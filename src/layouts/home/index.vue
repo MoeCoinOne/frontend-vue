@@ -1,5 +1,7 @@
 <template>
-  <article v-title="$t('home.index.title')"></article>
+  <article v-title="$t('home.index.title')">
+    <el-button type="primary">123</el-button>
+  </article>
 </template>
 
 <script>

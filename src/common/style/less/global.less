@@ -4,3 +4,14 @@ body, html, #app {
     height: 100%;
     width: 100%;
 }
+
+.clearfix::before,.clearfix::after {
+    content: "";
+    display: table;
+}
+.clearfix::after{
+    clear: both;
+}
+.clearfix {
+    zoom: 1;
+}

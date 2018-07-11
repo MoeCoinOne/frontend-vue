@@ -3,11 +3,11 @@
     <div class="container">
       <h1 class="moe-navbar-item moe-navbar-title" @click="$router.push('/')">
         <!-- <img class="moe-navbar-logo" src="/static/images/logo.png"> -->
-        <span>ProjectA</span>
+        <span>{{ $t('site.name') }}</span>
       </h1>
       <ul class="moe-navbar-item moe-navbar-link">
-        <li><router-link to="/" exact>首页</router-link></li>
-        <li><router-link to="/about">关于</router-link></li>
+        <li><router-link to="/" exact>{{ $t('site.navbar.home') }}</router-link></li>
+        <li><router-link to="/about">{{ $t('site.navbar.about') }}</router-link></li>
       </ul>
     </div>
   </div>
@@ -22,6 +22,7 @@ export default {
 <style lang="less" scoped>
 // 标题栏
 .moe-navbar {
+  background-color: #fff;
   height: 80px;
   color: black;
   top: 0;
@@ -32,6 +33,7 @@ export default {
   position: relative;
   display: block;
   border-bottom: 1px #f0f0f0 solid;
+  box-shadow: 1px 0 10px #bbb;
 
   .container {
     width: 1140px;
@@ -58,7 +60,6 @@ export default {
   }
 
   &.moe-navbar-link {
-    float: right;
     li {
       margin: 0;
       float: left;

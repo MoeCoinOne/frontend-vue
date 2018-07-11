@@ -1,3 +1,11 @@
+export const site = {
+  name: '萌娘条漫',
+  navbar: {
+    home: '首页',
+    about: '关于'
+  }
+}
+
 export const home = {
   index: {
     title: ' 首页'

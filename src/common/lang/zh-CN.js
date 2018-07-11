@@ -35,5 +35,19 @@ export const user = {
     getAuthCode: '点击获取',
     authCodePlaceholder: '验证码',
     submit: '提交'
+  },
+  index: {
+    title: '个人主页',
+    balance: '余额',
+    follow: '关注',
+    subscribe: '订阅',
+    mainPage: '主页',
+    dynamic: '动态',
+    recharge: '充值',
+    setting: '设置',
+    comicTitle: '条漫标题',
+    comicViews: '阅读量',
+    subscription: '订阅量',
+    updateTime: '更新时间'
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <article v-title="$t('user.login.title')">
+  <article v-title="$t('user.forget.title')">
     <!-- <img class="banner" src="/static/images/user/banner.png" /> -->
     <div class="banner">
       <div class="title">
@@ -11,23 +11,21 @@
     <div class="form-container">
       <el-form class="form" ref="form" :model="form">
         <el-form-item class="first">
-          <el-input v-model="form.account" :placeholder="$t('user.login.accountPlaceholder')"></el-input>
+          <el-input v-model="form.account" :placeholder="$t('user.forget.accountPlaceholder')"></el-input>
 
           <div class="title circle">
-            <h2>{{ $t('user.login.title') }}</h2>
+            <h2>{{ $t('user.forget.title') }}</h2>
             <img src="/static/img/user/circle.svg" />
           </div>
           <img class="title oh" src="/static/img/user/oh.svg" />
         </el-form-item>
-        <el-form-item style="margin-bottom: 0">
-          <el-input type="password" v-model="form.password" :placeholder="$t('user.login.passwordPlaceholder')"></el-input>
+        <el-form-item>
+          <el-input v-model="form.authCode" :placeholder="$t('user.forget.authCodePlaceholder')">
+            <el-button slot="append" type="primary">{{ $t('user.register.getAuthCode') }}</el-button>
+          </el-input>
         </el-form-item>
         <el-form-item>
-          <div class="form-action">
-            <el-checkbox v-model="checked">{{ $t('user.login.remember') }}</el-checkbox>
-            <router-link class="a-forget" to="/home/index">{{ $t('user.login.forget') }}</router-link>
-          </div>
-          <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.login.submit') }}</el-button>
+          <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.forget.submit') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -46,7 +44,7 @@ export default {
     return {
       form: {
         account: '',
-        password: ''
+        authCode: ''
       }
     }
   }

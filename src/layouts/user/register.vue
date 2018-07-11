@@ -1,5 +1,5 @@
 <template>
-  <article v-title="$t('user.login.title')">
+  <article v-title="$t('user.register.title')">
     <!-- <img class="banner" src="/static/images/user/banner.png" /> -->
     <div class="banner">
       <div class="title">
@@ -11,23 +11,37 @@
     <div class="form-container">
       <el-form class="form" ref="form" :model="form">
         <el-form-item class="first">
-          <el-input v-model="form.account" :placeholder="$t('user.login.accountPlaceholder')"></el-input>
+          <el-input v-model="form.account" :placeholder="$t('user.register.nicknamePlaceholder')"></el-input>
 
           <div class="title circle">
-            <h2>{{ $t('user.login.title') }}</h2>
+            <h2>{{ $t('user.register.title') }}</h2>
             <img src="/static/img/user/circle.svg" />
           </div>
           <img class="title oh" src="/static/img/user/oh.svg" />
         </el-form-item>
+        <el-form-item>
+          <el-input v-model="form.account" :placeholder="$t('user.register.passwordPlaceholder')"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div class="mobile-form">
+            <el-select class="select" v-model="value" :placeholder="$t('user.register.regionSelectPlaceholder')">
+              <el-option label="item.label" value="item.value"></el-option>
+            </el-select>
+            <el-input class="input" v-model="form.account" :placeholder="$t('user.register.mobilePlaceholder')"></el-input>
+          </div>
+        </el-form-item>
         <el-form-item style="margin-bottom: 0">
-          <el-input type="password" v-model="form.password" :placeholder="$t('user.login.passwordPlaceholder')"></el-input>
+          <el-input v-model="form.account" :placeholder="$t('user.register.authCodePlaceholder')">
+            <el-button slot="append" type="primary">{{ $t('user.register.getAuthCode') }}</el-button>
+          </el-input>
         </el-form-item>
         <el-form-item>
           <div class="form-action">
-            <el-checkbox v-model="checked">{{ $t('user.login.remember') }}</el-checkbox>
-            <router-link class="a-forget" to="/home/index">{{ $t('user.login.forget') }}</router-link>
+            <el-checkbox v-model="checked">
+              {{ $t('user.register.term.text') }}<router-link class="link" to="/home/index">{{ $t('user.register.term.userTerm') }}</router-link>{{ $t('user.register.term.and') }}<router-link class="link" to="/home/index">{{ $t('user.register.term.accountTerm') }}</router-link>
+            </el-checkbox>
           </div>
-          <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.login.submit') }}</el-button>
+          <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.register.submit') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -45,8 +59,7 @@ export default {
   data () {
     return {
       form: {
-        account: '',
-        password: ''
+        account: ''
       }
     }
   }
@@ -146,12 +159,23 @@ article {
 .form-action {
   margin: 5px 0;
 }
-.a-forget {
+.link {
   color: #2D84E9;
   text-decoration: none;
-  float: right;
 }
 .footbar {
   margin-top: 100px;
+}
+.mobile-form {
+  display: flex;
+  flex-direction: row;
+
+  .select {
+    width: 120px;
+  }
+  .input {
+    padding-left: 12px;
+    flex: 1;
+  }
 }
 </style>

@@ -169,7 +169,7 @@
 </style>
 
 <script>
-import { HeaderNormal } from '@/components/global'
+import HeaderNormal from '@/components/user/headerNormal'
 export default {
   components: {
     HeaderNormal

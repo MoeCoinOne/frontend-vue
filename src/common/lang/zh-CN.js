@@ -36,6 +36,11 @@ export const user = {
     authCodePlaceholder: '验证码',
     submit: '提交'
   },
+  authShow: {
+    followTitle: '关注',
+    subscribeNumTitle: '订阅数',
+    feeSubscribe: '付费订阅'
+  },
   index: {
     title: '个人主页',
     balance: '余额',

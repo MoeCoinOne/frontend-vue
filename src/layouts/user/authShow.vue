@@ -11,15 +11,16 @@
             <div class="author-desc">个人简介</div>
           </div>
           <div class="right-area">
-            <span class="follow-title">关注</span>
+            <span class="follow-title">{{ $t('user.authShow.followTitle') }}</span>
             <span class="follow-num">1</span>
-            <span class="subscribe-title">订阅数</span>
+            <span class="subscribe-title">{{ $t('user.authShow.subscribeNumTitle') }}</span>
             <span class="subscribe-num">10</span>
           </div>
         </div>
-      </div>
-      <div style="height: 500px;">
-         下面的内容
+        <div class="line2" >
+          <thumbnail class="thumb-item"></thumbnail>
+          <thumbnail class="thumb-item"></thumbnail>
+        </div>
       </div>
     </div>
   </div>
@@ -73,16 +74,29 @@
           }
         }
       }
+
+      .line2 {
+        padding: 50px 0 50px 0;
+        margin-left: -63px;
+
+        .thumb-item {
+          display: inline-block;
+          margin-left: 63px;
+        }
+      }
     }
   }
 }
 </style>
 
 <script>
-import { HeaderNormal } from '@/components/global'
+import HeaderNormal from '@/components/user/headerNormal'
+import Thumbnail from '@/components/user/authShowThumbnail'
+
 export default {
   components: {
-    HeaderNormal
+    HeaderNormal,
+    Thumbnail
   }
 }
 </script>

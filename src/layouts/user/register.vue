@@ -14,20 +14,10 @@
           <img class="title oh" src="/static/img/user/oh.png" />
         </el-form-item>
         <el-form-item>
-          <el-input v-model="form.account" :placeholder="$t('user.register.passwordPlaceholder')"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <div class="mobile-form">
-            <el-select class="select" v-model="value" :placeholder="$t('user.register.regionSelectPlaceholder')">
-              <el-option label="item.label" value="item.value"></el-option>
-            </el-select>
-            <el-input class="input" v-model="form.account" :placeholder="$t('user.register.mobilePlaceholder')"></el-input>
-          </div>
+          <el-input v-model="form.account" :placeholder="$t('user.register.mailPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item style="margin-bottom: 0">
-          <el-input v-model="form.account" :placeholder="$t('user.register.authCodePlaceholder')">
-            <el-button slot="append" type="primary">{{ $t('user.register.getAuthCode') }}</el-button>
-          </el-input>
+          <el-input v-model="form.account" :placeholder="$t('user.register.passwordPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="form-action">
@@ -56,6 +46,11 @@ export default {
       form: {
         account: ''
       }
+    }
+  },
+  methods: {
+    onSubmit () {
+      this.$router.push({ name: 'UserConfirmMail' })
     }
   }
 }

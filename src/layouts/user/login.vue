@@ -1,9 +1,9 @@
 <template>
-  <article v-title="$t('user.login.title')">
+  <article v-title="$t('user.login.title')" v-loading="loading">
     <!-- <img class="banner" src="/static/images/user/banner.png" /> -->
     <nav-bar></nav-bar>
 
-    <div class="form-container">
+    <div class="form-container" >
       <el-form class="form" ref="form" :model="form">
         <el-form-item class="first">
           <el-input v-model="form.account" :placeholder="$t('user.login.accountPlaceholder')"></el-input>
@@ -40,10 +40,23 @@ export default {
   },
   data () {
     return {
+      loading: false,
       form: {
         account: '',
         password: ''
       }
+    }
+  },
+  methods: {
+    onSubmit () {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+        this.$store.commit('setUserToken', {
+          userToken: '111'
+        })
+        this.$router.replace({ name: 'HomeExplore' })
+      }, 2000)
     }
   }
 }

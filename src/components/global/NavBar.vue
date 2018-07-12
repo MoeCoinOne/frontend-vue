@@ -11,16 +11,44 @@
         <!-- <li><router-link to="/about">{{ $t('site.navbar.about') }}</router-link></li> -->
       </ul>
       <ul class="moe-navbar-item moe-navbar-link moe-navbar-action clearfix">
-        <li><router-link :to="{ name: 'UserLogin' }" exact>{{ $t('site.navbar.login') }}</router-link></li>
-        <li><router-link :to="{ name: 'UserRegister' }">{{ $t('site.navbar.register') }}</router-link></li>
+        <li v-if="notLogin"><router-link :to="{ name: 'UserLogin' }" exact>{{ $t('site.navbar.login') }}</router-link></li>
+        <li v-if="notLogin"><router-link :to="{ name: 'UserRegister' }">{{ $t('site.navbar.register') }}</router-link></li>
+        <li v-if="isLogin" style="width: 100px">
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link moe-nav-user">
+              孟二千<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="$router.push({ name: 'AccountHomeIndex' })"><i class="el-icon-news el-icon--left"></i>我的主页</el-dropdown-item>
+              <el-dropdown-item @click.native="logout" divided><i class="el-icon-circle-close-outline el-icon--left"></i>退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-
+  computed: {
+    ...mapState({
+      userToken: state => state.user.userToken
+    }),
+    isLogin () {
+      return !this.notLogin
+    },
+    notLogin () {
+      return !this.userToken
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.commit('clearUserToken')
+      this.$router.replace({ name: 'UserLogin' })
+    }
+  }
 }
 </script>
 
@@ -115,6 +143,13 @@ export default {
         }
       }
     }
+  }
+}
+.moe-nav-user {
+  padding: 30px 0;
+  font-size: 16px;
+  &:hover {
+    color: @primaryColor;
   }
 }
 </style>

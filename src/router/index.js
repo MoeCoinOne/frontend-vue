@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Home from './home'
 import User from './user'
+import Account from './account'
 
 Vue.use(Router)
 
@@ -17,6 +18,7 @@ export default new Router({
       redirect: '/home/explore'
     },
     ...Home,
-    ...User
+    ...User,
+    ...Account
   ]
 })

@@ -12,7 +12,6 @@ export default [
   {
     path: '/c/:id',
     alias: '/home/creator/:id',
-    name: 'HomeCreator',
     component: Creator,
     children: [
       {

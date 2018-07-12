@@ -21,7 +21,7 @@ export const home = {
 export const user = {
   login: {
     title: ' 登录',
-    accountPlaceholder: '你的手机号/邮箱',
+    accountPlaceholder: '你的邮箱',
     passwordPlaceholder: '密码',
     remember: '记住我',
     forget: '忘记密码？',
@@ -30,6 +30,7 @@ export const user = {
   register: {
     title: '注册',
     nicknamePlaceholder: '昵称',
+    mailPlaceholder: '电子邮箱',
     passwordPlaceholder: '密码（6-16个字符组成，区分大小写）',
     regionSelectPlaceholder: '选择地区',
     mobilePlaceholder: '填写手机号',
@@ -49,6 +50,9 @@ export const user = {
     getAuthCode: '点击获取',
     authCodePlaceholder: '验证码',
     submit: '提交'
+  },
+  confirmMail: {
+    title: '确认邮箱'
   },
   authShow: {
     followTitle: '关注',

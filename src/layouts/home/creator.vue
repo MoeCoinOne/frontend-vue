@@ -18,7 +18,6 @@
     </div>
 
     <router-view></router-view>
-
     <foot-bar class="footbar"></foot-bar>
   </article>
 </template>

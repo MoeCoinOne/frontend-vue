@@ -1,14 +1,20 @@
 export const site = {
-  name: '萌娘条漫',
+  name: '安可萌',
   navbar: {
     home: '首页',
-    about: '关于'
+    explore: '发现',
+    about: '关于',
+    login: '登录',
+    register: '注册'
   }
 }
 
 export const home = {
   index: {
     title: ' 首页'
+  },
+  explore: {
+    title: '发现'
   }
 }
 

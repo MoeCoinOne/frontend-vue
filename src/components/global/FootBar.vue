@@ -1,6 +1,6 @@
 <template>
   <footer>
-    © 2018 ProjectA
+    © 2018 {{ $t('site.name') }}
   </footer>
 </template>
 

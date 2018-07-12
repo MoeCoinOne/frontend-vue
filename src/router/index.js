@@ -8,10 +8,13 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  },
   routes: [
     {
       path: '/',
-      redirect: '/home/index'
+      redirect: '/home/explore'
     },
     ...Home,
     ...User

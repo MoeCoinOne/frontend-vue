@@ -1,5 +1,5 @@
 export default {
-  domain: 'https://example.com/',
+  domain: 'https://virtserver.swaggerhub.com/MoeCoinOne/Web/1.0.0/',
   requestHandler (options, next) {
     return next()
   },
@@ -8,7 +8,7 @@ export default {
   },
   api: {
     user: {
-      login: 'user/login'
+      login: 'auth/login'
     }
   }
 }

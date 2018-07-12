@@ -1,12 +1,6 @@
 <template>
   <article v-title="$t('user.forget.title')">
-    <!-- <img class="banner" src="/static/images/user/banner.png" /> -->
-    <div class="banner">
-      <div class="title">
-        <img src="/static/img/user/cute.svg" />
-        <h1>萌娘条漫</h1>
-      </div>
-    </div>
+    <nav-bar></nav-bar>
 
     <div class="form-container">
       <el-form class="form" ref="form" :model="form">
@@ -15,9 +9,9 @@
 
           <div class="title circle">
             <h2>{{ $t('user.forget.title') }}</h2>
-            <img src="/static/img/user/circle.svg" />
+            <img src="/static/img/user/circle.png" />
           </div>
-          <img class="title oh" src="/static/img/user/oh.svg" />
+          <img class="title oh" src="/static/img/user/oh.png" />
         </el-form-item>
         <el-form-item>
           <el-input v-model="form.authCode" :placeholder="$t('user.forget.authCodePlaceholder')">
@@ -35,9 +29,10 @@
 </template>
 
 <script>
-import { FootBar } from '@/components/global'
+import { NavBar, FootBar } from '@/components/global'
 export default {
   components: {
+    NavBar,
     FootBar
   },
   data () {
@@ -60,38 +55,6 @@ export default {
 article {
   background-color: #f6fbf7;
   height: 100%;
-}
-.banner {
-  width: 100%;
-  background-color: #fff;
-  box-shadow: 1px 0 12px #999;
-  padding: 0 10px;
-  box-sizing: border-box;
-  height: 150px;
-  background: url(/static/img/user/banner.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-
-  .title {
-    width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    img {
-      height: 110px;
-      display: inline-block;
-    }
-
-    h1 {
-      display: inline-block;
-      padding-left: 15px;
-      margin: 0;
-      font-weight: normal;
-    }
-  }
 }
 .form-container {
   padding-top: 150px;

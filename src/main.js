@@ -6,6 +6,8 @@ import router from './router'
 import store from './store'
 import VueI18n from 'vue-i18n'
 import ElementUI from 'element-ui'
+import VuePhotoPreview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
 import './common/style/element/theme/index.css'
 import './common/directives'
 import './common/plugins'
@@ -13,6 +15,7 @@ import './common/plugins'
 Vue.config.productionTip = false
 Vue.use(VueI18n)
 Vue.use(ElementUI)
+Vue.use(VuePhotoPreview)
 
 const i18n = new VueI18n({
   locale: 'zh-CN', // 默认语言

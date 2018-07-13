@@ -15,7 +15,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home/explore'
+      redirect: '/home/index'
     },
     ...Home,
     ...User,

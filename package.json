@@ -14,6 +14,7 @@
     "build-element-style": "et -c ./src/common/style/element/vars.scss -o ./src/common/style/element/theme"
   },
   "dependencies": {
+    "animate.css": "^3.6.1",
     "element-ui": "^2.4.3",
     "less": "^3.5.3",
     "less-loader": "^4.1.0",

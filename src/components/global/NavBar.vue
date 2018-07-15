@@ -20,7 +20,7 @@
               孟二千<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="$router.push({ name: 'AccountHomeIndex' })"><i class="el-icon-news el-icon--left"></i>我的主页</el-dropdown-item>
+              <el-dropdown-item @click.native="$router.push('/account/home')"><i class="el-icon-news el-icon--left"></i>我的主页</el-dropdown-item>
               <el-dropdown-item @click.native="logout" divided><i class="el-icon-circle-close-outline el-icon--left"></i>退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

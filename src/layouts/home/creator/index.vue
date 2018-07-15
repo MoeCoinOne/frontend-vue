@@ -14,35 +14,19 @@
         </el-card>
       </el-aside>
       <el-main class="main-box">
-        <el-card class="box-card sponsor">
+        <el-card class="box-card sponsor" v-for="(scheme, sIndex) in schemes" :key="sIndex">
           <div class="info">
-            <h3 class="title">一罐可乐</h3>
+            <h3 class="title">{{ scheme.title }}</h3>
             <div class="price">
-              <span class="cost">2.00</span>
+              <span class="cost">{{ parseFloat(scheme.cost).toFixed(2) }}</span>
               <span class="cycle">￥/月</span>
-              <span class="count">123 人已赞助</span>
+              <span class="count">{{ scheme.subscribe_count }} 人已赞助</span>
             </div>
-            <div class="intro">唉。</div>
+            <div class="intro" v-html="scheme.intro"></div>
           </div>
+          <image-list class="image-list" :images="scheme.images"></image-list>
           <div class="btn-group">
-            <el-button type="primary">赞助￥2.00</el-button>
-          </div>
-        </el-card>
-        <el-card class="box-card sponsor">
-          <div class="info">
-            <h3 class="title">插画</h3>
-            <div class="price">
-              <span class="cost">500.00</span>
-              <span class="cycle">￥/月</span>
-              <span class="count">123 人已赞助</span>
-            </div>
-            <div class="intro">
-              不太复杂的，你想要看到的插画。<br/>
-              非商用授权，日涂的水准，不适合肉多的同性内容，其他的别违规哟。
-            </div>
-          </div>
-          <div class="btn-group">
-            <el-button type="primary">赞助￥500.00</el-button>
+            <el-button type="primary">赞助￥{{ parseFloat(scheme.cost).toFixed(2) }}</el-button>
           </div>
         </el-card>
       </el-main>
@@ -52,8 +36,58 @@
 </template>
 
 <script>
+import { ImageList } from '@/components/global'
 export default {
-
+  components: {
+    ImageList
+  },
+  data () {
+    return {
+      schemes: [{
+        id: 1,
+        title: '一罐可乐',
+        intro: '唉。',
+        cost: 2,
+        subscribe_count: 123,
+        images: [{
+          id: 3,
+          src: 'https://moecoin.one/images/summer.jpg'
+        }, {
+          id: 1,
+          src: '/static/img/home/temp/2.jpg'
+        }, {
+          id: 2,
+          src: '/static/img/home/temp/1.jpg'
+        }, {
+          id: 3,
+          src: '/static/img/home/user-banner.jpg'
+        }, {
+          id: 1,
+          src: '/static/img/home/temp/2.jpg'
+        }, {
+          id: 2,
+          src: '/static/img/home/temp/1.jpg'
+        }]
+      }, {
+        id: 2,
+        title: '插画',
+        intro: '不太复杂的，你想要看到的插画。<br/>非商用授权，日涂的水准，不适合肉多的同性内容，其他的别违规哟。',
+        cost: 500,
+        subscribe_count: 123,
+        images: [{
+          id: 2,
+          src: '/static/img/home/temp/1.jpg'
+        }]
+      }, {
+        id: 3,
+        title: '无图片',
+        intro: 'Hello world!',
+        cost: 6655,
+        subscribe_count: 2,
+        images: []
+      }]
+    }
+  }
 }
 </script>
 
@@ -116,6 +150,9 @@ export default {
           .intro {
             margin-top: 12px;
           }
+        }
+        .image-list {
+          margin-top: 18px;
         }
         .btn-group {
           position: absolute;

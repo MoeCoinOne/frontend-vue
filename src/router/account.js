@@ -1,6 +1,7 @@
 const Home = () => import('@/layouts/account/home.vue')
-const HomeIndex = () => import('@/layouts/account/home/index.vue')
+const HomeSubscribes = () => import('@/layouts/account/home/subscribes.vue')
 const HomeDynamic = () => import('@/layouts/account/home/dynamic.vue')
+const HomeBill = () => import('@/layouts/account/home/bill.vue')
 
 export default [
   {
@@ -8,14 +9,20 @@ export default [
     component: Home,
     children: [
       {
-        path: '',
-        name: 'AccountHomeIndex',
-        component: HomeIndex
-      },
-      {
         path: 'dynamic',
+        alias: '',
         name: 'AccountHomeDynamic',
         component: HomeDynamic
+      },
+      {
+        path: 'subscribes',
+        name: 'AccountHomeSubscribes',
+        component: HomeSubscribes
+      },
+      {
+        path: 'bill',
+        name: 'AccountHomeBill',
+        component: HomeBill
       }
     ]
   }

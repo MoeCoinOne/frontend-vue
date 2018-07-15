@@ -14,7 +14,7 @@ export default {
 @import './common/style/less/global.less';
 
 #app {
-  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-family: "HanHei SC", "PingFang SC", "Helvetica Neue", Helvetica, STHeitiSC-Light, "Microsoft YaHei", '微软雅黑', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

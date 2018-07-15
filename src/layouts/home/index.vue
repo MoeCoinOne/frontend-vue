@@ -1,6 +1,6 @@
 <template>
   <article>
-    <nav-bar></nav-bar>
+    <nav-bar style="border: 0"></nav-bar>
     <el-carousel class="moe-home-carousel" :interval="8000" @change="onCarouselChange">
       <el-carousel-item class="carousel-item" v-for="(item, index) in carouselList" :key="index" :style="{ backgroundImage: `url(${item.background})` }">
         <div class="carousel-intro">
@@ -97,6 +97,7 @@ export default {
 
 <style lang="less">
 .moe-home-carousel {
+  width: 100%;
   .el-carousel__container {
     height: 450px;
   }

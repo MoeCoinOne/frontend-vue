@@ -1,5 +1,5 @@
 <template>
-  <section>主页</section>
+  <section>账单</section>
 </template>
 
 <script>

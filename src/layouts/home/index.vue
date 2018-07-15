@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     onCarouselChange (nextIndex, prevIndex) {
-      if (prevIndex !== null) {
+      if (prevIndex !== null && this.carouselList[prevIndex]) {
         this.carouselList[prevIndex].title.class = []
         this.carouselList[prevIndex].intro.class = []
       }

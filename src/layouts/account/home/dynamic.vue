@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-title="$t('account.home.dynamic.title')">
     <div class="dynamic" v-for="(dynamic, dIndex) in dynamics" :key="dIndex">
       <div class="user">
         <user-pop
@@ -12,12 +12,10 @@
       <div v-html="dynamic.content"></div>
       <image-list class="images" :preview-id="dIndex" :images="dynamic.images"></image-list>
       <div class="actions">
-        <div class="star">
-          <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
-            <i slot="icon" class="icon-star el-icon-star-on"></i>
-          </vue-star>
-          <span>5</span>
-        </div>
+        <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
+          <i slot="icon" class="icon-star el-icon-star-on"></i>
+        </vue-star>
+        <div class="start-count">5</div>
         <div>&nbsp;•&nbsp;</div>
         <div class="comment">11 条评论</div>
       </div>
@@ -115,24 +113,19 @@ section {
   .actions {
     font-size: 16px;
     color: #8590a6;
+    position: relative;
     div {
       display: inline-block;
-      vertical-align: middle;
     }
-    .star {
-      position: relative;
-      .vue-star {
-        position: absolute;
-        top: -39px;
-        left: -38px;
-      }
-      span {
-        display: inline-block;
-        margin-left: 25px;
-      }
+    .vue-star {
+      position: absolute;
+      top: -40px;
+      left: -38px;
+    }
+    .start-count {
+      margin-left: 28px;
     }
     .comment {
-      padding-top: 3px;
       cursor: pointer;
     }
   }

@@ -15,7 +15,7 @@
       <router-link
         slot="reference"
         class="link"
-        :to="{ name: 'HomeCreator', params: { id: user.linkName } }"
+        :to="{ name: 'HomeCreatorIndex', params: { id: user.linkName } }"
       >
       <img v-if="user.avatar" :src="user.avatar" class="avatar" /><span class="name">{{ user.name }}</span>
     </router-link>
@@ -62,6 +62,7 @@ export default {
     .name {
       font-size: 18px;
       font-weight: bold;
+      color: #333;
     }
     .intro {
       margin-top: 3px;
@@ -74,6 +75,7 @@ export default {
   }
 }
 .link {
+  color: #666699;
   text-decoration: none;
   img, span {
     display: inline-block;
@@ -94,7 +96,6 @@ export default {
 
 <style lang="less">
 .moe-user-popover {
-  padding: 0;
-  position: relative;
+  padding: 0 !important;
 }
 </style>

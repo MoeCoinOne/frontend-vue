@@ -1,7 +1,7 @@
 <template>
-  <section>
+  <section v-title="$t('account.home.subscribes.title')">
     <el-container>
-      <el-aside class="box aside" width="300px">
+      <el-aside class="box aside" width="230px">
         <div class="tag active">全部</div>
         <div class="tag">动画</div>
         <div class="tag">游戏</div>
@@ -10,11 +10,22 @@
         <div class="creator" v-for="(creator, cIndex) in creatorList" :key="cIndex">
           <img class="avatar" :src="creator.creator.avatar" />
           <div class="info">
-            <router-link class="nickname" :to="{ name: 'HomeCreator', params: { id: creator.creator.linkname } }">
+            <router-link class="nickname" :to="{ name: 'HomeCreatorIndex', params: { id: creator.creator.linkname } }">
               {{ creator.creator.nickname }}
             </router-link>
             <div class="intro">{{ creator.creator.introduce }}</div>
           </div>
+          <el-popover
+            placement="top"
+            width="160"
+            v-model="creator.popShow">
+            <p>你确定要取消订阅他吗</p>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="text" @click="creator.popShow = false">取消</el-button>
+              <el-button type="danger" size="mini" @click="creator.popShow = false">确定</el-button>
+            </div>
+            <el-button slot="reference" class="btn-delete-sub">已订阅</el-button>
+          </el-popover>
         </div>
       </el-main>
     </el-container>
@@ -32,6 +43,7 @@ export default {
       creatorList: [
         {
           id: 0,
+          popShow: false,
           creator: {
             id: 0,
             nickname: '孟二千',
@@ -53,7 +65,7 @@ export default {
     }
   },
   mounted () {
-    for (let index = 0; index < 5; index++) {
+    for (let index = 0; index < 0; index++) {
       this.creatorList.push(this.creatorList[0])
     }
   }
@@ -74,6 +86,7 @@ export default {
 }
 .aside {
   padding: 10px 0;
+  height: max-content;
   .tag {
     padding: 10px 20px;
     cursor: pointer;
@@ -87,11 +100,13 @@ export default {
 }
 .main {
   margin-left: 20px;
+  height: max-content;
 
   .creator {
     margin-bottom: 13px;
     padding-bottom: 10px;
     border-bottom: 1px solid #f6f6f6;
+    position: relative;
     &:last-child {
       margin-bottom: 0;
       padding-bottom: 0;
@@ -106,8 +121,8 @@ export default {
     .info {
       display: inline-block;
       vertical-align: top;
-      margin-left: 3px;
-      margin-top: 3px;
+      margin-left: 6px;
+      margin-top: 5px;
       .nickname {
         font-size: 20px;
         font-weight: bold;
@@ -115,11 +130,16 @@ export default {
         color: #000;
       }
       .intro {
-        margin-top: 3px;
+        margin-top: 4px;
         color: #333;
         font-size: 14px;
       }
     }
   }
+}
+.btn-delete-sub {
+  position: absolute;
+  right: 0;
+  top: 10px;
 }
 </style>

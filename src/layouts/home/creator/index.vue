@@ -24,7 +24,7 @@
             </div>
             <div class="intro" v-html="scheme.intro"></div>
           </div>
-          <image-list class="image-list" :images="scheme.images"></image-list>
+          <image-list class="image-list" :images="scheme.images" :preview-id="sIndex"></image-list>
           <div class="btn-group">
             <el-button type="primary">赞助￥{{ parseFloat(scheme.cost).toFixed(2) }}</el-button>
           </div>

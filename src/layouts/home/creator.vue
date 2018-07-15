@@ -14,20 +14,36 @@
             <router-link class="action-item" :to="{ name: 'HomeCreatorSponsor', params: $route.params }">赞助者</router-link>
           </div>
         </div>
+        <el-button type="danger" icon="el-icon-edit" class="btn-publish" @click="showPublishDialog">发布动态</el-button>
       </div>
     </div>
 
     <router-view></router-view>
     <foot-bar class="footbar"></foot-bar>
+    <creator-publish-dialog :show.sync="publishDialog.show"></creator-publish-dialog>
   </article>
 </template>
 
 <script>
+import CreatorPublishDialog from '@/components/home/CreatorPublishDialog'
 import { NavBar, FootBar } from '@/components/global'
 export default {
   components: {
     NavBar,
-    FootBar
+    FootBar,
+    CreatorPublishDialog
+  },
+  data () {
+    return {
+      publishDialog: {
+        show: false
+      }
+    }
+  },
+  methods: {
+    showPublishDialog () {
+      this.publishDialog.show = true
+    }
   }
 }
 </script>
@@ -42,6 +58,7 @@ article {
   width: 100%;
   box-shadow: 1px 0 10px #aaa;
   background-color: #fff;
+  position: relative;
   .user-banner {
     width: 100%;
     background-image: url(/static/img/home/user-banner.jpg);
@@ -96,6 +113,11 @@ article {
           border-bottom: 5px solid #ea6f5a;
         }
       }
+    }
+    .btn-publish {
+      position: absolute;
+      top: 0;
+      right: 0;
     }
   }
 }

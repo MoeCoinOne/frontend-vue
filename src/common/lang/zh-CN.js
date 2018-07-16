@@ -32,6 +32,7 @@ export const user = {
     nicknamePlaceholder: '昵称',
     mailPlaceholder: '电子邮箱',
     passwordPlaceholder: '密码（6-16个字符组成，区分大小写）',
+    repeatPasswordPlaceholder: '确认你的密码',
     regionSelectPlaceholder: '选择地区',
     mobilePlaceholder: '填写手机号',
     authCodePlaceholder: '验证码',
@@ -95,4 +96,14 @@ export const account = {
       title: '安全设置'
     }
   }
+}
+
+export const error = {
+  LOGIN_ACCOUNT_EMPTY: '邮箱不能为空',
+  LOGIN_ACCOUNT_INVALID: '邮箱格式无效',
+  LOGIN_PASSWORD_EMPTY: '密码不能为空',
+  REGISTER_NICKNAME_EMPTY: '昵称不能为空',
+  REGISTER_MAIL_INVALID: '邮箱格式无效',
+  REGISTER_PASSWORD_INVALID: '请输入6-16位密码',
+  REGISTER_REPEAT_PASSWORD_INVALID: '两次输入的密码不一致'
 }

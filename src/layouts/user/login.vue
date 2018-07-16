@@ -4,8 +4,8 @@
     <nav-bar></nav-bar>
 
     <div class="form-container" >
-      <el-form class="form" ref="form" :model="form">
-        <el-form-item class="first">
+      <el-form class="form" ref="form" :model="form" :rules="rules" status-icon>
+        <el-form-item class="first" prop="account">
           <el-input v-model="form.account" :placeholder="$t('user.login.accountPlaceholder')"></el-input>
 
           <div class="title circle">
@@ -14,12 +14,12 @@
           </div>
           <img class="title oh" src="/static/img/user/oh.png" />
         </el-form-item>
-        <el-form-item style="margin-bottom: 0">
+        <el-form-item style="margin-bottom: 0" prop="password">
           <el-input type="password" v-model="form.password" :placeholder="$t('user.login.passwordPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="form-action">
-            <el-checkbox>{{ $t('user.login.remember') }}</el-checkbox>
+            <el-checkbox v-model="form.remember">{{ $t('user.login.remember') }}</el-checkbox>
             <router-link class="a-forget" to="/user/forget">{{ $t('user.login.forget') }}</router-link>
           </div>
           <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.login.submit') }}</el-button>
@@ -43,20 +43,52 @@ export default {
       loading: false,
       form: {
         account: '',
-        password: ''
+        password: '',
+        remember: true
+      },
+      rules: {
+        account: [{
+          validator: (rule, value, callback) => {
+            if (!value) {
+              callback(new Error(this.$t('error.LOGIN_ACCOUNT_EMPTY')))
+            } else if (/^(\w-*\.*\+*)+@(\w-?)+(\.\w{2,})+$/.test(value) === false) {
+              callback(new Error(this.$t('error.LOGIN_ACCOUNT_INVALID')))
+            } else {
+              callback()
+            }
+          },
+          trigger: 'blur'
+        }],
+        password: [{
+          validator: (rule, value, callback) => {
+            if (!value) {
+              callback(new Error(this.$t('error.LOGIN_PASSWORD_EMPTY')))
+            } else {
+              callback()
+            }
+          },
+          trigger: 'blur'
+        }]
       }
     }
   },
   methods: {
     onSubmit () {
-      this.loading = true
-      setTimeout(() => {
-        this.loading = false
-        this.$store.commit('setUserToken', {
-          userToken: '111'
-        })
-        this.$router.replace('/account/home')
-      }, 2000)
+      this.$refs['form'].validate((valid) => {
+        this.loading = true
+        if (valid) {
+          setTimeout(() => {
+            this.loading = false
+            this.$store.commit('setUserToken', {
+              userToken: '111'
+            })
+            this.$router.replace({ name: 'HomeExplore' })
+          }, 200)
+        } else {
+          this.loading = false
+          return false
+        }
+      })
     }
   }
 }

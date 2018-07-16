@@ -3,8 +3,8 @@
     <nav-bar></nav-bar>
 
     <div class="form-container">
-      <el-form class="form" ref="form" :model="form">
-        <el-form-item class="first">
+      <el-form class="form" ref="form" :model="form" :rules="rules" status-icon>
+        <el-form-item class="first" prop="nickname">
           <el-input v-model="form.nickname" :placeholder="$t('user.register.nicknamePlaceholder')"></el-input>
 
           <div class="title circle">
@@ -13,11 +13,14 @@
           </div>
           <img class="title oh" src="/static/img/user/oh.png" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="mail">
           <el-input v-model="form.mail" :placeholder="$t('user.register.mailPlaceholder')"></el-input>
         </el-form-item>
-        <el-form-item style="margin-bottom: 0">
+        <el-form-item prop="password">
           <el-input type="password" v-model="form.password" :placeholder="$t('user.register.passwordPlaceholder')"></el-input>
+        </el-form-item>
+        <el-form-item style="margin-bottom: 0" prop="repeatPassword">
+          <el-input type="password" v-model="form.repeatPassword" :placeholder="$t('user.register.repeatPasswordPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="form-action">
@@ -46,7 +49,48 @@ export default {
       form: {
         mail: '',
         nickname: '',
-        password: ''
+        password: '',
+        repeatPassword: ''
+      },
+      rules: {
+        nickname: [{
+          validator: (rule, value, callback) => {
+            if (!value) {
+              callback(new Error(this.$t('error.REGISTER_NICKNAME_EMPTY')))
+            } else {
+              setTimeout(() => {
+                callback()
+              }, 500)
+            }
+          },
+          trigger: 'blur'
+        }],
+        mail: [{
+          validator: (rule, value, callback) => {
+            if (/^(\w-*\.*\+*)+@(\w-?)+(\.\w{2,})+$/.test(value) === false) {
+              callback(new Error(this.$t('error.REGISTER_MAIL_INVALID')))
+            } else {
+              setTimeout(() => {
+                callback()
+              }, 500)
+            }
+          },
+          trigger: 'blur'
+        }],
+        password: [
+          { required: true, message: this.$t('error.REGISTER_PASSWORD_INVALID'), trigger: 'blur' },
+          { min: 6, max: 16, message: this.$t('error.REGISTER_PASSWORD_INVALID'), trigger: 'blur' }
+        ],
+        repeatPassword: [{
+          validator: (rule, value, callback) => {
+            if (value !== this.form.password) {
+              callback(new Error(this.$t('error.REGISTER_REPEAT_PASSWORD_INVALID')))
+            } else {
+              callback()
+            }
+          },
+          trigger: 'blur'
+        }]
       },
       allowTerm: false
     }

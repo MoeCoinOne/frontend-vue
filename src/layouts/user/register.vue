@@ -5,7 +5,7 @@
     <div class="form-container">
       <el-form class="form" ref="form" :model="form">
         <el-form-item class="first">
-          <el-input v-model="form.account" :placeholder="$t('user.register.nicknamePlaceholder')"></el-input>
+          <el-input v-model="form.nickname" :placeholder="$t('user.register.nicknamePlaceholder')"></el-input>
 
           <div class="title circle">
             <h2>{{ $t('user.register.title') }}</h2>
@@ -14,18 +14,18 @@
           <img class="title oh" src="/static/img/user/oh.png" />
         </el-form-item>
         <el-form-item>
-          <el-input v-model="form.account" :placeholder="$t('user.register.mailPlaceholder')"></el-input>
+          <el-input v-model="form.mail" :placeholder="$t('user.register.mailPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item style="margin-bottom: 0">
-          <el-input v-model="form.account" :placeholder="$t('user.register.passwordPlaceholder')"></el-input>
+          <el-input type="password" v-model="form.password" :placeholder="$t('user.register.passwordPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="form-action">
-            <el-checkbox v-model="checked">
+            <el-checkbox v-model="allowTerm">
               {{ $t('user.register.term.text') }}<router-link class="link" to="/home/index">{{ $t('user.register.term.userTerm') }}</router-link>{{ $t('user.register.term.and') }}<router-link class="link" to="/home/index">{{ $t('user.register.term.accountTerm') }}</router-link>
             </el-checkbox>
           </div>
-          <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.register.submit') }}</el-button>
+          <el-button class="btn-login" type="primary" @click="onSubmit" :disabled="!allowTerm">{{ $t('user.register.submit') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -44,8 +44,11 @@ export default {
   data () {
     return {
       form: {
-        account: ''
-      }
+        mail: '',
+        nickname: '',
+        password: ''
+      },
+      allowTerm: false
     }
   },
   methods: {

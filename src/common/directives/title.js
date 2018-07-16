@@ -1,5 +1,5 @@
 function handleTitle (value) {
-  let siteName = 'MoeCoin'
+  let siteName = '安可萌'
   if (typeof value === 'string') {
     // String 类型直接设置站点标题
     document.title = `${value} - ${siteName}`

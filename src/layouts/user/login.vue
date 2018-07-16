@@ -19,7 +19,7 @@
         </el-form-item>
         <el-form-item>
           <div class="form-action">
-            <el-checkbox v-model="checked">{{ $t('user.login.remember') }}</el-checkbox>
+            <el-checkbox>{{ $t('user.login.remember') }}</el-checkbox>
             <router-link class="a-forget" to="/user/forget">{{ $t('user.login.forget') }}</router-link>
           </div>
           <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.login.submit') }}</el-button>
@@ -55,7 +55,7 @@ export default {
         this.$store.commit('setUserToken', {
           userToken: '111'
         })
-        this.$router.replace({ name: 'HomeExplore' })
+        this.$router.replace('/account/home')
       }, 2000)
     }
   }

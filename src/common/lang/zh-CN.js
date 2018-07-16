@@ -74,3 +74,25 @@ export const user = {
     updateTime: '更新时间'
   }
 }
+
+export const account = {
+  home: {
+    dynamic: {
+      title: '动态'
+    },
+    bill: {
+      title: '我的账单'
+    },
+    subscribes: {
+      title: '我的订阅'
+    }
+  },
+  setting: {
+    profile: {
+      title: '个人资料设置'
+    },
+    safe: {
+      title: '安全设置'
+    }
+  }
+}

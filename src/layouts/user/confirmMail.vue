@@ -7,7 +7,7 @@
       <p>如果您没有收到，请您检查垃圾箱或稍后再试。</p>
 
       <div class="confirm">
-        <p>请在下方填写所收到的验证码</p>
+        <p>请在下方填写所收到的验证码（使用123123可通过）</p>
 
         <div class="input-group" :class="{ error: codeError }">
           <input
@@ -74,12 +74,27 @@ export default {
       }
     },
     submit (code) {
-      console.log(code)
-      this.setError()
+      if (code !== '123123') {
+        this.setError()
+      } else {
+        this.$store.commit('setUserToken', {
+          userToken: '111'
+        })
+        this.$message({
+          showClose: true,
+          message: '注册成功~',
+          type: 'success'
+        })
+        this.$router.replace('/account/home')
+      }
     },
     setError () {
       this.codeError = true
-      this.$message.error('验证码错误')
+      this.$message({
+        showClose: true,
+        message: '验证码不正确~',
+        type: 'error'
+      })
       this.$nextTick(() => {
         setTimeout(() => {
           for (let input of this.inputs) {

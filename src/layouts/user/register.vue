@@ -1,5 +1,5 @@
 <template>
-  <article v-title="$t('user.register.title')">
+  <article v-title="$t('user.register.title')" v-loading="loading">
     <nav-bar></nav-bar>
 
     <div class="form-container">
@@ -46,9 +46,10 @@ export default {
   },
   data () {
     return {
+      loading: false,
       form: {
         mail: '',
-        nickname: '',
+        nickname: 'TestUser',
         password: '',
         repeatPassword: ''
       },
@@ -58,9 +59,7 @@ export default {
             if (!value) {
               callback(new Error(this.$t('error.REGISTER_NICKNAME_EMPTY')))
             } else {
-              setTimeout(() => {
-                callback()
-              }, 500)
+              callback()
             }
           },
           trigger: 'blur'
@@ -70,16 +69,27 @@ export default {
             if (/^(\w-*\.*\+*)+@(\w-?)+(\.\w{2,})+$/.test(value) === false) {
               callback(new Error(this.$t('error.REGISTER_MAIL_INVALID')))
             } else {
-              setTimeout(() => {
+              this.$request.get({
+                name: 'user.checkMail',
+                params: {
+                  email: value
+                }
+              }).then(response => {
+                // TODO: 校验邮箱正常
+                console.log(response)
                 callback()
-              }, 500)
+              }).catch(error => {
+                // TODO: 解决异常
+                callback()
+                console.log(error)
+              })
             }
           },
           trigger: 'blur'
         }],
         password: [
           { required: true, message: this.$t('error.REGISTER_PASSWORD_INVALID'), trigger: 'blur' },
-          { min: 6, max: 16, message: this.$t('error.REGISTER_PASSWORD_INVALID'), trigger: 'blur' }
+          { min: 8, max: 16, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' }
         ],
         repeatPassword: [{
           validator: (rule, value, callback) => {
@@ -97,7 +107,43 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$router.push({ name: 'UserConfirmMail' })
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.loading = true
+          this.$request.post({
+            name: 'user.register',
+            body: {
+              nickname: this.form.nickname,
+              email: this.form.mail,
+              password: this.form.password
+            }
+          }).then(response => {
+            console.log(response)
+            this.$route.push({
+              name: 'UserConfirmMail',
+              query: {
+                email: this.form.mail
+              }
+            })
+          }).catch(error => {
+            if (typeof error.body.err_message === 'object') {
+            } else if (typeof error.body.err_message === 'string') {
+              switch (error.body.err_message) {
+                case 'Password did not conform with policy: Password must have lowercase characters':
+                  this.$message.error(this.$t('error.REGISTER_PASSWORD_NUMERIC_INVALID'))
+                  break
+                case 'Password did not conform with policy: Password must have numeric characters':
+                  this.$message.error(this.$t('error.REGISTER_PASSWORD_NUMERIC_INVALID'))
+                  break
+                default:
+                  this.$message.error(error.body.err_message)
+              }
+            }
+          }).finally(() => {
+            this.loading = false
+          })
+        }
+      })
     }
   }
 }

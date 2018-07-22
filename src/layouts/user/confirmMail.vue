@@ -1,13 +1,13 @@
 <template>
-  <article v-title="$t('user.confirmMail.title')">
+  <article v-title="$t('user.confirmMail.title')" v-loading="loading">
     <nav-bar></nav-bar>
     <div class="container">
-      <h1>验证邮箱</h1>
-      <p>一封验证邮件已经发送到了您的邮箱当中。</p>
-      <p>如果您没有收到，请您检查垃圾箱或稍后再试。</p>
+      <h1>{{ $t('user.confirmMail.title') }}</h1>
+      <p>{{ $t('user.confirmMail.withoutReceived') }}</p>
+      <p>{{ $t('user.confirmMail.mailSended') }}</p>
 
       <div class="confirm">
-        <p>请在下方填写所收到的验证码（使用123123可通过）</p>
+        <p>{{ $t('user.confirmMail.pleaseInput') }}</p>
 
         <div class="input-group" :class="{ error: codeError }">
           <input
@@ -32,6 +32,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       codeLength: 6,
       codeError: false,
       inputs: []
@@ -74,25 +75,35 @@ export default {
       }
     },
     submit (code) {
-      if (code !== '123123') {
-        this.setError()
-      } else {
-        this.$store.commit('setUserToken', {
-          userToken: '111'
-        })
-        this.$message({
-          showClose: true,
-          message: '注册成功~',
-          type: 'success'
-        })
-        this.$router.replace('/account/home')
-      }
+      this.loading = true
+      this.$request.post({
+        name: 'user.confirmMail',
+        body: {
+          email: this.$route.query.email,
+          validationCode: code
+        }
+      }).then(response => {
+        if (response.body.success) {
+          this.$message({
+            showClose: true,
+            message: this.$t('user.confirmMail.success'),
+            type: 'success'
+          })
+          this.$router.replace('/user/login')
+        } else {
+          this.setError()
+        }
+      }).catch(error => {
+        this.setError(error)
+      }).finally(() => {
+        this.loading = false
+      })
     },
     setError () {
       this.codeError = true
       this.$message({
         showClose: true,
-        message: '验证码不正确~',
+        message: this.$t('error.CONFIRM_MAIL_CODE_INVALID'),
         type: 'error'
       })
       this.$nextTick(() => {

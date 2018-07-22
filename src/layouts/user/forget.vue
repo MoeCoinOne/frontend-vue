@@ -15,8 +15,11 @@
         </el-form-item>
         <el-form-item>
           <el-input v-model="form.authCode" :placeholder="$t('user.forget.authCodePlaceholder')">
-            <el-button slot="append" type="primary">{{ $t('user.register.getAuthCode') }}</el-button>
+            <el-button slot="append" type="primary" @click="sendCode">{{ $t('user.register.getAuthCode') }}</el-button>
           </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="form.password" :placeholder="$t('user.forget.passwordPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.forget.submit') }}</el-button>
@@ -39,8 +42,23 @@ export default {
     return {
       form: {
         account: '',
-        authCode: ''
+        authCode: '',
+        password: ''
       }
+    }
+  },
+  methods: {
+    sendCode () {
+      this.$request.post({
+        name: 'user.sendForgetCode',
+        body: {
+          email: this.form.account
+        }
+      }).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

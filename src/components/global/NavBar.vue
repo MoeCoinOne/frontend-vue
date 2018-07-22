@@ -34,21 +34,35 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  mounted () {
+    this.getUserInfo()
+  },
   computed: {
     ...mapState({
-      userToken: state => state.user.userToken
+      accessToken: state => state.user.accessToken
     }),
     isLogin () {
       return !this.notLogin
     },
     notLogin () {
-      return !this.userToken
+      return !this.accessToken
     }
   },
   methods: {
     logout () {
       this.$store.commit('clearUserToken')
       this.$router.replace({ name: 'UserLogin' })
+    },
+    getUserInfo () {
+      // TODO: 处理当前用户信息
+      this.$request.get({
+        name: 'account.userinfo',
+        config: {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`
+          }
+        }
+      })
     }
   }
 }

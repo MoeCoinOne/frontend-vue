@@ -1,5 +1,5 @@
 export default {
-  domain: 'https://virtserver.swaggerhub.com/MoeCoinOne/Web/1.0.0/',
+  domain: 'http://moewebapp.qvwznnvemk.us-east-1.elasticbeanstalk.com/api/v1/',
   requestHandler (options, next) {
     return next()
   },
@@ -8,7 +8,15 @@ export default {
   },
   api: {
     user: {
-      login: 'auth/login'
+      login: 'auth/login',
+      register: 'users/signup',
+      checkMail: 'users/isEmailAvailable',
+      confirmMail: 'users/confirmSignup',
+      sendForgetCode: 'users/initiateForgotPassword',
+      confirmForget: 'users/confirmForgotPassword'
+    },
+    account: {
+      userinfo: 'users/userinfo'
     }
   }
 }

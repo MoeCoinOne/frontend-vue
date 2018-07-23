@@ -17,4 +17,5 @@ RUN npm i
 RUN npm run build
 RUN cp -R /app/dist/*  /usr/share/nginx/html
 
+RUN sed -i "11i try_files \$uri \$uri/ /index.html;" /etc/nginx/conf.d/default.conf
 CMD ["nginx", "-g", "daemon off;"]

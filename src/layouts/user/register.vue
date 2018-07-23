@@ -118,8 +118,7 @@ export default {
               password: this.form.password
             }
           }).then(response => {
-            console.log(response)
-            this.$route.push({
+            this.$router.push({
               name: 'UserConfirmMail',
               query: {
                 email: this.form.mail

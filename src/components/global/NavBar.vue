@@ -16,8 +16,11 @@
         <li v-if="notLogin"><router-link :to="{ name: 'UserRegister' }">{{ $t('site.navbar.register') }}</router-link></li>
         <li v-if="isLogin" style="width: 100px">
           <el-dropdown trigger="click">
-            <span class="el-dropdown-link moe-nav-user">
-              孟二千<i class="el-icon-arrow-down el-icon--right"></i>
+            <span v-if="nickname" class="el-dropdown-link moe-nav-user">
+              {{ nickname }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <span v-else class="el-dropdown-link">
+              <i class="el-icon-loading"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="$router.push('/account/home')"><i class="el-icon-news el-icon--left"></i>我的主页</el-dropdown-item>
@@ -34,12 +37,17 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  data () {
+    return {
+    }
+  },
   mounted () {
     this.getUserInfo()
   },
   computed: {
     ...mapState({
-      accessToken: state => state.user.accessToken
+      accessToken: state => state.user.accessToken,
+      nickname: state => state.user.nickname
     }),
     isLogin () {
       return !this.notLogin
@@ -55,14 +63,31 @@ export default {
     },
     getUserInfo () {
       // TODO: 处理当前用户信息
-      this.$request.get({
-        name: 'account.userinfo',
-        config: {
-          headers: {
-            Authorization: `Bearer ${this.accessToken}`
+      if (this.isLogin) {
+        this.$request.get({
+          name: 'account.userinfo',
+          config: {
+            headers: {
+              Authorization: `Bearer ${this.accessToken}`
+            }
           }
-        }
-      })
+        }).then(response => {
+          this.$store.commit('setUserInfo', {
+            uuid: response.body.data.uuid,
+            nickname: response.body.data.nickname,
+            uniqueName: response.body.data.unique_name
+          })
+        }).catch(error => {
+          console.log(error)
+        })
+      }
+    }
+  },
+  watch: {
+    accessToken (newValue) {
+      if (this.isLogin) {
+        this.getUserInfo()
+      }
     }
   }
 }

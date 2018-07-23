@@ -12,6 +12,7 @@
           @select="onMenuSelect"
         >
           <el-menu-item class="setting-menu-item" index="AccountSettingProfile">个人资料</el-menu-item>
+          <el-menu-item class="setting-menu-item" index="AccountSettingSubscription">订阅管理</el-menu-item>
           <el-menu-item class="setting-menu-item" index="AccountSettingSafe">账户安全</el-menu-item>
         </el-menu>
       </el-aside>

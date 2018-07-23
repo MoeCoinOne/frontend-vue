@@ -17,6 +17,9 @@ export default {
     },
     account: {
       userinfo: 'users/userinfo'
+    },
+    subscription: {
+      type: 'subscription/subscriptionType'
     }
   }
 }

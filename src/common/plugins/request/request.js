@@ -20,6 +20,10 @@ class Request {
 
   $handleRequest (method, option) {
     let url = 'url' in option ? option.url : this.$getApi(option.name)
+    // 调用url格式化函数
+    if (typeof option.formatUrl === 'function') {
+      url = option.formatUrl(url)
+    }
     let config = 'config' in option ? option.config : {}
     let params = 'params' in option ? option.params : {}
     if ('body' in option) {

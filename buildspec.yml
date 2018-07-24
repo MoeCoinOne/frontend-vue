@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # Install dependencies needed for running tests
+      - npm install
+
+      # Upgrade AWS CLI to the latest version
+      - pip install --upgrade awscli
+
+  build:
+    commands:
+      - npm run build
+
+  post_build:
+      - aws s3 cp  dist/ s3://encoremoe-develop/ 
+
+artifacts:
+  type: zip
+  files:
+    - dist/**/*

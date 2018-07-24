@@ -19,10 +19,10 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="form.password" :placeholder="$t('user.forget.passwordPlaceholder')"></el-input>
+          <el-input type="password" v-model="form.password" :placeholder="$t('user.forget.passwordPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.forget.submit') }}</el-button>
+          <el-button class="btn-login" type="primary" @click="submit">{{ $t('user.forget.submit') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -58,6 +58,27 @@ export default {
         console.log(response)
       }).catch(error => {
         console.log(error)
+      })
+    },
+    submit () {
+      this.$request.post({
+        name: 'user.confirmForget',
+        body: {
+          email: this.form.account,
+          validationCode: this.form.authCode,
+          password: this.form.password
+        }
+      }).then(response => {
+        this.$message({
+          showClose: true,
+          message: this.$t('user.confirmMail.success'),
+          type: 'success'
+        })
+        this.$router.replace('/user/login')
+      }).catch(error => {
+        console.log(error)
+        this.$message.error('验证码错误~')
+        // TODO: 忘记密码error处理与计时
       })
     }
   }

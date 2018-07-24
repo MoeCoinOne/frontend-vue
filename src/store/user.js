@@ -1,6 +1,7 @@
 var state = {
   accessToken: window.localStorage.getItem('_AccessToken'),
   idToken: window.localStorage.getItem('_IdToken'),
+  refreshToken: window.localStorage.getItem('_RefreshToken'),
   nickname: '',
   uuid: '',
   uniqueName: ''
@@ -14,6 +15,7 @@ export default {
       state.idToken = payload.idToken
       window.localStorage.setItem('_AccessToken', payload.accessToken)
       window.localStorage.setItem('_IdToken', payload.idToken)
+      window.localStorage.setItem('_RefreshToken', payload.refreshToken)
     },
     setUserInfo (state, payload) {
       for (let key in payload) {
@@ -28,6 +30,7 @@ export default {
       state.uniqueName = ''
       window.localStorage.removeItem('_AccessToken')
       window.localStorage.removeItem('_IdToken')
+      window.localStorage.removeItem('_RefreshToken')
     }
   }
 }

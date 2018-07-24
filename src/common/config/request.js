@@ -9,6 +9,7 @@ export default {
   api: {
     user: {
       login: 'auth/login',
+      refreshToken: 'auth/refreshToken',
       register: 'users/signup',
       checkMail: 'users/isEmailAvailable',
       confirmMail: 'users/confirmSignup',

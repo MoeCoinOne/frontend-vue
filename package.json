@@ -16,6 +16,7 @@
   "dependencies": {
     "animate.css": "^3.6.1",
     "element-ui": "^2.4.3",
+    "js-base64": "^2.4.8",
     "less": "^3.5.3",
     "less-loader": "^4.1.0",
     "vue": "^2.5.2",

@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { Base64 } from 'js-base64'
 import { mapState } from 'vuex'
 export default {
   data () {
@@ -47,6 +48,8 @@ export default {
   computed: {
     ...mapState({
       accessToken: state => state.user.accessToken,
+      idToken: state => state.user.idToken,
+      refreshToken: state => state.user.refreshToken,
       nickname: state => state.user.nickname
     }),
     isLogin () {
@@ -79,11 +82,37 @@ export default {
           })
         }).catch(error => {
           console.log(error)
-          this.$message.error('登录状态已过期')
-          this.$store.commit('clearUserToken')
-          this.$router.push('/user/login')
+          this.doRefreshToken()
         })
       }
+    },
+    parseTokenPayload (token) {
+      let tokenList = token.split('.')
+      return JSON.parse(Base64.decode(tokenList[1]))
+    },
+    doRefreshToken () {
+      let payload = this.parseTokenPayload(this.idToken)
+      let email = payload.email
+
+      this.$request.post({
+        name: 'user.refreshToken',
+        body: {
+          email,
+          refreshToken: this.refreshToken
+        }
+      }).then(response => {
+        this.$store.commit('setUserToken', {
+          accessToken: response.body.accessToken,
+          idToken: response.body.idToken,
+          refreshToken: response.body.refreshToken
+        })
+        this.getUserInfo()
+      }).catch(error => {
+        console.error(error)
+        this.$message.error('登录状态已过期')
+        this.$store.commit('clearUserToken')
+        this.$router.push('/user/login')
+      })
     }
   },
   watch: {

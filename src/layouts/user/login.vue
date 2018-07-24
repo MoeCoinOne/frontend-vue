@@ -87,7 +87,8 @@ export default {
             // success
             this.$store.commit('setUserToken', {
               accessToken: response.body.accessToken,
-              idToken: response.body.idToken
+              idToken: response.body.idToken,
+              refreshToken: response.body.refreshToken
             })
             this.$message({
               message: this.$t('user.login.success'),

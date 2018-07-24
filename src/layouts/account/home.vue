@@ -26,7 +26,7 @@
 
     <section class="menu">
       <el-menu :default-active="$route.name" class="el-menu" mode="horizontal" @select="onMenuSelect">
-        <el-menu-item index="AccountHomeDynamic">动态</el-menu-item>
+        <el-menu-item v-if="false" index="AccountHomeDynamic">动态</el-menu-item>
         <el-menu-item index="AccountHomeSubscribes">我的订阅</el-menu-item>
         <el-menu-item index="AccountHomeBill">我的账单</el-menu-item>
       </el-menu>

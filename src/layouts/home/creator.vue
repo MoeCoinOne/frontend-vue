@@ -1,5 +1,5 @@
 <template>
-  <article v-title="'创作者'" v-loading="loading">
+  <article v-title="pageTitle" v-loading="loading">
     <nav-bar></nav-bar>
     <div class="user-header">
       <div class="user-banner"></div>
@@ -11,7 +11,7 @@
           </div>
           <div class="action">
             <router-link class="action-item" :to="{ name: 'HomeCreatorIndex', params: $route.params }" exact>主页</router-link>
-            <router-link class="action-item" :to="{ name: 'HomeCreatorSponsor', params: $route.params }">赞助者</router-link>
+            <router-link v-if="userinfo.uuid === currentUserUUID" class="action-item" :to="{ name: 'HomeCreatorSponsor', params: $route.params }">赞助者</router-link>
           </div>
         </div>
         <el-button type="danger" icon="el-icon-edit" class="btn-publish" @click="showPublishDialog">发布动态</el-button>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import CreatorPublishDialog from '@/components/home/CreatorPublishDialog'
 import { NavBar, FootBar } from '@/components/global'
 export default {
@@ -36,6 +37,7 @@ export default {
   data () {
     return {
       loading: false,
+      pageTitle: this.$t('home.creator.title'),
       publishDialog: {
         show: false
       },
@@ -68,6 +70,8 @@ export default {
         this.userinfo.uniqueName = response.body.data.unique_name
         this.userinfo.biography = response.body.data.biography
         this.userinfo.avatarId = response.body.data.avatar_id
+
+        this.pageTitle = `${this.userinfo.nickname} - ${this.$t('site.name')}`
       }).catch(error => {
         if (error.status === 404) {
           this.$message.error('创作者不存在')
@@ -78,6 +82,11 @@ export default {
         this.loading = false
       })
     }
+  },
+  computed: {
+    ...mapState({
+      currentUserUUID: state => state.user.uuid
+    })
   }
 }
 </script>

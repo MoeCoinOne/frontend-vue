@@ -1,18 +1,18 @@
 <template>
-  <section v-title="$t('account.setting.profile.title')">
+  <section v-title="$t('account.setting.profile.title')" v-loading="loading">
     <h2 class="title">个人资料</h2>
     <el-form class="form" :model="form" label-width="80px" label-position="left">
       <el-form-item label="昵称">
         <el-input v-model="form.nickname"></el-input>
       </el-form-item>
       <el-form-item label="个人介绍">
-        <el-input type="textarea" v-model="form.intro"></el-input>
+        <el-input type="textarea" v-model="form.introduce"></el-input>
       </el-form-item>
       <el-form-item label="个性地址">
-        <el-input v-model="form.linkName" disabled></el-input>
+        <el-input v-model="form.uniqueName"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button>提交</el-button>
+        <el-button @click="saveProfile">提交</el-button>
       </el-form-item>
     </el-form>
     <h2 class="title">头像</h2>
@@ -29,19 +29,81 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
+      loading: false,
       form: {
-        nickname: '孟二千',
-        introduce: '写代码的艺术家',
-        linkName: 'smilec',
+        nickname: '',
+        introduce: '',
+        uniqueName: '',
         avatar: ''
       },
       avatar: {
         link: '/static/img/home/user-avatar.jpg'
       }
     }
+  },
+  created () {
+    this.getUserInfo()
+  },
+  methods: {
+    getUserInfo () {
+      this.loading = true
+      this.$request.get({
+        name: 'account.userinfo',
+        config: {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`
+          }
+        }
+      }).then(response => {
+        this.form.nickname = response.body.data.nickname
+        this.form.introduce = response.body.data.biography
+        this.form.uniqueName = response.body.data.unique_name
+      }).catch(error => {
+        console.log(error)
+        this.$message.error('登录状态已过期')
+        this.$store.commit('clearUserToken')
+        this.$router.push('/user/login')
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    saveProfile () {
+      this.loading = true
+      this.$request.post({
+        name: 'account.userinfo',
+        body: {
+          uuid: this.uuid,
+          nickname: this.form.nickname,
+          biography: this.form.introduce,
+          unique_name: this.form.uniqueName
+        },
+        config: {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`
+          }
+        }
+      }).then(response => {
+        this.$message({
+          message: '保存成功~',
+          type: 'success'
+        })
+      }).catch(error => {
+        this.$message.error('保存失败~出错啦~')
+        console.log(error)
+      }).finally(() => {
+        this.loading = false
+      })
+    }
+  },
+  computed: {
+    ...mapState({
+      uuid: state => state.user.uuid,
+      accessToken: state => state.user.accessToken
+    })
   }
 }
 </script>

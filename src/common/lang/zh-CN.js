@@ -15,6 +15,12 @@ export const home = {
   },
   explore: {
     title: '发现'
+  },
+  pay: {
+    title: '收银台'
+  },
+  creator: {
+    title: '创作者'
   }
 }
 
@@ -67,7 +73,7 @@ export const user = {
     feeSubscribe: '付费订阅'
   },
   index: {
-    title: '个人主页',
+    title: '个人中心',
     balance: '余额',
     follow: '关注',
     subscribe: '订阅',

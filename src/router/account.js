@@ -15,12 +15,12 @@ export default [
     children: [
       {
         path: 'dynamic',
-        alias: '',
         name: 'AccountHomeDynamic',
         component: HomeDynamic
       },
       {
         path: 'subscribes',
+        alias: '',
         name: 'AccountHomeSubscribes',
         component: HomeSubscribes
       },

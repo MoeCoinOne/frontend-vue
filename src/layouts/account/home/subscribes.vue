@@ -3,8 +3,6 @@
     <el-container>
       <el-aside class="box aside" width="230px">
         <div class="tag active">全部</div>
-        <div class="tag">动画</div>
-        <div class="tag">游戏</div>
       </el-aside>
       <el-main class="box main">
         <div class="creator" v-for="(creator, cIndex) in creatorList" :key="cIndex">
@@ -15,7 +13,8 @@
             </router-link>
             <div class="intro">{{ creator.creator.introduce }}</div>
           </div>
-          <el-popover
+          <el-button class="btn-delete-sub">已订阅</el-button>
+          <!-- <el-popover
             placement="top"
             width="160"
             v-model="creator.popShow">
@@ -25,7 +24,7 @@
               <el-button type="danger" size="mini" @click="creator.popShow = false">确定</el-button>
             </div>
             <el-button slot="reference" class="btn-delete-sub">已订阅</el-button>
-          </el-popover>
+          </el-popover> -->
         </div>
       </el-main>
     </el-container>

@@ -1,22 +1,22 @@
 <template>
-  <article v-title="$t('user.index.title')">
+  <article v-title="$t('user.index.title')" v-loading="loading">
     <nav-bar></nav-bar>
 
     <section class="banner">
       <div class="user">
-        <el-button type="danger" class="btn-be-creator" icon="el-icon-star-on">成为创作者</el-button>
+        <el-button v-if="false" type="danger" class="btn-be-creator" icon="el-icon-star-on">成为创作者</el-button>
         <img class="avatar" :src="user.avatar" />
         <div class="info">
-          <h1>孟二千 <small>一个写代码的艺术家</small></h1>
+          <h1>{{ user.nickname }} <small>{{ user.introduce }}</small></h1>
           <div class="item">
             <span class="title">订阅</span>
-            <span class="value">10</span>
+            <span class="value">0</span>
           </div>
           <div class="item">
             <span class="title">关注</span>
-            <span class="value">5</span>
+            <span class="value">0</span>
           </div>
-          <div class="item">
+          <div class="item" v-if="false">
             <span class="title">余额</span>
             <span class="value">￥200</span>
           </div>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { NavBar, FootBar } from '@/components/global'
 export default {
   components: {
@@ -45,18 +46,44 @@ export default {
   },
   data () {
     return {
+      loading: false,
       user: {
+        nickname: '',
+        introduce: '',
         avatar: '/static/img/home/user-avatar.jpg'
       }
     }
   },
-  mounted () {
-    console.log(this.$route)
+  created () {
+    this.getUserInfo()
   },
   methods: {
     onMenuSelect (index) {
       this.$router.push({ name: index })
+    },
+    getUserInfo () {
+      this.loading = true
+      this.$request.get({
+        name: 'account.userinfo',
+        config: {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`
+          }
+        }
+      }).then(response => {
+        this.user.nickname = response.body.data.nickname
+        this.user.introduce = response.body.data.biography
+      }).catch(error => {
+        console.log(error)
+      }).finally(() => {
+        this.loading = false
+      })
     }
+  },
+  computed: {
+    ...mapState({
+      accessToken: state => state.user.accessToken
+    })
   }
 }
 </script>

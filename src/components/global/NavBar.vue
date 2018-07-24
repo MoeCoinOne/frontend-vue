@@ -65,7 +65,6 @@ export default {
       this.$router.replace({ name: 'UserLogin' })
     },
     getUserInfo () {
-      // TODO: 处理当前用户信息
       if (this.isLogin) {
         this.$request.get({
           name: 'account.userinfo',

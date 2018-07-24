@@ -1,5 +1,5 @@
 <template>
-  <section v-title="$t('account.home.subscribes.title')">
+  <section v-title="$t('account.home.subscribes.title')" v-loading="loading">
     <el-container>
       <el-aside class="box aside" width="230px">
         <div class="tag active">全部</div>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { UserPop } from '@/components/global'
 export default {
   components: {
@@ -39,6 +40,12 @@ export default {
   },
   data () {
     return {
+      loading: false,
+      pagination: {
+        current: 1,
+        size: 20,
+        total: 0
+      },
       creatorList: [
         {
           id: 0,
@@ -64,9 +71,38 @@ export default {
     }
   },
   mounted () {
-    for (let index = 0; index < 0; index++) {
-      this.creatorList.push(this.creatorList[0])
+    this.loadData()
+  },
+  methods: {
+    loadData () {
+      this.loading = true
+      this.$request.get({
+        name: 'subscription.relationship',
+        params: {
+          type: 'FOLLOWING',
+          page: this.pagination.current++,
+          pageSize: this.pagination.size
+        },
+        config: {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`
+          }
+        }
+      }).then(response => {
+        // TODO: 设置实际的订阅列表
+        // this.creatorList = response.body.data
+      }).catch(error => {
+        console.error(error)
+        this.$message.error('我的订阅获取失败~')
+      }).finally(() => {
+        this.loading = false
+      })
     }
+  },
+  computed: {
+    ...mapState({
+      accessToken: state => state.user.accessToken
+    })
   }
 }
 </script>

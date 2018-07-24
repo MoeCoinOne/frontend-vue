@@ -1,5 +1,5 @@
 <template>
-  <section v-title="$t('account.home.bill.title')">
+  <section v-title="$t('account.home.bill.title')" v-loading="loading">
     <!-- 统计部分 -->
     <el-row class="amount">
       <el-col :span="12" class="balance-box">
@@ -64,9 +64,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
+      loading: false,
+      pagination: {
+        current: 1,
+        size: 20,
+        total: 0
+      },
       bill: {
         list: [{
           id: '1129',
@@ -102,13 +109,43 @@ export default {
       }
     }
   },
+  created () {
+    this.loadData()
+  },
+  methods: {
+    loadData () {
+      this.loading = true
+      this.$request.get({
+        name: 'payments',
+        params: {
+          page: this.pagination.current++,
+          pageSize: this.pagination.size
+        },
+        config: {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`
+          }
+        }
+      }).then(response => {
+        // TODO: 处理实际的账单
+        console.log(response)
+      }).catch(error => {
+        console.error(error)
+      }).finally(() => {
+        this.loading = false
+      })
+    }
+  },
   computed: {
     balance () {
       return {
         int: 200,
         decimal: 23
       }
-    }
+    },
+    ...mapState({
+      accessToken: state => state.user.accessToken
+    })
   }
 }
 </script>

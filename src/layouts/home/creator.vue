@@ -14,7 +14,7 @@
             <router-link v-if="userinfo.uuid === currentUserUUID" class="action-item" :to="{ name: 'HomeCreatorSponsor', params: $route.params }">赞助者</router-link>
           </div>
         </div>
-        <el-button type="danger" icon="el-icon-edit" class="btn-publish" @click="showPublishDialog">发布动态</el-button>
+        <!-- <el-button type="danger" icon="el-icon-edit" class="btn-publish" @click="showPublishDialog">发布动态</el-button> -->
       </div>
     </div>
 

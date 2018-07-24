@@ -1,7 +1,7 @@
 <template>
   <section v-title="$t('account.home.bill.title')" v-loading="loading">
     <!-- 统计部分 -->
-    <el-row class="amount">
+    <el-row class="amount" v-if="false">
       <el-col :span="12" class="balance-box">
         <div class="box">
           <h4 class="title">可用余额</h4>
@@ -31,30 +31,33 @@
         :data="bill.list"
         style="width: 100%">
         <el-table-column
-          prop="id"
+          prop="payment_no"
           label="订单编号"
-          width="80">
+          width="200">
         </el-table-column>
         <el-table-column
-          prop="date"
+          prop="created_at"
           label="交易时间"
-          width="180">
+          width="220">
         </el-table-column>
         <el-table-column
-          prop="type"
-          label="交易类型"
+          prop="payment_method"
+          label="交易方式"
           width="100">
         </el-table-column>
         <el-table-column
-          prop="remark"
-          label="描述">
-        </el-table-column>
-        <el-table-column
-          prop="fee"
+          prop="sum"
           label="金额">
           <template slot-scope="scope">
-            <span :style="{ color: scope.row.fee > 0 ? 'green' : 'red' }">
-              {{ scope.row.fee }}
+            {{ scope.row.sum }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="sum"
+          label="状态">
+          <template slot-scope="scope">
+            <span :style="{ color: scope.row.status === 20 ? 'green' : 'red' }">
+              {{ scope.row.status === 20 ? '成功' : '未支付' }}
             </span>
           </template>
         </el-table-column>
@@ -75,37 +78,7 @@ export default {
         total: 0
       },
       bill: {
-        list: [{
-          id: '1129',
-          date: '2018-07-15 14:47:39',
-          type: '支出',
-          remark: '订阅孟五千',
-          fee: -11.12
-        }, {
-          id: '1121',
-          date: '2018-07-15 14:47:39',
-          type: '收入',
-          remark: '微信充值',
-          fee: 50
-        }, {
-          id: '1119',
-          date: '2018-07-15 14:47:39',
-          type: '支出',
-          remark: '订阅顺火暖工作室',
-          fee: -10.12
-        }, {
-          id: '1009',
-          date: '2018-07-15 14:47:39',
-          type: '支出',
-          remark: '订阅哈哈将军',
-          fee: -5
-        }, {
-          id: '1001',
-          date: '2018-07-15 14:47:39',
-          type: '收入',
-          remark: '微信充值',
-          fee: 100.00
-        }]
+        list: []
       }
     }
   },
@@ -128,6 +101,7 @@ export default {
         }
       }).then(response => {
         // TODO: 处理实际的账单
+        this.bill.list = response.body.data
         console.log(response)
       }).catch(error => {
         console.error(error)

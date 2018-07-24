@@ -13,7 +13,6 @@ phases:
     commands:
       - npm run build
 
-  # Because we need to migrate, keep dev dependencies.
   post_build:
       - aws s3 cp  dist/ s3://encoremoe-develop/ 
 

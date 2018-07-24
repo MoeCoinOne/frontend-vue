@@ -19,6 +19,7 @@ export default {
       userinfo: 'users/userinfo'
     },
     subscription: {
+      relationship: 'subscription/relationship',
       type: 'subscription/subscriptionType'
     }
   }

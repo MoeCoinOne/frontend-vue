@@ -13,29 +13,31 @@
           </div>
         </el-card>
       </el-aside>
-      <el-main class="main-box">
-        <el-card class="box-card sponsor" v-for="(scheme, sIndex) in schemes" :key="sIndex">
+      <el-main class="main-box" v-loading="loading">
+        <el-card class="box-card sponsor" :class="{ 'is-first': sIndex === 0 }" v-for="(scheme, sIndex) in schemes" :key="sIndex">
           <div class="info">
-            <h3 class="title">{{ scheme.title }}</h3>
+            <h3 class="title">{{ scheme.name }}</h3>
             <div class="price">
-              <span class="cost">{{ parseFloat(scheme.cost).toFixed(2) }}</span>
+              <span class="cost">{{ parseFloat(scheme.price).toFixed(2) }}</span>
               <span class="cycle">￥/月</span>
-              <span class="count">{{ scheme.subscribe_count }} 人已赞助</span>
+              <!-- <span class="count">{{ scheme.subscribe_count }} 人已赞助</span> -->
             </div>
-            <div class="intro" v-html="scheme.intro"></div>
+            <div class="intro" v-for="(line, lIndex) in scheme.description.split('\n')" :key="lIndex">
+              {{ line }}
+            </div>
           </div>
-          <image-list class="image-list" :images="scheme.images" :preview-id="sIndex"></image-list>
+          <!-- <image-list class="image-list" :images="scheme.images" :preview-id="sIndex"></image-list> -->
           <div class="btn-group">
-            <el-button type="primary">赞助￥{{ parseFloat(scheme.cost).toFixed(2) }}</el-button>
+            <el-button type="primary" @click="pay(scheme)">赞助￥{{ parseFloat(scheme.price).toFixed(2) }}</el-button>
           </div>
         </el-card>
       </el-main>
     </el-container>
-
   </section>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { ImageList } from '@/components/global'
 export default {
   components: {
@@ -43,50 +45,69 @@ export default {
   },
   data () {
     return {
-      schemes: [{
-        id: 1,
-        title: '一罐可乐',
-        intro: '唉。',
-        cost: 2,
-        subscribe_count: 123,
-        images: [{
-          id: 3,
-          src: 'https://moecoin.one/images/summer.jpg'
-        }, {
-          id: 1,
-          src: '/static/img/home/temp/2.jpg'
-        }, {
-          id: 2,
-          src: '/static/img/home/temp/1.jpg'
-        }, {
-          id: 3,
-          src: '/static/img/home/user-banner.jpg'
-        }, {
-          id: 1,
-          src: '/static/img/home/temp/2.jpg'
-        }, {
-          id: 2,
-          src: '/static/img/home/temp/1.jpg'
-        }]
-      }, {
-        id: 2,
-        title: '插画',
-        intro: '不太复杂的，你想要看到的插画。<br/>非商用授权，日涂的水准，不适合肉多的同性内容，其他的别违规哟。',
-        cost: 500,
-        subscribe_count: 123,
-        images: [{
-          id: 2,
-          src: '/static/img/home/temp/1.jpg'
-        }]
-      }, {
-        id: 3,
-        title: '无图片',
-        intro: 'Hello world!',
-        cost: 6655,
-        subscribe_count: 2,
-        images: []
-      }]
+      loading: false,
+      userinfo: {
+        uuid: '',
+        nickname: '',
+        biography: ''
+      },
+      schemes: []
     }
+  },
+  mounted () {
+    this.loadData()
+  },
+  methods: {
+    async loadData () {
+      this.loading = true
+      try {
+        // 获取用户信息
+        let userinfo = await this.$request.get({
+          name: 'account.userinfo',
+          params: {
+            unique_name: this.$route.params.id
+          }
+        })
+        this.userinfo = userinfo.body.data
+        // 获取订阅列表
+        let types = await this.$request.get({
+          name: 'subscription.type',
+          params: {
+            userId: this.userinfo.uuid
+          }
+        })
+        this.schemes = types.body.data
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
+    },
+    pay (type) {
+      this.$router.push({
+        name: 'HomePay',
+        query: {
+          uuid: this.userinfo.uuid,
+          nickname: this.userinfo.nickname,
+          introduce: this.userinfo.biography,
+          // 赞助方案
+          typeId: type.id,
+          typePrice: type.price,
+          typeName: type.name
+        }
+      })
+    }
+  },
+  watch: {
+    uuid (newValue) {
+      if (newValue) {
+        this.loadData()
+      }
+    }
+  },
+  computed: {
+    ...mapState({
+      accessToken: state => state.user.accessToken
+    })
   }
 }
 </script>
@@ -126,7 +147,7 @@ export default {
 
     .box-card {
       margin-top: 20px;
-      &:first-child {
+      &:first-child, &.is-first {
         margin-top: 0px;
       }
       &.sponsor {

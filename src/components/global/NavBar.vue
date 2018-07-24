@@ -79,6 +79,9 @@ export default {
           })
         }).catch(error => {
           console.log(error)
+          this.$message.error('登录状态已过期')
+          this.$store.commit('clearUserToken')
+          this.$router.push('/user/login')
         })
       }
     }

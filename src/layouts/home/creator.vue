@@ -1,5 +1,5 @@
 <template>
-  <article v-title="'创作者'">
+  <article v-title="'创作者'" v-loading="loading">
     <nav-bar></nav-bar>
     <div class="user-header">
       <div class="user-banner"></div>
@@ -7,7 +7,7 @@
         <img class="avatar" src="/static/img/home/user-avatar.jpg" />
         <div class="info">
           <div class="intro">
-            <h1>孟二千 <small>一个写代码的艺术家</small></h1>
+            <h1>{{ userinfo.nickname }} <small>{{ userinfo.biography }}</small></h1>
           </div>
           <div class="action">
             <router-link class="action-item" :to="{ name: 'HomeCreatorIndex', params: $route.params }" exact>主页</router-link>
@@ -35,14 +35,48 @@ export default {
   },
   data () {
     return {
+      loading: false,
       publishDialog: {
         show: false
+      },
+      userinfo: {
+        uuid: '',
+        nickname: '',
+        uniqueName: '',
+        biography: '',
+        avatarId: ''
       }
     }
+  },
+  mounted () {
+    this.loadData()
   },
   methods: {
     showPublishDialog () {
       this.publishDialog.show = true
+    },
+    loadData () {
+      this.loading = true
+      this.$request.get({
+        name: 'account.userinfo',
+        params: {
+          unique_name: this.$route.params.id
+        }
+      }).then(response => {
+        this.userinfo.uuid = response.body.data.uuid
+        this.userinfo.nickname = response.body.data.nickname
+        this.userinfo.uniqueName = response.body.data.unique_name
+        this.userinfo.biography = response.body.data.biography
+        this.userinfo.avatarId = response.body.data.avatar_id
+      }).catch(error => {
+        if (error.status === 404) {
+          this.$message.error('创作者不存在')
+        } else {
+          this.$message.error('未知错误')
+        }
+      }).finally(() => {
+        this.loading = false
+      })
     }
   }
 }

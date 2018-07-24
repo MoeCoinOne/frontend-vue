@@ -23,7 +23,7 @@
         <el-main class="main-box">
           <div class="creator-card"
             v-for="(creator, cIndex) in creators" :key="cIndex"
-            @click="$router.push({ name: 'HomeCreatorIndex', params: { id: 'smilec' } })">
+            @click="$router.push({ name: 'HomeCreatorIndex', params: { id: 'f5f21a0f-e5c8-43d6-97c6-5a9278dc2afe' } })">
             <img class="ubanner" :src="creator.banner" />
             <div class="info">
               <img class="avatar" :src="creator.avatar" />
@@ -125,17 +125,6 @@ export default {
     }
   },
   mounted () {
-    // 目前会error 因为 Request Config 中的域名是 example.com
-    this.$request.post({
-      name: 'user.login',
-      body: {
-        test: 'hello world'
-      }
-    }).then(response => {
-      console.log('ok', response)
-    }).catch(error => {
-      console.log(error)
-    })
   }
 }
 </script>

@@ -74,12 +74,16 @@ export default {
         }
       }).then(response => {
         this.$emit('success', {
-          type: 'create',
-          typeId: response.body.data.type_id
+          type: 'create'
+        })
+        this.$message({
+          message: '保存成功~',
+          type: 'success'
         })
         this.close()
       }).catch(error => {
         console.log(error)
+        this.$message.error('保存失败~')
       }).finally(() => {
         this.loading = false
       })
@@ -100,12 +104,16 @@ export default {
         }
       }).then(response => {
         this.$emit('success', {
-          type: 'modify',
-          typeId: response.body.data.type_id
+          type: 'modify'
+        })
+        this.$message({
+          message: '保存成功~',
+          type: 'success'
         })
         this.close()
       }).catch(error => {
         console.log(error)
+        this.$message.error('保存失败~')
       }).finally(() => {
         this.loading = false
       })

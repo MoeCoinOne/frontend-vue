@@ -15,7 +15,9 @@
             {{ parseFloat(type.price) }} 元
           </el-form-item>
           <el-form-item label="介绍" class="moe-subscription-type-form-item">
-            <div v-html="type.description.replace(/\n/g, '<br>')"></div>
+            <div class="intro-line" v-for="(line, lIndex) in type.description.split('\n')" :key="lIndex">
+              {{ line }}
+            </div>
           </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -52,6 +54,9 @@ export default {
       this.type.loading = true
       this.$request.get({
         name: 'subscription.type',
+        params: {
+          pageSize: 1000
+        },
         config: {
           headers: {
             Authorization: `Bearer ${this.accessToken}`
@@ -61,6 +66,7 @@ export default {
         this.type.list = response.body.data
       }).catch(error => {
         console.log(error)
+        this.$message.error('数据获取失败')
       }).finally(() => {
         this.type.loading = false
       })
@@ -129,6 +135,10 @@ section {
     color: #fff;
 
   }
+}
+.intro-line {
+  line-height: 1.8;
+  margin-top: 7px;
 }
 </style>
 

@@ -23,7 +23,7 @@
         <el-main class="main-box">
           <div class="creator-card"
             v-for="(creator, cIndex) in creators" :key="cIndex"
-            @click="$router.push({ name: 'HomeCreatorIndex', params: { id: 'f5f21a0f-e5c8-43d6-97c6-5a9278dc2afe' } })">
+            @click="$router.push({ name: 'HomeCreatorIndex', params: { id: 'smilec' } })">
             <img class="ubanner" :src="creator.banner" />
             <div class="info">
               <img class="avatar" :src="creator.avatar" />

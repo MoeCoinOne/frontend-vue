@@ -24,6 +24,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="$router.push('/account/home')"><i class="el-icon-news el-icon--left"></i>个人中心</el-dropdown-item>
+              <el-dropdown-item @click.native="$router.push({ name: 'HomeCreatorIndex', params: { id: uniqueName } })"><i class="el-icon-tickets el-icon--left"></i>创作者首页</el-dropdown-item>
               <el-dropdown-item @click.native="$router.push('/account/setting')"><i class="el-icon-setting el-icon--left"></i>账户设置</el-dropdown-item>
               <el-dropdown-item @click.native="logout" divided><i class="el-icon-circle-close-outline el-icon--left"></i>退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -50,7 +51,8 @@ export default {
       accessToken: state => state.user.accessToken,
       idToken: state => state.user.idToken,
       refreshToken: state => state.user.refreshToken,
-      nickname: state => state.user.nickname
+      nickname: state => state.user.nickname,
+      uniqueName: state => state.user.uniqueName
     }),
     isLogin () {
       return !this.notLogin

@@ -3,8 +3,8 @@
     <nav-bar></nav-bar>
 
     <div class="form-container">
-      <el-form class="form" ref="form" :model="form">
-        <el-form-item class="first">
+      <el-form class="form" ref="form" :model="form" :rules="rules">
+        <el-form-item class="first" prop="account">
           <el-input v-model="form.account" :placeholder="$t('user.forget.accountPlaceholder')"></el-input>
 
           <div class="title circle">
@@ -13,16 +13,17 @@
           </div>
           <img class="title oh" src="/static/img/user/oh.png" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="authCode">
           <el-input v-model="form.authCode" :placeholder="$t('user.forget.authCodePlaceholder')">
-            <el-button slot="append" type="primary" @click="sendCode">{{ $t('user.register.getAuthCode') }}</el-button>
+            <el-button v-if="codeSeconds" slot="append" :disabled="true" >{{ codeSeconds }}s</el-button>
+            <el-button v-else :loading="codeSending" slot="append" @click="sendCode">{{ $t('user.register.getAuthCode') }}</el-button>
           </el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input type="password" v-model="form.password" :placeholder="$t('user.forget.passwordPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button class="btn-login" type="primary" @click="submit">{{ $t('user.forget.submit') }}</el-button>
+          <el-button class="btn-login" :loading="loading" type="primary" @click="onSubmit">{{ $t('user.forget.submit') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -40,27 +41,60 @@ export default {
   },
   data () {
     return {
+      codeSeconds: 0,
+      codeSending: false,
+      loading: false,
       form: {
         account: '',
         authCode: '',
         password: ''
+      },
+      rules: {
+        account: [
+          { required: true, message: this.$t('error.FORGET_MAIL_EMPTY'), trigger: 'blur' }
+        ],
+        authCode: [
+          { required: true, message: this.$t('error.FORGET_CODE_EMPTY'), trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: this.$t('error.FORGET_PASSWORD_LENGTH_INVALID'), trigger: 'blur' },
+          { min: 8, message: this.$t('error.FORGET_PASSWORD_LENGTH_INVALID'), trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
     sendCode () {
+      this.codeSending = true
       this.$request.post({
         name: 'user.sendForgetCode',
         body: {
           email: this.form.account
         }
       }).then(response => {
-        console.log(response)
+        this.startTiming()
       }).catch(error => {
-        console.log(error)
+        switch (error.body.err_message) {
+          case 'Username/client id combination not found.':
+            this.$message.error(this.$t('error.FORGET_MAIL_NOT_EXIST'))
+            break
+          default:
+            this.$message.error(this.$t('error.UNKOWN'))
+            break
+        }
+      }).finally(() => {
+        this.codeSending = false
+      })
+    },
+    onSubmit () {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.submit()
+        }
       })
     },
     submit () {
+      this.loading = true
       this.$request.post({
         name: 'user.confirmForget',
         body: {
@@ -76,10 +110,35 @@ export default {
         })
         this.$router.replace('/user/login')
       }).catch(error => {
-        console.log(error)
-        this.$message.error('验证码错误~')
-        // TODO: 忘记密码error处理与计时
+        switch (error.body.err_message) {
+          case 'Username/client id combination not found.':
+            this.$message.error(this.$t('error.FORGET_MAIL_NOT_EXIST'))
+            break
+          case 'Password does not conform to policy: Password must have lowercase characters':
+            this.$message.error(this.$t('error.REGISTER_PASSWORD_LOWERCASE_INVALID'))
+            break
+          case 'Password does not conform to policy: Password must have numeric characters':
+            this.$message.error(this.$t('error.REGISTER_PASSWORD_NUMERIC_INVALID'))
+            break
+          case 'Invalid verification code provided, please try again.':
+            this.$message.error(this.$t('error.FORGET_CODE_INVALID'))
+            break
+          default:
+            this.$message.error(this.$t('error.UNKOWN'))
+            break
+        }
+      }).finally(() => {
+        this.loading = false
       })
+    },
+    startTiming () {
+      this.codeSeconds = 60
+      let id = setInterval(() => {
+        this.codeSeconds--
+        if (this.codeSeconds <= 0) {
+          clearInterval(id)
+        }
+      }, 1000)
     }
   }
 }

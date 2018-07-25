@@ -49,7 +49,7 @@ export default {
       loading: false,
       form: {
         mail: '',
-        nickname: 'TestUser',
+        nickname: '',
         password: '',
         repeatPassword: ''
       },
@@ -75,21 +75,22 @@ export default {
                   email: value
                 }
               }).then(response => {
-                // TODO: 校验邮箱正常
-                console.log(response)
-                callback()
+                if (response.body.data.available) {
+                  callback()
+                } else {
+                  callback(new Error(this.$t('error.REGISTER_MAIL_EXIST')))
+                }
               }).catch(error => {
-                // TODO: 解决异常
                 callback()
-                console.log(error)
+                console.error(error)
               })
             }
           },
           trigger: 'blur'
         }],
         password: [
-          { required: true, message: this.$t('error.REGISTER_PASSWORD_INVALID'), trigger: 'blur' },
-          { min: 8, max: 16, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' }
+          { required: true, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' },
+          { min: 8, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' }
         ],
         repeatPassword: [{
           validator: (rule, value, callback) => {
@@ -129,7 +130,7 @@ export default {
             } else if (typeof error.body.err_message === 'string') {
               switch (error.body.err_message) {
                 case 'Password did not conform with policy: Password must have lowercase characters':
-                  this.$message.error(this.$t('error.REGISTER_PASSWORD_NUMERIC_INVALID'))
+                  this.$message.error(this.$t('error.REGISTER_PASSWORD_LOWERCASE_INVALID'))
                   break
                 case 'Password did not conform with policy: Password must have numeric characters':
                   this.$message.error(this.$t('error.REGISTER_PASSWORD_NUMERIC_INVALID'))

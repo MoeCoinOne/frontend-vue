@@ -111,6 +111,7 @@ export const account = {
 }
 
 export const error = {
+  UNKOWN: '未知错误~请稍后再试~',
   // 登录
   LOGIN_ACCOUNT_EMPTY: '邮箱不能为空',
   LOGIN_ACCOUNT_INVALID: '邮箱格式无效',
@@ -120,10 +121,17 @@ export const error = {
   // 注册
   REGISTER_NICKNAME_EMPTY: '昵称不能为空',
   REGISTER_MAIL_INVALID: '邮箱格式无效',
+  REGISTER_MAIL_EXIST: '邮箱已经被占用',
   REGISTER_PASSWORD_LENGTH_INVALID: '请输入8位以上密码',
   REGISTER_PASSWORD_LOWERCASE_INVALID: '密码中必须包含小写字母',
   REGISTER_PASSWORD_NUMERIC_INVALID: '密码中必须包含数字',
   REGISTER_REPEAT_PASSWORD_INVALID: '两次输入的密码不一致',
   // 邮箱验证
-  CONFIRM_MAIL_CODE_INVALID: '验证码不正确~'
+  CONFIRM_MAIL_CODE_INVALID: '验证码不正确~',
+  // 忘记密码
+  FORGET_MAIL_NOT_EXIST: '账户不存在',
+  FORGET_MAIL_EMPTY: '邮箱不能为空',
+  FORGET_CODE_EMPTY: '验证码不能为空',
+  FORGET_CODE_INVALID: '验证码不正确~请重试~',
+  FORGET_PASSWORD_LENGTH_INVALID: '请输入8位以上密码'
 }

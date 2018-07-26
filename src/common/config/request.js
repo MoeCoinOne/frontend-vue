@@ -1,5 +1,6 @@
+console.log(process.env.NODE_ENV)
 export default {
-  domain: 'http://moewebapp.qvwznnvemk.us-east-1.elasticbeanstalk.com/api/v1/',
+  domain: process.env.NODE_ENV === 'production' ? 'https://develop-test.encore.moe/api/v1/' : 'http://moewebapp.qvwznnvemk.us-east-1.elasticbeanstalk.com/api/v1/',
   requestHandler (options, next) {
     return next()
   },

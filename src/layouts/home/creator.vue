@@ -71,7 +71,7 @@ export default {
         this.userinfo.biography = response.body.data.biography
         this.userinfo.avatarId = response.body.data.avatar_id
 
-        this.pageTitle = `${this.userinfo.nickname} - ${this.$t('site.name')}`
+        this.pageTitle = this.userinfo.nickname
       }).catch(error => {
         if (error.status === 404) {
           this.$message.error('创作者不存在')

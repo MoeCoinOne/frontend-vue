@@ -1,9 +1,9 @@
 <template>
   <section v-title="$t('account.setting.safe.title')" v-loading="type.loading">
-    <h2 class="title">订阅管理 <el-button class="btn-create" type="warning" icon="el-icon-plus" size="small" @click="showTypeDialog('create')">创建订阅</el-button></h2>
+    <h2 class="title">订阅类型管理 <el-button class="btn-create" type="warning" icon="el-icon-plus" size="small" @click="showTypeDialog('create')">创建订阅</el-button></h2>
     <subscription-type-dialog :show.sync="typeDialog.show" :type="typeDialog.type" @success="loadData"></subscription-type-dialog>
     <div v-if="!type.loading && type.list.length === 0" class="tips-empty">
-      你还没有设置订阅，快创建一个吧
+      你还没有设置订阅类型，快创建一个吧
     </div>
     <el-collapse>
       <el-collapse-item v-for="(type, tIndex) in type.list" :key="tIndex">

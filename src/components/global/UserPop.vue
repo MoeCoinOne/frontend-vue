@@ -9,7 +9,7 @@
         <img v-if="user.avatar" :src="user.avatar" class="avatar" />
         <div class="info">
           <div class="name">{{ user.name }}</div>
-          <div class="intro">一个写代码的艺术家</div>
+          <div class="intro">{{ user.intro }}</div>
         </div>
       </div>
       <router-link
@@ -31,6 +31,7 @@ export default {
         return {
           avatar: '',
           name: '',
+          intro: '',
           linkName: ''
         }
       }

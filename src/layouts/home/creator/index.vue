@@ -13,7 +13,7 @@
           </div> -->
         </el-card>
       </el-aside>
-      <el-main class="main-box" v-loading="loading">
+      <el-main class="main-box" v-loading="loading" v-if="loading || schemes.length">
         <el-card class="box-card sponsor" :class="{ 'is-first': sIndex === 0 }" v-for="(scheme, sIndex) in schemes" :key="sIndex">
           <div class="info">
             <h3 class="title">{{ scheme.name }}</h3>
@@ -30,6 +30,13 @@
           <div class="btn-group">
             <el-button type="primary" @click="pay(scheme)">赞助￥{{ parseFloat(scheme.price).toFixed(2) }}</el-button>
           </div>
+        </el-card>
+      </el-main>
+      <el-main class="main-box" v-else>
+        <el-card class="box-card empty">
+          <img src="/static/img/empty.png" />
+          <h2>这里还没有任何一个订阅类型</h2>
+          <router-link v-if="currentUserId === userinfo.uuid" class="tips" to="/account/setting/subscription">这就去创建一个</router-link>
         </el-card>
       </el-main>
     </el-container>
@@ -107,7 +114,8 @@ export default {
   },
   computed: {
     ...mapState({
-      accessToken: state => state.user.accessToken
+      accessToken: state => state.user.accessToken,
+      currentUserId: state => state.user.uuid
     })
   }
 }
@@ -180,6 +188,22 @@ export default {
           position: absolute;
           bottom: 20px;
           right: 20px;
+        }
+      }
+      &.empty {
+        text-align: center;
+        padding: 5px 0 20px 0;
+        img {
+          height: 200px;
+        }
+        h2 {
+          color: #444;
+          font-weight: normal;
+          font-size: 21px;
+        }
+        .tips {
+          text-decoration: none;
+          color: #2D84E9;
         }
       }
     }

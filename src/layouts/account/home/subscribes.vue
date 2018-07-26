@@ -4,7 +4,7 @@
       <el-aside class="box aside" width="230px">
         <div class="tag active">全部</div>
       </el-aside>
-      <el-main class="box main">
+      <el-main class="box main" v-if="loading || creatorList.length">
         <div class="creator" v-for="(creator, cIndex) in creatorList" :key="cIndex">
           <img class="avatar" :src="creator.creator.avatar" />
           <div class="info">
@@ -27,6 +27,10 @@
           </el-popover> -->
         </div>
       </el-main>
+      <el-main v-else class="box main empty">
+        <img src="/static/img/empty.png" />
+        <h2>你还没有订阅任何创作者</h2>
+      </el-main>
     </el-container>
   </section>
 </template>
@@ -47,26 +51,26 @@ export default {
         total: 0
       },
       creatorList: [
-        {
-          id: 0,
-          popShow: false,
-          creator: {
-            id: 0,
-            nickname: '孟二千',
-            linkname: 'smilec',
-            introduce: '写代码的艺术家',
-            subscription_amount: 0,
-            avatar: '/static/img/home/temp/1a.jpg'
-          },
-          started_at: 0,
-          time_expired: 0,
-          type: {
-            id: 0,
-            name: 'string',
-            description: 'string',
-            price: 0
-          }
-        }
+        // {
+        //   id: 0,
+        //   popShow: false,
+        //   creator: {
+        //     id: 0,
+        //     nickname: '孟二千',
+        //     linkname: 'smilec',
+        //     introduce: '写代码的艺术家',
+        //     subscription_amount: 0,
+        //     avatar: '/static/img/home/temp/1a.jpg'
+        //   },
+        //   started_at: 0,
+        //   time_expired: 0,
+        //   type: {
+        //     id: 0,
+        //     name: 'string',
+        //     description: 'string',
+        //     price: 0
+        //   }
+        // }
       ]
     }
   },
@@ -169,6 +173,18 @@ export default {
         color: #333;
         font-size: 14px;
       }
+    }
+  }
+  &.empty {
+    text-align: center;
+    padding: 10px 0 15px 0;
+    img {
+      height: 200px;
+    }
+    h2 {
+      color: #444;
+      font-weight: normal;
+      font-size: 18px;
     }
   }
 }

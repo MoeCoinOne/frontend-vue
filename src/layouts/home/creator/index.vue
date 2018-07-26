@@ -4,13 +4,13 @@
       <el-aside class="aside-box">
         <el-card class="box-card">
           <div class="number-item">
-            <h2 class="number">2,379</h2>
+            <h2 class="number">{{ userinfo.follower_count }}</h2>
             <h4 class="desc">订阅者</h4>
           </div>
-          <div class="number-item">
+          <!-- <div class="number-item">
             <h2 class="number">$7,491</h2>
             <h4 class="desc">月收入</h4>
-          </div>
+          </div> -->
         </el-card>
       </el-aside>
       <el-main class="main-box" v-loading="loading">
@@ -49,7 +49,8 @@ export default {
       userinfo: {
         uuid: '',
         nickname: '',
-        biography: ''
+        biography: '',
+        follower_count: 0
       },
       schemes: []
     }

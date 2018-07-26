@@ -9,17 +9,17 @@
         <div class="info">
           <h1>{{ user.nickname }} <small>{{ user.introduce }}</small></h1>
           <div class="item">
-            <span class="title">订阅</span>
-            <span class="value">0</span>
+            <span class="title">我关注的</span>
+            <span class="value">{{ user.followingCount }}</span>
           </div>
           <div class="item">
-            <span class="title">关注</span>
-            <span class="value">0</span>
+            <span class="title">订阅我的</span>
+            <span class="value">{{ user.followerCount }}</span>
           </div>
-          <div class="item" v-if="false">
+          <!-- <div class="item" v-if="false">
             <span class="title">余额</span>
             <span class="value">￥200</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>
@@ -50,7 +50,9 @@ export default {
       user: {
         nickname: '',
         introduce: '',
-        avatar: '/static/img/home/user-avatar.jpg'
+        avatar: '/static/img/home/user-avatar.jpg',
+        followerCount: 0,
+        followingCount: 0
       }
     }
   },
@@ -73,6 +75,8 @@ export default {
       }).then(response => {
         this.user.nickname = response.body.data.nickname
         this.user.introduce = response.body.data.biography
+        this.user.followerCount = response.body.data.follower_count
+        this.user.followingCount =response.body.data.following_count
       }).catch(error => {
         console.log(error)
       }).finally(() => {

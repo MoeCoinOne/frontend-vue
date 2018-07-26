@@ -6,7 +6,7 @@
     <div class="form-container" >
       <el-form class="form" ref="form" :model="form" :rules="rules" status-icon>
         <el-form-item class="first" prop="account">
-          <el-input v-model="form.account" :placeholder="$t('user.login.accountPlaceholder')"></el-input>
+          <el-input ref="inputAccount" v-model="form.account" :placeholder="$t('user.login.accountPlaceholder')"></el-input>
 
           <div class="title circle">
             <h2>{{ $t('user.login.title') }}</h2>
@@ -15,14 +15,14 @@
           <img class="title oh" src="/static/img/user/oh.png" />
         </el-form-item>
         <el-form-item style="margin-bottom: 0" prop="password">
-          <el-input type="password" v-model="form.password" :placeholder="$t('user.login.passwordPlaceholder')"></el-input>
+          <el-input ref="inputPassword" type="password" v-model="form.password" :placeholder="$t('user.login.passwordPlaceholder')"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="form-action">
             <el-checkbox v-model="form.remember">{{ $t('user.login.remember') }}</el-checkbox>
             <router-link class="a-forget" to="/user/forget">{{ $t('user.login.forget') }}</router-link>
           </div>
-          <el-button class="btn-login" type="primary" @click="onSubmit">{{ $t('user.login.submit') }}</el-button>
+          <el-button ref="btnLogin" class="btn-login" type="primary" @click="onSubmit">{{ $t('user.login.submit') }}</el-button>
         </el-form-item>
       </el-form>
     </div>

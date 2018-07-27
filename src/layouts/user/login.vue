@@ -73,60 +73,69 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          this.$request.post({
-            name: 'user.login',
-            body: {
-              email: this.form.account,
-              password: this.form.password
-            }
-          }).then(response => {
-            // success
-            this.$store.commit('setUserToken', {
-              accessToken: response.body.accessToken,
-              idToken: response.body.idToken,
-              refreshToken: response.body.refreshToken
-            })
-            this.$message({
-              message: this.$t('user.login.success'),
-              type: 'success'
-            })
-            this.$router.replace({ name: 'HomeExplore' })
-          }).catch(error => {
-            // error
-            if (typeof error.body === 'object') {
-              if (error.body.validation === 'User is not confirmed.') {
-                // 用户没有通过认证
-                this.$router.push({
-                  name: 'UserConfirmMail',
-                  query: {
-                    email: this.form.account
-                  }
-                })
-              } else if (error.body.validation === 'User does not exist.') {
-                // 用户不存在
-                this.$message.error(this.$t('error.LOGIN_ACCOUNT_NOT_EXIST'))
-              } else if (error.body.validation === 'Incorrect username or password.') {
-                // 邮箱或密码错误
-                this.$message.error(this.$t('error.LOGIN_ACCOUNT_PASSWORD_INVALID'))
-              } else {
-                // 其他错误
-                this.$message.error(error.body.validation)
-              }
-            } else if (typeof error.body === 'string') {
-              this.$message.error(error.body)
-            }
-          }).finally(() => {
-            this.loading = false
-          })
-        } else {
-          this.loading = false
-          return false
-        }
+    validateForm () {
+      return new Promise((resolve, reject) => {
+        this.$refs['form'].validate((valid) => {
+          resolve(valid)
+        })
       })
+    },
+    async onSubmit () {
+      let valid = await this.validateForm()
+      if (valid) {
+        console.log(0)
+        this.loading = true
+        this.$request.post({
+          name: 'user.login',
+          body: {
+            email: this.form.account,
+            password: this.form.password
+          }
+        }).then(response => {
+          // success
+          console.log(1)
+          this.$store.commit('setUserToken', {
+            accessToken: response.body.accessToken,
+            idToken: response.body.idToken,
+            refreshToken: response.body.refreshToken
+          })
+          this.$message({
+            message: this.$t('user.login.success'),
+            type: 'success'
+          })
+          this.$router.replace({ name: 'HomeExplore' })
+        }).catch(error => {
+          // error
+          console.log(2)
+          if (typeof error.body === 'object') {
+            if (error.body.validation === 'User is not confirmed.') {
+              // 用户没有通过认证
+              this.$router.push({
+                name: 'UserConfirmMail',
+                query: {
+                  email: this.form.account
+                }
+              })
+            } else if (error.body.validation === 'User does not exist.') {
+              // 用户不存在
+              this.$message.error(this.$t('error.LOGIN_ACCOUNT_NOT_EXIST'))
+            } else if (error.body.validation === 'Incorrect username or password.') {
+              // 邮箱或密码错误
+              this.$message.error(this.$t('error.LOGIN_ACCOUNT_PASSWORD_INVALID'))
+            } else {
+              // 其他错误
+              this.$message.error(error.body.validation)
+            }
+          } else if (typeof error.body === 'string') {
+            this.$message.error(error.body)
+          }
+        }).finally(() => {
+          this.loading = false
+        })
+      } else {
+        this.loading = false
+        return false
+      }
     }
   }
 }

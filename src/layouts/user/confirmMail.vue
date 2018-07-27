@@ -83,16 +83,12 @@ export default {
           validationCode: code
         }
       }).then(response => {
-        if (response.body.success) {
-          this.$message({
-            showClose: true,
-            message: this.$t('user.confirmMail.success'),
-            type: 'success'
-          })
-          this.$router.replace('/user/login')
-        } else {
-          this.setError()
-        }
+        this.$message({
+          showClose: true,
+          message: this.$t('user.confirmMail.success'),
+          type: 'success'
+        })
+        this.$router.replace('/user/login')
       }).catch(error => {
         this.setError(error)
       }).finally(() => {

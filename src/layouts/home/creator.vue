@@ -46,11 +46,16 @@ export default {
         nickname: '',
         uniqueName: '',
         biography: '',
-        avatarId: ''
+        avatarId: 'gavatar|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
       }
     }
   },
   mounted () {
+    console.log(this)
+    this.loadData()
+  },
+  beforeRouteUpdate (to, from, next) {
+    next()
     this.loadData()
   },
   methods: {

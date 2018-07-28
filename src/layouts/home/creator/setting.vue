@@ -1,6 +1,5 @@
 <template>
-  <article>
-    <nav-bar></nav-bar>
+  <section>
     <el-container class="container">
       <el-aside width="200px" class="aside">
         <el-menu
@@ -11,15 +10,14 @@
           active-text-color="#444"
           @select="onMenuSelect"
         >
-          <el-menu-item class="setting-menu-item" index="AccountSettingProfile">个人资料</el-menu-item>
-          <el-menu-item v-if="false" class="setting-menu-item" index="AccountSettingSafe">账户安全</el-menu-item>
+          <el-menu-item class="setting-menu-item" index="HomeCreatorSettingSubscription">订阅类型</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main class="main">
-        <router-view class="view"></router-view>
+        <router-view></router-view>
       </el-main>
     </el-container>
-  </article>
+  </section>
 </template>
 
 <script>
@@ -37,9 +35,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-article {
-  background-color: #f8f8f8;
-  min-height: 100%;
+section {
+  margin-top: 30px;
 }
 .container {
   width: 1100px;

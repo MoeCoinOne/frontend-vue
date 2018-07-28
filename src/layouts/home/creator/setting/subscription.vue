@@ -1,5 +1,5 @@
 <template>
-  <section v-title="$t('account.setting.safe.title')" v-loading="type.loading">
+  <div v-title="$t('account.setting.safe.title')" v-loading="type.loading">
     <h2 class="title">订阅类型管理 <el-button class="btn-create" type="warning" icon="el-icon-plus" size="small" @click="showTypeDialog('create')">创建订阅</el-button></h2>
     <subscription-type-dialog :show.sync="typeDialog.show" :type="typeDialog.type" @success="loadData"></subscription-type-dialog>
     <div v-if="!type.loading && type.list.length === 0" class="tips-empty">
@@ -22,7 +22,7 @@
         </el-form>
       </el-collapse-item>
     </el-collapse>
-  </section>
+  </div>
 </template>
 
 <script>

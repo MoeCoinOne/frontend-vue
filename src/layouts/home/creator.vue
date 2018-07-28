@@ -11,7 +11,8 @@
           </div>
           <div class="action">
             <router-link class="action-item" :to="{ name: 'HomeCreatorIndex', params: $route.params }" exact>主页</router-link>
-            <router-link v-if="userinfo.uuid === currentUserUUID" class="action-item" :to="{ name: 'HomeCreatorSponsor', params: $route.params }">赞助者</router-link>
+            <router-link v-if="isSelf" class="action-item" :to="{ name: 'HomeCreatorSponsor', params: $route.params }">赞助者</router-link>
+            <router-link v-if="isSelf" class="action-item" :to="{ name: 'HomeCreatorSettingSubscription', params: $route.params }">设置</router-link>
           </div>
         </div>
         <!-- <el-button type="danger" icon="el-icon-edit" class="btn-publish" @click="showPublishDialog">发布动态</el-button> -->
@@ -91,7 +92,10 @@ export default {
   computed: {
     ...mapState({
       currentUserUUID: state => state.user.uuid
-    })
+    }),
+    isSelf () {
+      return this.userinfo.uuid === this.currentUserUUID
+    }
   }
 }
 </script>

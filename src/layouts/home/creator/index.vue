@@ -36,7 +36,7 @@
         <el-card class="box-card empty">
           <img src="/static/img/empty.png" />
           <h2>这里还没有任何一个订阅类型</h2>
-          <router-link v-if="currentUserId === userinfo.uuid" class="tips" to="/account/setting/subscription">这就去创建一个</router-link>
+          <router-link v-if="currentUserId === userinfo.uuid" class="tips" :to="{ name: 'HomeCreatorSettingSubscription', params: $route.params }">这就去创建一个</router-link>
         </el-card>
       </el-main>
     </el-container>

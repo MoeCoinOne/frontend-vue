@@ -33,6 +33,8 @@
     </section>
 
     <router-view class="view"></router-view>
+
+    <foot-bar class="footer"></foot-bar>
   </article>
 </template>
 
@@ -168,5 +170,9 @@ article {
 .view {
   width: 1100px;
   margin: 0 auto;
+}
+.footer {
+  padding: 50px 0;
+  width: 1100px;
 }
 </style>

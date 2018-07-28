@@ -4,7 +4,8 @@ var state = {
   refreshToken: window.localStorage.getItem('_RefreshToken'),
   nickname: '',
   uuid: '',
-  uniqueName: ''
+  uniqueName: '',
+  loginCallback: ''
 }
 
 export default {
@@ -31,6 +32,9 @@ export default {
       window.localStorage.removeItem('_AccessToken')
       window.localStorage.removeItem('_IdToken')
       window.localStorage.removeItem('_RefreshToken')
+    },
+    setLoginCallback (state, payload) {
+      state.loginCallback = payload
     }
   }
 }

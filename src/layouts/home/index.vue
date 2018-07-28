@@ -57,12 +57,12 @@ article {
 .banner {
   width: 100%;
   height: calc(~"100vh - 80px");
-  background-attachment: scroll,	fixed;
+  background-attachment: scroll, fixed;
   background-color: #666;
   background-image: url(/static/img/home/overlay.png), url(/static/img/home/banner.jpg);
-  background-position: top left,	center center;
-  background-repeat: repeat,	no-repeat;
-  background-size: auto,	cover;
+  background-position: top left, center center;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
   color: #fff;
 
   .title {
@@ -134,7 +134,7 @@ article {
   width: 100%;
   height: 1100px;
   padding-bottom: 50px;
-  
+
   .title {
     text-align: center;
     margin: 0;
@@ -151,7 +151,7 @@ article {
       max-width: 50%;
       display: inline-block;
       box-sizing: border-box;
-      
+
       padding: 4em 4em 3em 6em;
       h3 {
         margin: 0;

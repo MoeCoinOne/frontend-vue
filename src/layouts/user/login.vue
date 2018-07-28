@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { NavBar, FootBar } from '@/components/global'
 export default {
   components: {
@@ -72,6 +73,12 @@ export default {
       }
     }
   },
+  mounted () {
+    // 存储登录回调
+    if (this.$route.query.callback) {
+      this.$store.commit('setLoginCallback', this.$route.query.callback)
+    }
+  },
   methods: {
     onSubmit () {
       this.$refs['form'].validate((valid) => {
@@ -94,7 +101,12 @@ export default {
               message: this.$t('user.login.success'),
               type: 'success'
             })
-            this.$router.replace({ name: 'HomeExplore' })
+            if (this.loginCallback) {
+              this.$router.replace(JSON.parse(this.loginCallback))
+              this.$store.commit('setLoginCallback', '')
+            } else {
+              this.$router.replace({ name: 'HomeExplore' })
+            }
           }).catch(error => {
             // error
             if (typeof error.body === 'object') {
@@ -128,6 +140,11 @@ export default {
         }
       })
     }
+  },
+  computed: {
+    ...mapState({
+      loginCallback: state => state.user.loginCallback
+    })
   }
 }
 </script>

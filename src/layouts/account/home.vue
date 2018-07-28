@@ -76,7 +76,7 @@ export default {
         this.user.nickname = response.body.data.nickname
         this.user.introduce = response.body.data.biography
         this.user.followerCount = response.body.data.follower_count
-        this.user.followingCount =response.body.data.following_count
+        this.user.followingCount = response.body.data.following_count
       }).catch(error => {
         console.log(error)
       }).finally(() => {

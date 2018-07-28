@@ -61,7 +61,12 @@ router.beforeEach(function (to, from, next) {
     if (isAllow(to.path)) {
       next()
     } else {
-      next('/user/login')
+      let callback = JSON.stringify({
+        path: to.path,
+        query: to.query,
+        params: to.params
+      })
+      next({ path: '/user/login', query: { callback } })
     }
   }
 })

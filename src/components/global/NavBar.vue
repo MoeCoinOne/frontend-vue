@@ -38,6 +38,7 @@
 <script>
 import { Base64 } from 'js-base64'
 import { mapState } from 'vuex'
+import md5 from 'md5'
 export default {
   data () {
     return {
@@ -81,6 +82,12 @@ export default {
             nickname: response.body.data.nickname,
             uniqueName: response.body.data.unique_name
           })
+          // 头像为空的时候设置头像
+          if (!response.body.data.avatar_id) {
+            this.updateProfile({
+              avatarId: 'gavatar|' + md5(response.body.data.email)
+            })
+          }
         }).catch(error => {
           console.log(error)
           this.doRefreshToken()
@@ -113,6 +120,20 @@ export default {
         this.$message.error('登录状态已过期')
         this.$store.commit('clearUserToken')
         this.$router.push('/user/login')
+      })
+    },
+    updateProfile (profile) {
+      this.$request.post({
+        name: 'account.userinfo',
+        body: {
+          uuid: this.uuid,
+          avatar_id: profile.avatarId
+        },
+        config: {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`
+          }
+        }
       })
     }
   },

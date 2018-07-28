@@ -16,19 +16,23 @@
       </el-form-item>
     </el-form>
     <h2 class="title">头像</h2>
-    <el-upload
-      class="moe-avatar-uploader"
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :show-file-list="false"
-      :on-success="handleAvatarSuccess"
-      :before-upload="beforeAvatarUpload">
-      <img v-if="avatar.link" :src="avatar.link" class="moe-uploader-avatar">
-      <i v-else class="el-icon-plus moe-avatar-uploader-icon"></i>
-    </el-upload>
+    <div class="avatar-group">
+      <div class="avatars">
+        <img width="100" height="100" :src="`https://develop-test.encore.moe/api/v1/users/avatar/${avatarId}?s=100&d=mp`" />
+        <img width="75" height="75" :src="`https://develop-test.encore.moe/api/v1/users/avatar/${avatarId}?s=150&d=mp`" />
+        <img width="50" height="50" :src="`https://develop-test.encore.moe/api/v1/users/avatar/${avatarId}?s=100&d=mp`" />
+      </div>
+      <p>我们使用Gavatar托管您的头像，您可以在Gavatar中自定义您的头像。</p>
+      
+      <div>
+        <a :href="`https://www.gravatar.com/${avatarMd5}`" target="_blank">自定义我的头像</a>
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
+import md5 from 'md5'
 import { mapState } from 'vuex'
 export default {
   data () {
@@ -37,12 +41,10 @@ export default {
       form: {
         nickname: '',
         introduce: '',
-        uniqueName: '',
-        avatar: ''
+        uniqueName: ''
       },
-      avatar: {
-        link: '/static/img/home/user-avatar.jpg'
-      }
+      avatarId: '',
+      email: ''
     }
   },
   created () {
@@ -62,6 +64,8 @@ export default {
         this.form.nickname = response.body.data.nickname
         this.form.introduce = response.body.data.biography
         this.form.uniqueName = response.body.data.unique_name
+        this.avatarId = response.body.data.avatar_id
+        this.email = response.body.data.email
       }).catch(error => {
         console.log(error)
         this.$message.error('登录状态已过期')
@@ -103,7 +107,10 @@ export default {
     ...mapState({
       uuid: state => state.user.uuid,
       accessToken: state => state.user.accessToken
-    })
+    }),
+    avatarMd5 () {
+      return md5(this.email)
+    }
   }
 }
 </script>
@@ -126,6 +133,17 @@ section {
 }
 .form {
   width: 440px;
+}
+.avatar-group {
+  .avatars {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #dfdfdf;
+    width: 500px;
+    img {
+      margin-right: 4px;
+    }
+  }
 }
 </style>
 

@@ -4,7 +4,7 @@
     <div class="user-header">
       <div class="user-banner"></div>
       <div class="user-info">
-        <img class="avatar" src="/static/img/home/user-avatar.jpg" />
+        <img class="avatar" :src="`https://develop-test.encore.moe/api/v1/users/avatar/${userinfo.avatarId}?s=200&d=mp`" />
         <div class="info">
           <div class="intro">
             <h1>{{ userinfo.nickname }} <small>{{ userinfo.biography }}</small></h1>

@@ -39,6 +39,7 @@
 
 <script>
 import { NavBar, FootBar } from '@/components/global'
+import md5 from 'md5'
 export default {
   components: {
     NavBar,
@@ -116,7 +117,8 @@ export default {
             body: {
               nickname: this.form.nickname,
               email: this.form.mail,
-              password: this.form.password
+              password: this.form.password,
+              avatar_id: 'gavatar|' + md5(this.form.mail)
             }
           }).then(response => {
             this.$router.push({

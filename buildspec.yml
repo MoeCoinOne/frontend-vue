@@ -15,7 +15,7 @@ phases:
 
   post_build:
     commands:
-      - aws s3 cp  dist/ s3://$(S3_BUCKET_NAME)/ --recursive
+      - aws s3 cp  dist/ s3://$(DEPLOY_BUCKET)/ --recursive
 
 artifacts:
   type: zip

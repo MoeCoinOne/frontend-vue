@@ -249,5 +249,8 @@ export default {
   &:hover {
     color: @primaryColor;
   }
+  &:focus {
+    outline: none;
+  }
 }
 </style>

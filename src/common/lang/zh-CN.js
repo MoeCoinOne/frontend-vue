@@ -11,7 +11,7 @@ export const site = {
 
 export const home = {
   index: {
-    title: ' 首页'
+    title: ' 安可萌 - 为各个领域的创作者提供资金和作品分发平台'
   },
   explore: {
     title: '发现'

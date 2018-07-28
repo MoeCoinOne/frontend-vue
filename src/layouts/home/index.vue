@@ -1,5 +1,5 @@
 <template>
-  <article v-title="$t('home.index.title')">
+  <article v-title="{ title: $t('home.index.title'), showSiteName: false }">
     <nav-bar style="border: 0"></nav-bar>
     <section class="banner">
       <div class="title">

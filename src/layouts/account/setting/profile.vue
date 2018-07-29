@@ -23,7 +23,7 @@
         <img width="50" height="50" :src="`https://develop-test.encore.moe/api/v1/users/avatar/${avatarId}?s=100&d=mp`" />
       </div>
       <p>我们使用Gavatar托管您的头像，您可以在Gavatar中自定义您的头像。</p>
-      
+
       <div>
         <a :href="`https://www.gravatar.com/${avatarMd5}`" target="_blank">自定义我的头像</a>
       </div>

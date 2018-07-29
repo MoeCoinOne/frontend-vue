@@ -7,7 +7,6 @@ const CreatorSponsor = () => import('@/layouts/home/creator/sponsor.vue')
 const CreatorSetting = () => import('@/layouts/home/creator/setting.vue')
 const CreatorSettingSubscription = () => import('@/layouts/home/creator/setting/subscription.vue')
 
-
 export default [
   {
     path: '/home/index',

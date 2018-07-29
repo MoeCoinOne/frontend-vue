@@ -17,7 +17,7 @@
           <h2>发现你的创作世界</h2>
           <p>使用安可萌可以帮助您构建自己的收入来源<br>独特的加密分发系统可保护您的作品版权</p>
         </div>
-        
+
         <img src="/static/img/home/chan-chest.jpg" />
       </div>
     </section>
@@ -205,7 +205,6 @@ article {
         &:hover {
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
         }
-        
 
         padding: 3em 3em 2em 4em;
         h3 {

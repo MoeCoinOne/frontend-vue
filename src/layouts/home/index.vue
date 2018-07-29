@@ -97,6 +97,7 @@ article {
     text-align: center;
     height: calc(~"100vh - 80px");
     flex-direction: column;
+    width: 100%;
 
     img {
       margin-bottom: 1.5rem;

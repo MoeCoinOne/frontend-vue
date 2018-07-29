@@ -6,7 +6,7 @@
     popper-class="moe-user-popover"
   >
       <div slot="default" class="popover">
-        <img v-if="user.avatar" :src="user.avatar" class="avatar" />
+        <img v-if="user.avatar" :src="avatar" class="avatar" />
         <div class="info">
           <div class="name">{{ user.name }}</div>
           <div class="intro">{{ user.intro }}</div>
@@ -17,7 +17,7 @@
         class="link"
         :to="{ name: 'HomeCreatorIndex', params: { id: user.linkName } }"
       >
-      <img v-if="user.avatar" :src="user.avatar" class="avatar" /><span class="name">{{ user.name }}</span>
+      <img v-if="user.avatar" :src="avatar" class="avatar" /><span class="name">{{ user.name }}</span>
     </router-link>
   </el-popover>
 </template>
@@ -35,6 +35,11 @@ export default {
           linkName: ''
         }
       }
+    }
+  },
+  computed: {
+    avatar () {
+      return `https://develop-test.encore.moe/api/v1/users/avatar/${this.user.avatar}?s=100&d=mp`
     }
   }
 }

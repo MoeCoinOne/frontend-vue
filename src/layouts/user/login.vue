@@ -105,7 +105,7 @@ export default {
               this.$router.replace(JSON.parse(this.loginCallback))
               this.$store.commit('setLoginCallback', '')
             } else {
-              this.$router.replace({ name: 'HomeExplore' })
+              this.$router.replace({ path: '/account/home' })
             }
           }).catch(error => {
             // error

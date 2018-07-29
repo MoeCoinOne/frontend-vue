@@ -6,12 +6,12 @@
       </el-aside>
       <el-main class="box main" v-if="loading || creatorList.length">
         <div class="creator" v-for="(creator, cIndex) in creatorList" :key="cIndex">
-          <img class="avatar" :src="creator.creator.avatar" />
+          <img class="avatar" :src="`https://develop-test.encore.moe/api/v1/users/avatar/${creator.creator.avatar_id}?s=100&d=mp`" />
           <div class="info">
-            <router-link class="nickname" :to="{ name: 'HomeCreatorIndex', params: { id: creator.creator.linkname } }">
+            <router-link target="_blank" class="nickname" :to="{ name: 'HomeCreatorIndex', params: { id: creator.creator.unique_name } }">
               {{ creator.creator.nickname }}
             </router-link>
-            <div class="intro">{{ creator.creator.introduce }}</div>
+            <div class="intro">{{ creator.creator.biography }}</div>
           </div>
           <el-button class="btn-delete-sub">已订阅</el-button>
           <!-- <el-popover
@@ -26,6 +26,15 @@
             <el-button slot="reference" class="btn-delete-sub">已订阅</el-button>
           </el-popover> -->
         </div>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :current-page.sync="pagination.current"
+          :total="pagination.total"
+          :page-size="pagination.size"
+          @current-change="loadData"
+        >
+        </el-pagination>
       </el-main>
       <el-main v-else class="box main empty">
         <img src="/static/img/empty.png" />
@@ -50,28 +59,7 @@ export default {
         size: 20,
         total: 0
       },
-      creatorList: [
-        // {
-        //   id: 0,
-        //   popShow: false,
-        //   creator: {
-        //     id: 0,
-        //     nickname: '孟二千',
-        //     linkname: 'smilec',
-        //     introduce: '写代码的艺术家',
-        //     subscription_amount: 0,
-        //     avatar: '/static/img/home/temp/1a.jpg'
-        //   },
-        //   started_at: 0,
-        //   time_expired: 0,
-        //   type: {
-        //     id: 0,
-        //     name: 'string',
-        //     description: 'string',
-        //     price: 0
-        //   }
-        // }
-      ]
+      creatorList: []
     }
   },
   mounted () {
@@ -84,7 +72,7 @@ export default {
         name: 'subscription.relationship',
         params: {
           type: 'FOLLOWING',
-          page: this.pagination.current++,
+          page: this.pagination.current,
           pageSize: this.pagination.size
         },
         config: {
@@ -94,7 +82,8 @@ export default {
         }
       }).then(response => {
         // TODO: 设置实际的订阅列表
-        // this.creatorList = response.body.data
+        this.creatorList = response.body.data
+        this.pagination.total = response.body.pagination.total
       }).catch(error => {
         console.error(error)
         this.$message.error('我的订阅获取失败~')

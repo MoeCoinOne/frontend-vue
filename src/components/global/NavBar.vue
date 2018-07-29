@@ -7,7 +7,7 @@
       </h1>
       <ul class="moe-navbar-item moe-navbar-link">
         <li><router-link to="/home/index" exact>{{ $t('site.navbar.home') }}</router-link></li>
-        <li><router-link to="/home/explore" exact>{{ $t('site.navbar.explore') }}</router-link></li>
+        <!-- <li><router-link to="/home/explore" exact>{{ $t('site.navbar.explore') }}</router-link></li> -->
         <li><a href="https://moecoin.one/">{{ $t('site.navbar.about') }}</a></li>
         <!-- <li><router-link to="/about">{{ $t('site.navbar.about') }}</router-link></li> -->
       </ul>

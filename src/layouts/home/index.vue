@@ -3,7 +3,6 @@
     <nav-bar style="border: 0"></nav-bar>
     <section class="banner">
       <div class="title">
-        <img src="/static/img/home/logo.png" />
         <h2>创作者支援平台</h2>
         <div class="desc">安可萌&nbsp;&nbsp;<span>为各个领域的创作者提供资金和作品分发平台</span></div>
         <div class="btn-group">
@@ -14,8 +13,8 @@
     <section class="intro">
       <div class="box">
         <div class="text">
-          <h2>发现你的创作世界</h2>
-          <p>使用安可萌可以帮助您构建自己的收入来源<br>独特的加密分发系统可保护您的作品版权</p>
+          <h2>发展你的创作世界</h2>
+          <p>使用安可萌可以帮助您构建持续的收入来源<br>独特的加密分发系统可保护您的作品版权</p>
         </div>
 
         <img src="/static/img/home/chan-chest.jpg" />
@@ -50,20 +49,20 @@ export default {
     return {
       advantages: [{
         icon: 'i-qianbao',
-        title: '订阅资金按月支付',
-        desc: '* 扣除通道费用后'
+        title: '订阅资金全额每月支付',
+        desc: '0平台费。扣除支付宝/微信等通道费用'
       }, {
         icon: 'i-xin',
-        title: '专属内容',
+        title: '粉丝专属内容',
         desc: '订阅自己喜爱的创作者，获取只属于你的专属内容'
       }, {
         icon: 'i-dunpai',
-        title: '盗版抵抗 & 加密分发系统',
-        desc: '* 开发中，区块链加密分发收取5%费用'
+        title: '盗版抵抗的加密分发系统',
+        desc: '开发中，区块链加密分发收取5%费用'
       }, {
         icon: 'i-ka',
         title: '全球支付',
-        desc: '法定货币、加密货币 多种选择'
+        desc: '法定货币、加密货币 多种选择 即时兑换'
       }]
     }
   },
@@ -100,7 +99,7 @@ article {
 }
 .banner {
   width: 100%;
-  height: calc(~"100vh - 80px");
+  height: calc(~"40vh");
   background-attachment: scroll, fixed;
   background-color: #666;
   background-image: url(/static/img/home/overlay.png), url(/static/img/home/banner/6.jpg);
@@ -114,7 +113,7 @@ article {
     align-items: center;
     justify-content: center;
     text-align: center;
-    height: calc(~"100vh - 80px");
+    height: calc(~"40vh");
     flex-direction: column;
     width: 100%;
 
@@ -199,8 +198,8 @@ article {
   .title {
     text-align: center;
     margin: 0;
-    padding: 80px 0;
-    padding-bottom: 60px;
+    padding: 40px 0;
+    padding-bottom: 20px;
     font-size: 35px;
     font-weight: 300;
     color: #000;

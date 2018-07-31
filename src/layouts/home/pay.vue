@@ -1,5 +1,5 @@
 <template>
-  <article v-title="$t('home.pay.title')">
+  <article v-title="$t('home.pay.title')" v-loading="loading">
     <nav-bar></nav-bar>
     <section class="container">
       <h1>赞助 {{ creator.nickname }} <small>{{ creator.introduce }}</small></h1>
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="btn-group">
-        <el-button type="warning" @click="subscribe">去支付</el-button>
+        <el-button type="warning" @click="subscribe">{{ type.price ? '去支付' : '立即订阅' }}</el-button>
       </div>
     </section>
   </article>
@@ -63,6 +63,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       creator: {
         uuid: '',
         nickname: '',
@@ -92,9 +93,15 @@ export default {
   },
   methods: {
     subscribe () {
+      if (this.type.price > 0) {
+        this.$message.error('暂时无法订阅付费项目~第三方支付申请中~')
+        return
+      }
+      this.loading = true
+      let returnUrl = encodeURIComponent('https://baidu.com')
       this.$request.post({
         name: 'subscription.relationship',
-        formatUrl: url => `${url}/${this.creator.uuid}`,
+        formatUrl: url => `${url}/${this.creator.uuid}?returnUrl=${returnUrl}`,
         body: {
           typeId: parseInt(this.type.id),
           period: parseInt(this.form.period),
@@ -106,10 +113,22 @@ export default {
           }
         }
       }).then(response => {
-        window.location.href = response.body.data.paymentUrl
+        console.log(response.body)
+        this.$message({
+          type: 'success',
+          message: '订阅成功~'
+        })
+        this.$router.push('/account/home')
+        // window.location.href = response.body.data.paymentUrl
       }).catch(error => {
         console.error(error)
-        this.$message.error(error.body.error)
+        if (error.body.error === 'CANNOT_SUBSCRIBE_SELF') {
+          this.$message.error('不能订阅自己噢~')
+        } else {
+          this.$message.error(error.body.error)
+        }
+      }).finally(() => {
+        this.loading = false
       })
     }
   },

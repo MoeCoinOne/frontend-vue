@@ -7,7 +7,7 @@
         <h2>创作者支援平台</h2>
         <div class="desc">安可萌&nbsp;&nbsp;<span>为各个领域的创作者提供资金和作品分发平台</span></div>
         <div class="btn-group">
-          <div class="btn">开始安可 More</div>
+          <div class="btn" @click="onLearnMoreClick">开始安可 More</div>
         </div>
       </div>
     </section>
@@ -41,6 +41,7 @@
 <script>
 import 'animate.css/animate.min.css'
 import { NavBar } from '@/components/global'
+import { mapState } from 'vuex'
 export default {
   components: {
     NavBar
@@ -69,6 +70,24 @@ export default {
   mounted () {
   },
   methods: {
+    onLearnMoreClick () {
+      if (this.isLogin) {
+        this.$router.push('/account/home')
+      } else {
+        this.$router.push('/user/register')
+      }
+    }
+  },
+  computed: {
+    ...mapState({
+      accessToken: state => state.user.accessToken
+    }),
+    isLogin () {
+      return !this.notLogin
+    },
+    notLogin () {
+      return !this.accessToken
+    }
   }
 }
 </script>
@@ -84,7 +103,7 @@ article {
   height: calc(~"100vh - 80px");
   background-attachment: scroll, fixed;
   background-color: #666;
-  background-image: url(/static/img/home/overlay.png), url(/static/img/home/banner/5.jpg);
+  background-image: url(/static/img/home/overlay.png), url(/static/img/home/banner/6.jpg);
   background-position: top left, center center;
   background-repeat: repeat, no-repeat;
   background-size: auto, cover;

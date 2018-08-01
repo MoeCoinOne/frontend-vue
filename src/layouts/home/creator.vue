@@ -113,7 +113,7 @@ article {
   position: relative;
   .user-banner {
     width: 100%;
-    background-image: url(/static/img/home/user-banner.jpg);
+    background-image: url(/static/img/home/banner/6.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

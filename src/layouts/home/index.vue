@@ -50,14 +50,14 @@ export default {
       advantages: [{
         icon: 'i-qianbao',
         title: '订阅资金全额每月支付',
-        desc: '0平台费。扣除支付宝/微信等通道费用'
+        desc: '0平台费，仅扣除支付宝微信等通道费用'
       }, {
         icon: 'i-xin',
         title: '粉丝专属内容',
         desc: '订阅自己喜爱的创作者，获取只属于你的专属内容'
       }, {
         icon: 'i-dunpai',
-        title: '盗版抵抗的加密分发系统',
+        title: '抵抗盗版的加密分发系统',
         desc: '开发中，区块链加密分发收取5%费用'
       }, {
         icon: 'i-ka',

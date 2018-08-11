@@ -2,7 +2,7 @@
   <section>
     <el-container class="body-container">
       <el-aside class="aside-box">
-        <el-card class="box-card">
+        <el-card class="box-card" shadow="hover">
           <div class="number-item">
             <h2 class="number">{{ userinfo.follower_count }}</h2>
             <h4 class="desc">订阅者</h4>
@@ -13,31 +13,33 @@
           </div> -->
         </el-card>
       </el-aside>
-      <el-main class="main-box" v-loading="loading" v-if="loading || schemes.length">
-        <el-card class="box-card sponsor" :class="{ 'is-first': sIndex === 0 }" v-for="(scheme, sIndex) in schemes" :key="sIndex">
-          <div class="info">
-            <h3 class="title">{{ scheme.name }}</h3>
-            <div class="price">
-              <span class="cost">{{ parseFloat(scheme.price).toFixed(2) }}</span>
-              <span class="cycle">￥/月</span>
-              <!-- <span class="count">{{ scheme.subscribe_count }} 人已赞助</span> -->
+      <el-main class="main-box" v-loading="loading">
+        <div v-if="loading || schemes.length">
+          <el-card class="box-card sponsor" :class="{ 'is-first': sIndex === 0 }" v-for="(scheme, sIndex) in schemes" :key="sIndex" shadow="hover">
+            <div class="info">
+              <h3 class="title">{{ scheme.name }}</h3>
+              <div class="price">
+                <span class="cost">{{ parseFloat(scheme.price).toFixed(2) }}</span>
+                <span class="cycle">￥/月</span>
+                <!-- <span class="count">{{ scheme.subscribe_count }} 人已赞助</span> -->
+              </div>
+              <div class="intro" v-for="(line, lIndex) in scheme.description.split('\n')" :key="lIndex">
+                {{ line }}
+              </div>
             </div>
-            <div class="intro" v-for="(line, lIndex) in scheme.description.split('\n')" :key="lIndex">
-              {{ line }}
+            <!-- <image-list class="image-list" :images="scheme.images" :preview-id="sIndex"></image-list> -->
+            <div class="btn-group">
+              <el-button type="primary" @click="pay(scheme)">赞助￥{{ parseFloat(scheme.price).toFixed(2) }}</el-button>
             </div>
-          </div>
-          <!-- <image-list class="image-list" :images="scheme.images" :preview-id="sIndex"></image-list> -->
-          <div class="btn-group">
-            <el-button type="primary" @click="pay(scheme)">赞助￥{{ parseFloat(scheme.price).toFixed(2) }}</el-button>
-          </div>
-        </el-card>
-      </el-main>
-      <el-main class="main-box" v-else>
-        <el-card class="box-card empty">
+          </el-card>
+        </div>
+        <el-card class="box-card empty" v-else>
           <img src="/static/img/empty.png" />
           <h2>这里还没有任何一个订阅类型</h2>
           <router-link v-if="currentUserId === userinfo.uuid" class="tips" :to="{ name: 'HomeCreatorSettingSubscription', params: $route.params }">这就去创建一个</router-link>
         </el-card>
+
+        <post-list class="post-list"></post-list>
       </el-main>
     </el-container>
   </section>
@@ -46,9 +48,11 @@
 <script>
 import { mapState } from 'vuex'
 import { ImageList } from '@/components/global'
+import PostList from './post'
 export default {
   components: {
-    ImageList
+    ImageList,
+    PostList
   },
   data () {
     return {
@@ -208,5 +212,9 @@ export default {
       }
     }
   }
+}
+.post-list {
+  width: 100% !important;
+  margin-top: 25px !important;
 }
 </style>

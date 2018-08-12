@@ -39,6 +39,9 @@
           prop="created_at"
           label="交易时间"
           width="220">
+          <template slot-scope="scope">
+            {{ moment(scope.row.created_at).locale('zh-cn').format('LLL') }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="payment_method"
@@ -62,11 +65,22 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :current-page.sync="pagination.current"
+        :page-count="pagination.totalPages"
+        :page-size="pagination.size"
+        @current-change="loadData"
+        style="margin-top: 15px"
+      >
+      </el-pagination>
     </div>
   </section>
 </template>
 
 <script>
+import moment from 'moment'
 import { mapState } from 'vuex'
 export default {
   data () {
@@ -75,7 +89,7 @@ export default {
       pagination: {
         current: 1,
         size: 20,
-        total: 0
+        totalPages: 0
       },
       bill: {
         list: []
@@ -91,7 +105,7 @@ export default {
       this.$request.get({
         name: 'payments',
         params: {
-          page: this.pagination.current++,
+          page: this.pagination.current,
           pageSize: this.pagination.size
         },
         config: {
@@ -102,13 +116,15 @@ export default {
       }).then(response => {
         // TODO: 处理实际的账单
         this.bill.list = response.body.data
+        this.pagination.totalPages = response.body.pagination.totalPages
         console.log(response)
       }).catch(error => {
         console.error(error)
       }).finally(() => {
         this.loading = false
       })
-    }
+    },
+    moment
   },
   computed: {
     balance () {

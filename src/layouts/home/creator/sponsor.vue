@@ -33,36 +33,7 @@ export default {
   data () {
     return {
       loading: false,
-      userList: [
-        {
-          id: 1,
-          linkName: 'smilec',
-          nickname: '梦三千',
-          avatar: '/static/img/home/temp/2a.jpg',
-          amount: 991.12
-        },
-        {
-          id: 2,
-          linkName: 'smilec',
-          nickname: '唐坚韧',
-          avatar: '/static/img/home/temp/1a.jpg',
-          amount: 511.32
-        },
-        {
-          id: 3,
-          linkName: 'smilec',
-          nickname: '大白兔',
-          avatar: '/static/img/home/temp/3a.jpg',
-          amount: 112.1
-        },
-        {
-          id: 4,
-          linkName: 'smilec',
-          nickname: '罗永浩',
-          avatar: '/static/img/home/user-avatar.jpg',
-          amount: 10
-        }
-      ],
+      userList: [],
       pagination: {
         current: 1,
         size: 20,

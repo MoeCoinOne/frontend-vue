@@ -24,6 +24,7 @@ export default {
       relationship: 'subscription/relationship',
       type: 'subscription/subscriptionType'
     },
-    payments: 'payments'
+    payments: 'payments',
+    timeline: 'timeline'
   }
 }

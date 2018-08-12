@@ -14,17 +14,18 @@
       <ul class="moe-navbar-item moe-navbar-link moe-navbar-action clearfix">
         <li v-if="notLogin"><router-link :to="{ name: 'UserLogin' }" exact>{{ $t('site.navbar.login') }}</router-link></li>
         <li v-if="notLogin"><router-link :to="{ name: 'UserRegister' }">{{ $t('site.navbar.register') }}</router-link></li>
+        <li v-if="isLogin" style="width: 50px"><router-link class="iconfont i-home" :to="{ name: 'HomeCreatorIndex', params: { id: uniqueName } }" exact></router-link></li>
         <li v-if="isLogin" style="width: 100px">
-          <el-dropdown trigger="click">
+          <el-dropdown class="moe-nav-dropdown" trigger="click">
             <span v-if="nickname" class="el-dropdown-link moe-nav-user">
-              {{ nickname }}<i class="el-icon-arrow-down el-icon--right"></i>
+              <!-- {{ nickname }}<i class="el-icon-arrow-down el-icon--right"></i> -->
+              <img class="avatar" :src="`https://develop-test.encore.moe/api/v1/users/avatar/${userinfo.avatar_id}?s=200&d=mp`" />
             </span>
             <span v-else class="el-dropdown-link">
               <i class="el-icon-loading"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="$router.push('/account/home')"><i class="el-icon-news el-icon--left"></i>个人中心</el-dropdown-item>
-              <el-dropdown-item @click.native="openCreatorPage"><i class="el-icon-tickets el-icon--left"></i>创作者首页</el-dropdown-item>
               <el-dropdown-item @click.native="$router.push('/account/setting')"><i class="el-icon-setting el-icon--left"></i>账户设置</el-dropdown-item>
               <el-dropdown-item @click.native="logout" divided><i class="el-icon-circle-close-outline el-icon--left"></i>退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -42,6 +43,9 @@ import md5 from 'md5'
 export default {
   data () {
     return {
+      userinfo: {
+        avatar_id: ''
+      }
     }
   },
   mounted () {
@@ -88,6 +92,7 @@ export default {
               avatarId: 'gavatar|' + md5(response.body.data.email)
             })
           }
+          this.$set(this, 'userinfo', response.body.data)
         }).catch(error => {
           console.log(error)
           this.doRefreshToken()
@@ -152,6 +157,7 @@ export default {
 
 <style lang="less" scoped>
 @primaryColor: #ea6f5a;
+@import "~@/common/style/less/global.less";
 // 标题栏
 .moe-navbar {
   background-color: #fff;
@@ -227,7 +233,7 @@ export default {
   &.moe-navbar-link {
     li {
       margin-left: 10px;
-      width: 50px;
+      min-width: 50px;
       a {
         border-bottom: 0;
         padding: 0 5px;
@@ -243,14 +249,30 @@ export default {
     }
   }
 }
+.moe-nav-dropdown {
+  height: 50px;
+}
 .moe-nav-user {
-  padding: 30px 0;
+  padding: 0px 0;
   font-size: 16px;
   &:hover {
     color: @primaryColor;
   }
   &:focus {
     outline: none;
+  }
+  .avatar {
+    width: 30px;
+    height: 30px;
+    margin-top: 23px;
+  }
+}
+.i-home {
+  &::before {
+    content: '\e618';
+    font-style: normal;
+    font-size: 24px;
+    color: #888;
   }
 }
 </style>

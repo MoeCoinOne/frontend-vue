@@ -8,7 +8,7 @@
         >
         </user-pop><span>&nbsp;•&nbsp;2018-01-01</span>
       </div>
-      <h2 class="title">{{ dynamic.title }}</h2>
+      <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.creator_linkname, postid: '123' } }">{{ dynamic.title }}</router-link>
       <div v-html="dynamic.content"></div>
       <image-list class="images" :preview-id="dIndex" :images="dynamic.images"></image-list>
       <div class="actions">
@@ -109,13 +109,6 @@ section {
   padding: 20px;
   box-sizing: border-box;
 }
-@media screen and (min-width: 1100px) {
-  section {
-    width: 1100px;
-    margin: 0 auto;
-    margin-top: 35px !important;
-  }
-}
 .dynamic {
   border-bottom: 1px solid #f6f6f6;
   margin-bottom: 20px;
@@ -138,8 +131,16 @@ section {
   }
   .title {
     font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+    display: block;
     margin: 10px 0;
     margin-bottom: 8px;
+    transition: all 0.2s;
+    &:hover {
+      color: #ea6f5a;
+    }
   }
   .images {
     margin: 12px 0;

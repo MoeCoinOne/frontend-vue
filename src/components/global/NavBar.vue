@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       userinfo: {
-        avatar_id: ''
+        avatar_id: 'gavatar|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
       }
     }
   },

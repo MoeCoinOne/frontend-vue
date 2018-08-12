@@ -3,6 +3,7 @@ const Explore = () => import('@/layouts/home/explore.vue')
 const Pay = () => import('@/layouts/home/pay.vue')
 const Creator = () => import('@/layouts/home/creator.vue')
 const CreatorIndex = () => import('@/layouts/home/creator/index.vue')
+const CreatorPosts = () => import('@/layouts/home/creator/posts.vue')
 const CreatorPost = () => import('@/layouts/home/creator/post.vue')
 const CreatorSponsor = () => import('@/layouts/home/creator/sponsor.vue')
 const CreatorSetting = () => import('@/layouts/home/creator/setting.vue')
@@ -35,7 +36,12 @@ export default [
         component: CreatorIndex
       },
       {
-        path: 'post',
+        path: 'posts',
+        name: 'HomeCreatorPosts',
+        component: CreatorPosts
+      },
+      {
+        path: 'post/:postid',
         name: 'HomeCreatorPost',
         component: CreatorPost
       },

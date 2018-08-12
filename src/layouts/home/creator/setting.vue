@@ -10,6 +10,7 @@
           active-text-color="#444"
           @select="onMenuSelect"
         >
+          <el-menu-item class="setting-menu-item" index="HomeCreatorSettingProfile">个人资料</el-menu-item>
           <el-menu-item class="setting-menu-item" index="HomeCreatorSettingSubscription">订阅类型</el-menu-item>
         </el-menu>
       </el-aside>

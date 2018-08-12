@@ -13,7 +13,7 @@
             <router-link class="action-item" :to="{ name: 'HomeCreatorIndex', params: $route.params }" exact>主页</router-link>
             <router-link class="action-item" :to="{ name: 'HomeCreatorPosts', params: $route.params }" exact>投稿</router-link>
             <router-link v-if="isSelf" class="action-item" :to="{ name: 'HomeCreatorSponsor', params: $route.params }">赞助者</router-link>
-            <router-link v-if="isSelf" class="action-item" :to="{ name: 'HomeCreatorSettingSubscription', params: $route.params }">设置</router-link>
+            <router-link v-if="isSelf" class="action-item" :to="{ name: 'HomeCreatorSettingProfile', params: $route.params }">设置</router-link>
           </div>
         </div>
         <!-- <el-button type="danger" icon="el-icon-edit" class="btn-publish" @click="showPublishDialog">发布动态</el-button> -->

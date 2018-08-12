@@ -8,6 +8,7 @@ const CreatorPost = () => import('@/layouts/home/creator/post.vue')
 const CreatorSponsor = () => import('@/layouts/home/creator/sponsor.vue')
 const CreatorSetting = () => import('@/layouts/home/creator/setting.vue')
 const CreatorSettingSubscription = () => import('@/layouts/home/creator/setting/subscription.vue')
+const CreatorSettingProfile = () => import('@/layouts/home/creator/setting/profile.vue')
 
 export default [
   {
@@ -55,8 +56,13 @@ export default [
         component: CreatorSetting,
         children: [
           {
-            path: 'subscription',
+            path: 'profile',
             alias: '',
+            name: 'HomeCreatorSettingProfile',
+            component: CreatorSettingProfile
+          },
+          {
+            path: 'subscription',
             name: 'HomeCreatorSettingSubscription',
             component: CreatorSettingSubscription
           }

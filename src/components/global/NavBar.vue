@@ -179,6 +179,25 @@ export default {
     margin: 0 auto
   }
 }
+@media only screen and (max-width: 1150px) {
+  .moe-navbar {
+    height: 64px;
+    .container {
+      width: 100%;
+      .moe-navbar-title {
+        line-height: 64px;
+        padding-left: 0;
+        font-size: 16px;
+        img {
+          height: 25px;
+        }
+      }
+      .moe-navbar-link {
+        display: none;
+      }
+    }
+  }
+}
 
 .moe-navbar-logo {
   height: 33px;

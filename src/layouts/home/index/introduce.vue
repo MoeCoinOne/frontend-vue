@@ -151,12 +151,32 @@ article {
       }
     }
   }
+  @media only screen and (max-width: 600px) {
+    height: 60vh;
+    .title {
+      height: 60vh;
+      h2 {
+        font-size: 2rem;
+      }
+      .desc {
+        font-size: 1rem;
+        width: 60%;
+        margin-bottom: 1.5rem;
+      }
+      .btn-group {
+        .btn {
+          width: 150px;
+          line-height: 10px;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
 }
 .intro {
   width: 100%;
   border-radius: 6px;
   background-color: #fff;
-
   .box {
     padding: 64px;
     padding-top: 85px;
@@ -184,6 +204,26 @@ article {
       right: 0;
       bottom: 0;
       width: 450px;
+    }
+  }
+  @media only screen and (max-width: 1200px) {
+    .box {
+      width: 100%;
+      box-sizing: border-box;
+      .text {
+        width: 100%;
+        h2 {
+          font-size: 1.5rem;
+          margin-bottom: 36px;
+        }
+        p {
+          font-size: 0.8rem;
+          margin-top: 0;
+        }
+      }
+      img {
+        display: none;
+      }
     }
   }
 }
@@ -240,6 +280,27 @@ article {
       }
     }
   }
+  @media only screen and (max-width: 1100px) {
+    padding-bottom: 20px;
+    .title {
+      font-size: 1.8rem;
+    }
+    .list {
+      width: 100%;
+      .box {
+        width: 100%;
+        max-width: none;
+        padding: 10px 10px 0 10px;
+        .advantage-item {
+          padding: 2em 2em 0.3em 2em;
+          h3 {
+            font-size: 1.2rem;
+            margin: 0 0 0.5em 0;
+          }
+        }
+      }
+    }
+  }
 }
 footer {
   width: 100%;
@@ -252,6 +313,9 @@ footer {
   align-items: center;
   font-size: 18px;
   font-weight: 300;
+  @media only screen and (max-width: 600px) {
+    height: 50px;
+  }
 }
 .i-xin {
   &::before {

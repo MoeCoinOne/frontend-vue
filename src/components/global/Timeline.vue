@@ -11,15 +11,17 @@
       <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.creator_linkname, postid: '123' } }">{{ dynamic.title }}</router-link>
       <div v-html="dynamic.content"></div>
       <image-list class="images" :preview-id="dIndex" :images="dynamic.images"></image-list>
-      <div class="actions">
+      <!-- <div class="actions">
         <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
           <i slot="icon" class="icon-star el-icon-star-on"></i>
         </vue-star>
         <div class="start-count">5</div>
-        <!-- <div>&nbsp;•&nbsp;</div>
-        <div class="comment">11 条评论</div> -->
-      </div>
+        <div>&nbsp;•&nbsp;</div>
+        <div class="comment">11 条评论</div>
+      </div> -->
     </div>
+    <loading v-if="loading"></loading>
+    <div class="tips-loading-finished">没有更多的信息了</div>
   </section>
 </template>
 
@@ -29,14 +31,24 @@ import VueStar from 'vue-star'
 import { mapState } from 'vuex'
 import ImageList from './ImageList'
 import UserPop from './UserPop'
+import Loading from './Loading'
 export default {
   components: {
     ImageList,
     UserPop,
-    VueStar
+    VueStar,
+    Loading
+  },
+  props: {
+    userId: {
+      type: String,
+      default: ''
+    }
   },
   data () {
     return {
+      loading: false,
+      loadingFinished: false,
       dynamics: [{
         id: 1,
         title: '我的新作品',
@@ -76,10 +88,13 @@ export default {
     })
   },
   created () {
-    // this.loadData()
+    this.loadData()
+    // 监听滚动事件
+    window.addEventListener('scroll', this.onScroll)
   },
   methods: {
     async loadData () {
+      this.loading = true
       try {
         let list = await this.$request.get({
           name: 'timeline',
@@ -92,6 +107,28 @@ export default {
         console.log(list)
       } catch (error) {
         console.log(error)
+        this.loadingFinished = true
+      }
+      this.loading = false
+    },
+    onScroll () {
+      let bodyScrollTop = document.body.scrollTop
+      let documentScrollTop = document.documentElement.scrollTop
+      let scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop
+
+      let bodyScrollHeight = document.body.scrollHeight
+      let documentScrollHeight = document.documentElement.scrollHeight
+      let scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight
+
+      let windowHeight = 0
+      if (document.compatMode === 'CSS1Compat') {
+        windowHeight = document.documentElement.clientHeight
+      } else {
+        windowHeight = document.body.clientHeight
+      }
+
+      if (scrollTop + windowHeight >= scrollHeight - 30 && !this.loading && !this.loadingFinished) {
+        this.loadData()
       }
     }
   }
@@ -169,5 +206,9 @@ section {
 .icon-star {
   font-size: 22px;
   cursor: pointer;
+}
+.tips-loading-finished {
+  text-align: center;
+  color: #555;
 }
 </style>

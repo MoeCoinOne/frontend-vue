@@ -16,7 +16,7 @@
       <el-main class="main-box" v-loading="loading">
         <types></types>
 
-        <timeline class="timeline"></timeline>
+        <timeline :user-id="userinfo.uuid" class="timeline"></timeline>
       </el-main>
     </el-container>
   </section>

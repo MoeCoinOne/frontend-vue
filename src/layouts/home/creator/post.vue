@@ -1,16 +1,18 @@
 <template>
   <article>
     <el-row class="container">
-      <el-col :span="18">
+      <el-col :span="18" v-loading="loading">
         <el-card shadow="none" class="post">
           <div class="header">
-            <h1 class="title">内容标题</h1>
-            <div class="time">2018年8月12日 18:01:43</div>
+            <h1 class="title">{{ content.title }}</h1>
+            <div class="time">{{ moment(content.created_at).locale('zh-cn').format('YYYY年MM月DD日 HH:mm:ss') }}</div>
           </div>
           <div class="content">
-            今年比较满意的摸鱼
+            <div class="content-line" v-for="(line, lIndex) in content.content.split('\n')" :key="lIndex">
+              {{ line }}
+            </div>
           </div>
-          <image-list class="images" :images="images"></image-list>
+          <image-list v-if="content.images" class="images" :images="images"></image-list>
         </el-card>
       </el-col>
       <el-col class="aside" :span="6">
@@ -22,6 +24,7 @@
 
 <script>
 import { NavBar, FootBar, ImageList } from '@/components/global'
+import moment from 'moment'
 import Types from '@/components/home/CreatorTypes'
 export default {
   components: {
@@ -32,17 +35,33 @@ export default {
   },
   data () {
     return {
-      images: [{
-        id: 2,
-        src: '/static/img/home/temp/1.jpg'
-      }, {
-        id: 3,
-        src: 'https://moecoin.one/images/summer.jpg'
-      }, {
-        id: 4,
-        src: '/static/img/home/user-banner.jpg'
-      }]
+      loading: false,
+      content: {
+        title: '',
+        content: '',
+        images: null,
+        created_at: ''
+      }
     }
+  },
+  mounted () {
+    this.loadData()
+  },
+  methods: {
+    async loadData () {
+      this.loading = true
+      try {
+        let response = await this.$request.get({
+          name: 'content',
+          formatUrl: url => `${url}/${this.$route.params.postid}`
+        })
+        this.$set(this, 'content', response.body.data)
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
+    },
+    moment
   }
 }
 </script>

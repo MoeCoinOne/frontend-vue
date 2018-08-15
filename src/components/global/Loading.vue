@@ -60,7 +60,6 @@ export default {
   position: absolute;
 }
 
-
 /* Every thing below this is just positioning */
 
 .background-masker.header-top,

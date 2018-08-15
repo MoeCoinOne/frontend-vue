@@ -1,6 +1,6 @@
 <template>
   <section>
-    <timeline class="timeline"></timeline>
+    <timeline class="timeline" :user-id="$parent.userinfo.uuid"></timeline>
   </section>
 </template>
 

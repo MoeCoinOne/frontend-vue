@@ -25,6 +25,7 @@ export default {
       type: 'subscription/subscriptionType'
     },
     payments: 'payments',
-    timeline: 'timeline'
+    timeline: 'timeline',
+    content: 'content'
   }
 }

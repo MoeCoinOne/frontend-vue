@@ -7,12 +7,12 @@
     :before-close="close">
     <el-form class="form" :model="form" label-width="45px" label-position="left">
       <el-form-item label="标题">
-        <el-input v-model="form.title"></el-input>
+        <el-input v-model="form.title" placeholder="这里是动态的标题ヾ(´∀`o)+"></el-input>
       </el-form-item>
       <el-form-item label="正文">
-        <el-input type="textarea" v-model="form.content" :autosize="{ minRows: 3, maxRows: 10}"></el-input>
+        <el-input type="textarea" v-model="form.content" :autosize="{ minRows: 5, maxRows: 10}" placeholder="这里是动态的正文~"></el-input>
       </el-form-item>
-      <el-form-item label="图片">
+      <el-form-item label="图片" v-if="false">
         <el-upload
           action="https://jsonplaceholder.typicode.com/posts/"
           list-type="picture-card"
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     show: {
@@ -39,6 +40,9 @@ export default {
   data () {
     return {
       form: {
+        type: 'ARTICLE',
+        minimum_paid: '0',
+        visible: 'NORMAL',
         title: '',
         content: '',
         images: []
@@ -49,9 +53,39 @@ export default {
     close () {
       this.$emit('update:show', false)
     },
-    submit () {
+    async submit () {
+      try {
+        let response = await this.$request.post({
+          name: 'content',
+          body: {
+            ...this.form
+          },
+          config: {
+            headers: {
+              Authorization: `Bearer ${this.accessToken}`
+            }
+          }
+        })
+
+        this.$message({
+          type: 'success',
+          message: '发表成功~'
+        })
+        this.$emit('success', {
+          contentId: response.body.data.id
+        })
+        this.close()
+      } catch (error) {
+        console.log(error)
+        this.$message.error('发表失败~')
+      }
     },
     onImageRemove () {}
+  },
+  computed: {
+    ...mapState({
+      accessToken: state => state.user.accessToken
+    })
   }
 }
 </script>

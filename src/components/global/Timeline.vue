@@ -1,16 +1,21 @@
 <template>
-  <section v-title="$t('account.home.dynamic.title')">
+  <section v-title="$t('account.home.dynamic.title')" v-loading="loading">
     <div class="dynamic" v-for="(dynamic, dIndex) in dynamics" :key="dIndex">
       <div class="user">
         <user-pop
           class="user-pop"
-          :user="{ avatar: dynamic.creator_avatar, name: dynamic.creator_name, linkName: dynamic.creator_linkname }"
+          v-if="!userId"
+          :user="{ avatar: dynamic.user.avatar_id, name: dynamic.user.nickname, linkName: dynamic.user.unique_name, intro: dynamic.user.biography }"
         >
-        </user-pop><span>&nbsp;•&nbsp;2018-01-01</span>
+        </user-pop><span v-if="!userId">&nbsp;•&nbsp;</span><span>发布于 {{ handleDate(dynamic.created_at) }}</span>
       </div>
-      <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.creator_linkname, postid: '123' } }">{{ dynamic.title }}</router-link>
-      <div v-html="dynamic.content"></div>
-      <image-list class="images" :preview-id="dIndex" :images="dynamic.images"></image-list>
+      <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.user ? dynamic.user.unique_name : $route.params.id, postid: dynamic.content_id } }">{{ dynamic.title }}</router-link>
+      <div class="content">
+        <div class="content-line" v-for="(line, lIndex) in dynamic.content.split('\n')" :key="lIndex">
+          {{ line }}
+        </div>
+      </div>
+      <image-list v-if="dynamic.images" class="images" :preview-id="dIndex" :images="dynamic.images"></image-list>
       <!-- <div class="actions">
         <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
           <i slot="icon" class="icon-star el-icon-star-on"></i>
@@ -20,8 +25,14 @@
         <div class="comment">11 条评论</div>
       </div> -->
     </div>
-    <loading v-if="loading"></loading>
-    <div class="tips-loading-finished">没有更多的信息了</div>
+    <div v-if="loadingFinished" class="tips-loading-finished">
+      <div v-if="isLogin">没有更多的信息了</div>
+      <div v-else><router-link class="link-login" :to="{ name: 'UserLogin', query: { callback: loginCallback } }">登录</router-link>后查看他/她的动态</div>
+    </div>
+    <div v-else>
+      <loading v-if="loading"></loading>
+      <el-button v-else style="width: 100%" size="small" type="primary" @click="loadData">加载更多</el-button>
+    </div>
   </section>
 </template>
 
@@ -32,6 +43,7 @@ import { mapState } from 'vuex'
 import ImageList from './ImageList'
 import UserPop from './UserPop'
 import Loading from './Loading'
+import moment from 'moment'
 export default {
   components: {
     ImageList,
@@ -49,43 +61,31 @@ export default {
     return {
       loading: false,
       loadingFinished: false,
-      dynamics: [{
-        id: 1,
-        title: '我的新作品',
-        content: '最近画了一个新东西',
-        creator_id: 1,
-        creator_name: '孟三千',
-        creator_linkname: 'smilec',
-        creator_avatar: 'gavatar|b60ec2cf2ed64b71cb95cf2e4173097f',
-        images: [{
-          id: 1,
-          src: '/static/img/home/temp/1.jpg'
-        }]
-      }, {
-        id: 2,
-        title: '我又回来了233',
-        content: '不太复杂的，你想要看到的插画。<br/>非商用授权，日涂的水准，不适合肉多的同性内容，其他的别违规哟。',
-        creator_id: 1,
-        creator_name: '孟二千千',
-        creator_linkname: 'smilec',
-        creator_avatar: 'gavatar|b60ec2cf2ed64b71cb95cf2e4173097f',
-        images: [{
-          id: 2,
-          src: '/static/img/home/temp/1.jpg'
-        }, {
-          id: 3,
-          src: 'https://moecoin.one/images/summer.jpg'
-        }, {
-          id: 4,
-          src: '/static/img/home/user-banner.jpg'
-        }]
-      }]
+      dynamics: [],
+      pagination: {
+        total: 1,
+        current: 0,
+        pageSize: 20
+      }
     }
   },
   computed: {
     ...mapState({
       accessToken: state => state.user.accessToken
-    })
+    }),
+    isLogin () {
+      return !this.notLogin
+    },
+    notLogin () {
+      return !this.accessToken
+    },
+    loginCallback () {
+      return JSON.stringify({
+        path: this.$route.path,
+        query: this.$route.query,
+        params: this.$route.params
+      })
+    }
   },
   created () {
     this.loadData()
@@ -96,15 +96,27 @@ export default {
     async loadData () {
       this.loading = true
       try {
-        let list = await this.$request.get({
+        let response = await this.$request.get({
           name: 'timeline',
+          formatUrl: url => this.userId ? `${url}/${this.userId}` : url,
+          params: {
+            page: ++this.pagination.current,
+            pageSize: this.pagination.pageSize
+          },
           config: {
             headers: {
               Authorization: `Bearer ${this.accessToken}`
             }
           }
         })
-        console.log(list)
+        // 如果是第一页则清空当前
+        if (this.pagination.current === 1) {
+          this.dynamics = []
+        }
+        this.dynamics = this.dynamics.concat(response.body.data)
+        if (response.body.data.length < this.pagination.pageSize) {
+          this.loadingFinished = true
+        }
       } catch (error) {
         console.log(error)
         this.loadingFinished = true
@@ -127,9 +139,26 @@ export default {
         windowHeight = document.body.clientHeight
       }
 
-      if (scrollTop + windowHeight >= scrollHeight - 30 && !this.loading && !this.loadingFinished) {
+      if (scrollTop + windowHeight === scrollHeight && !this.loading && !this.loadingFinished) {
         this.loadData()
       }
+    },
+    moment,
+    handleDate (date) {
+      let timestamp = this.moment(date).unix()
+      let range = this.moment().unix() - timestamp
+      if (range < 3600) {
+        return this.moment(date).locale('zh-cn').fromNow()
+      } else {
+        return this.moment(date).locale('zh-cn').format('YYYY-MM-DD HH:mm')
+      }
+    }
+  },
+  watch: {
+    userId (newVal) {
+      this.pagination.current = 0
+      this.dynamics = []
+      this.loadData()
     }
   }
 }
@@ -171,7 +200,7 @@ section {
     font-weight: bold;
     color: #000;
     text-decoration: none;
-    display: block;
+    display: inline-block;
     margin: 10px 0;
     margin-bottom: 8px;
     transition: all 0.2s;
@@ -210,5 +239,10 @@ section {
 .tips-loading-finished {
   text-align: center;
   color: #555;
+  .link-login {
+    color: #2D84E9;
+    text-decoration: none;
+    font-weight: bold;
+  }
 }
 </style>

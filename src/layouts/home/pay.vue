@@ -93,10 +93,6 @@ export default {
   },
   methods: {
     subscribe () {
-      if (this.type.price > 0) {
-        this.$message.error('暂时无法订阅付费项目~第三方支付申请中~')
-        return
-      }
       this.loading = true
       let returnUrl = encodeURIComponent('https://baidu.com')
       this.$request.post({

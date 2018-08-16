@@ -88,6 +88,7 @@ export default {
           uuid: this.userinfo.uuid,
           nickname: this.userinfo.nickname,
           introduce: this.userinfo.biography,
+          uniqueName: this.userinfo.unique_name,
           // 赞助方案
           typeId: type.id,
           typePrice: type.price,

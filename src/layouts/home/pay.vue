@@ -38,6 +38,7 @@
           </div>
           <div
             class="method-item wechat"
+            v-if="false"
             :class="{ active: form.method === 'wechat' }"
             @click="form.method = 'wechat'"
           >
@@ -67,7 +68,8 @@ export default {
       creator: {
         uuid: '',
         nickname: '',
-        introduce: ''
+        introduce: '',
+        uniqueName: ''
       },
       type: {
         id: 0,
@@ -85,6 +87,7 @@ export default {
       vm.creator.uuid = to.query.uuid
       vm.creator.nickname = to.query.nickname
       vm.creator.introduce = to.query.introduce
+      vm.creator.uniqueName = to.query.uniqueName
 
       vm.type.id = to.query.typeId
       vm.type.name = to.query.typeName
@@ -94,7 +97,7 @@ export default {
   methods: {
     subscribe () {
       this.loading = true
-      let returnUrl = encodeURIComponent('https://baidu.com')
+      let returnUrl = encodeURIComponent(window.location.origin + '/c/' + this.creator.uniqueName)
       this.$request.post({
         name: 'subscription.relationship',
         formatUrl: url => `${url}/${this.creator.uuid}?returnUrl=${returnUrl}`,
@@ -109,17 +112,21 @@ export default {
           }
         }
       }).then(response => {
-        console.log(response.body)
-        this.$message({
-          type: 'success',
-          message: '订阅成功~'
-        })
-        this.$router.push('/account/home')
-        // window.location.href = response.body.data.paymentUrl
+        if (response.body.data.status === 'PAYMENT_NEEDED') {
+          window.location.href = response.body.data.paymentUrl
+        } else {
+          this.$message({
+            type: 'success',
+            message: '订阅成功~'
+          })
+          this.$router.push('/account/home')
+        }
       }).catch(error => {
         console.error(error)
         if (error.body.error === 'CANNOT_SUBSCRIBE_SELF') {
           this.$message.error('不能订阅自己噢~')
+        } else if (error.body.error === 'SUBSCRIPTION_TYPE_CANNOT_CHANGE') {
+          this.$message.error('你已经订阅TA了，订阅类型暂时不可更改~')
         } else {
           this.$message.error(error.body.error)
         }

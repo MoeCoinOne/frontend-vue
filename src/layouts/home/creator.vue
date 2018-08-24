@@ -16,13 +16,12 @@
             <router-link v-if="isSelf" class="action-item" :to="{ name: 'HomeCreatorSettingProfile', params: $route.params }">设置</router-link>
           </div>
         </div>
-        <el-button v-if="isSelf" type="danger" icon="el-icon-edit" class="btn-publish" @click="showPublishDialog" @success="onPostSuccess">发布动态</el-button>
+        <el-button v-if="isSelf" type="danger" icon="el-icon-edit" class="btn-publish" @click="goPublishPage">发布动态</el-button>
       </div>
     </div>
 
     <router-view></router-view>
     <foot-bar class="footbar"></foot-bar>
-    <creator-publish-dialog :show.sync="publishDialog.show"></creator-publish-dialog>
   </article>
 </template>
 
@@ -61,8 +60,10 @@ export default {
     this.loadData()
   },
   methods: {
-    showPublishDialog () {
-      this.publishDialog.show = true
+    goPublishPage () {
+      this.$router.push({
+        name: 'HomePublish'
+      })
     },
     loadData () {
       this.loading = true
@@ -87,15 +88,6 @@ export default {
         }
       }).finally(() => {
         this.loading = false
-      })
-    },
-    onPostSuccess (event) {
-      this.$router.push({
-        name: 'HomeCreatorPost',
-        params: {
-          id: this.$route.params.id,
-          postid: event.contentId
-        }
       })
     }
   },

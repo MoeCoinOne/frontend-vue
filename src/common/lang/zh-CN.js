@@ -19,6 +19,9 @@ export const home = {
   pay: {
     title: '收银台'
   },
+  publish: {
+    title: '新建投稿'
+  },
   creator: {
     title: '创作者'
   }

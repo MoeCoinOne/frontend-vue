@@ -6,38 +6,38 @@
     <section class="container">
       <el-form ref="form" :model="form" label-position="top" >
 
-        <el-form-item label="投稿类型">
-          <el-select v-model="form.postType" placeholder="请选择">
-            <el-option label="图片投稿" value="picture"></el-option>
-            <el-option label="文章投稿" value="article"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="标题" v-if="form.postType === 'article'">
+        <el-form-item label="标题">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
 
-        <el-form-item label="图片列表" v-if="form.postType === 'picture'">
-          <el-upload
-            action=""
-            list-type="picture-card">
-            <i class="el-icon-plus"></i>
-          </el-upload>
-        </el-form-item>
+        <template v-for="(item,key) in form.priceGroups" >
+          <el-form-item label="图片列表" :key="key">
+            <el-upload
+              action=""
+              list-type="picture-card">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+          </el-form-item>
 
-        <el-form-item :label="textLabel">
-          <el-input
-          v-model="form.textContent"
-          type="textarea"
-          :autosize="{ minRows: 4}"
-          ></el-input>
+          <el-form-item label="说明" :key="key">
+            <el-input
+            v-model="item.textContent"
+            type="textarea"
+            :autosize="{ minRows: 4}"
+            ></el-input>
+          </el-form-item>
 
-        </el-form-item>
+          <el-form-item label="公开范围" :key="key">
+            <el-radio v-model="item.publishLevel" label="all">全体公开</el-radio>
+            <el-radio v-model="item.publishLevel" label="subscribed">订阅可见</el-radio>
+            <el-radio v-model="item.publishLevel" label="paid">付费 10 元或以上可见</el-radio>
+          </el-form-item>
 
-        <el-form-item label="公开范围">
-          <el-radio v-model="form.publishLevel" label="all">全体公开</el-radio>
-          <el-radio v-model="form.publishLevel" label="subscribed">订阅可见</el-radio>
-          <el-radio v-model="form.publishLevel" label="paid">付费 114514 元可见</el-radio>
+          <hr :key="key" style="margin-bottom:30px"/>
+        </template>
+
+        <el-form-item>
+            <el-button icon="el-icon-plus" type="warning" @click="addPriceGroup">增加付费档位</el-button>
         </el-form-item>
 
         <el-form-item>
@@ -65,30 +65,26 @@ export default {
     return {
       loading: false,
       form: {
-        postType: 'picture',
         title: '',
-        textContent: '',
-        publishLevel: 'all'
+        priceGroups: [{
+          textContent: '',
+          publishLevel: 'all'
+        }]
       }
     }
   },
   methods: {
-
+    addPriceGroup () {
+      this.form.priceGroups.push({
+        textContent: '',
+        publishLevel: 'all'
+      })
+    }
   },
   computed: {
     ...mapState({
       accessToken: state => state.user.accessToken
-    }),
-    textLabel () {
-      switch (this.form.postType) {
-        case 'picture':
-          return '说明'
-        case 'article':
-          return '正文'
-        default:
-          return '文字'
-      }
-    }
+    })
   }
 }
 </script>

@@ -19,7 +19,7 @@
 
         <el-form-item label="图片列表" v-if="form.postType === 'picture'">
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action=""
             list-type="picture-card">
             <i class="el-icon-plus"></i>
           </el-upload>

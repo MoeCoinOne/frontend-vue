@@ -109,7 +109,7 @@ article {
   box-shadow: 0 0 2px 0 #cbd0d8;
   border-radius: 4px;
   box-sizing: border-box;
-  padding: 80px;
+  padding: 50px 80px 80px 80px;
 
 }
 
@@ -117,7 +117,7 @@ article {
   width: 1100px;
   font-size: 20px;
   text-align: center;
-  margin:30px auto;
+  margin: 48px auto;
   font-weight: normal;
 }
 

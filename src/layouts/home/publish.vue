@@ -34,7 +34,12 @@
         <el-form-item label="公开范围">
           <el-radio v-model="form.visible" label="NORMAL">全体公开</el-radio>
           <el-radio v-model="form.visible" label="SUBSCRIBED_ONLY">订阅可见</el-radio>
-          <el-radio v-model="form.visible" label="PAID">付费 10 元或以上可见</el-radio>
+          <el-radio
+            v-model="form.visible"
+            :label="`PAID@${candidate}`"
+            v-for="candidate in visibleCandidate"
+            :key="candidate"
+          >付费 {{ candidate }} 元订阅可见</el-radio>
         </el-form-item>
 
         <!-- <el-form-item>
@@ -71,10 +76,37 @@ export default {
         title: '',
         content: '',
         images: []
-      }
+      },
+      visibleCandidate: []
     }
   },
   methods: {
+    // 从服务端加载订阅类型，用于可见度候候选
+    async loadVisibleCandidate () {
+      this.loading = true
+      try {
+        const res = await this.$request.get({
+          name: 'subscription.type',
+          params: {
+            pageSize: 1000
+          },
+          config: {
+            headers: {
+              Authorization: `Bearer ${this.accessToken}`
+            }
+          }
+        })
+        this.visibleCandidate = res.body.data
+          .map(item => parseFloat(item.price))
+          .filter((value, index, self) => self.indexOf(value) === index)
+        console.log(this.visibleCandidate)
+      } catch (err) {
+        console.error(err)
+      }
+      this.loading = false
+    },
+
+    // 向服务端发送投稿请求
     async postContent () {
       try {
         await this.$refs.form.validate()
@@ -83,10 +115,19 @@ export default {
       }
 
       try {
+        let params = this.form
+        if (params.visible.indexOf('PAID@') !== -1) {
+          const price = params.visible.substring(params.visible.indexOf('@') + 1)
+          params = Object.assign({}, params, {
+            visible: 'SUBSCRIBED_ONLY',
+            minimum_paid: price
+          })
+        }
+        this.loading = true
         const response = await this.$request.post({
           name: 'content',
           body: {
-            ...this.form
+            ...params
           },
           config: {
             headers: {
@@ -94,6 +135,7 @@ export default {
             }
           }
         })
+        this.loading = false
 
         this.$message({
           type: 'success',
@@ -118,6 +160,9 @@ export default {
       accessToken: state => state.user.accessToken,
       uniqueName: state => state.user.uniqueName
     })
+  },
+  mounted () {
+    this.loadVisibleCandidate().catch(err => console.error(err))
   }
 }
 </script>

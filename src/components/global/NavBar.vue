@@ -117,7 +117,8 @@ export default {
         this.$store.commit('setUserToken', {
           accessToken: response.body.accessToken,
           idToken: response.body.idToken,
-          refreshToken: response.body.refreshToken
+          refreshToken: response.body.refreshToken,
+          identity: response.body.identity
         })
         this.getUserInfo()
       }).catch(error => {

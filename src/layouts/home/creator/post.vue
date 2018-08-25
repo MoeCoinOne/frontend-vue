@@ -8,8 +8,7 @@
             <div class="time">{{ moment(content.created_at).locale('zh-cn').format('YYYY年MM月DD日 HH:mm:ss') }}</div>
           </div>
           <div class="content">
-            <div class="content-line" v-for="(line, lIndex) in content.content.split('\n')" :key="lIndex">
-              {{ line }}
+            <div class="content-line" v-for="(line, lIndex) in content.content.split('\n')" :key="lIndex" v-html="line">
             </div>
           </div>
           <image-list v-if="content.images" class="images" :images="images"></image-list>

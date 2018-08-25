@@ -23,12 +23,15 @@
         <el-form-item label="正文" prop="title" :rules="[
           { required: true, message:$t('error.POST_CONTENT_EMPTY')}
         ]">
-          <el-input
+          <!-- <el-input
           v-model="form.content"
           type="textarea"
           placeholder="这里是动态的正文~"
           :autosize="{ minRows: 5, maxRows: 10}"
-          ></el-input>
+          ></el-input> -->
+          <div class="quill-ctnr">
+            <quill-editor v-model="form.content" :options="editorConfig"></quill-editor>
+          </div>
         </el-form-item>
 
         <el-form-item label="公开范围">
@@ -62,10 +65,17 @@
 <script>
 import { mapState } from 'vuex'
 import { NavBar, FootBar } from '@/components/global'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+import { quillEditor as QuillEditor } from 'vue-quill-editor'
+
 export default {
   components: {
     NavBar,
-    FootBar
+    FootBar,
+    QuillEditor
   },
   data () {
     return {
@@ -77,7 +87,25 @@ export default {
         content: '',
         images: []
       },
-      visibleCandidate: []
+      visibleCandidate: [],
+      editorConfig: {
+        placeholder: '这里是投稿的正文~',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['link'],
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'size': ['small', false, 'large', 'huge'] }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }]
+          ]
+        }
+      }
     }
   },
   methods: {
@@ -99,7 +127,6 @@ export default {
         this.visibleCandidate = res.body.data
           .map(item => parseFloat(item.price))
           .filter((value, index, self) => self.indexOf(value) === index)
-        console.log(this.visibleCandidate)
       } catch (err) {
         console.error(err)
       }
@@ -211,5 +238,14 @@ article {
 
 .button-row{
   text-align: center
+}
+
+.quill-ctnr{
+  line-height: 12px;
+  margin-bottom: 56px;
+}
+.quill-editor{
+  box-sizing: border-box;
+  height: 250px;
 }
 </style>

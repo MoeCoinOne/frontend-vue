@@ -15,6 +15,7 @@
         <el-form-item label="图片列表">
           <el-upload
             action=""
+            :http-request="uploadImage"
             list-type="picture-card">
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -70,6 +71,9 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
 import { quillEditor as QuillEditor } from 'vue-quill-editor'
+import { quillEditorBaseConfig } from '../../common/config/rich-text'
+
+import { s3 } from 'fine-uploader/lib/core/all'
 
 export default {
   components: {
@@ -88,24 +92,7 @@ export default {
         images: []
       },
       visibleCandidate: [],
-      editorConfig: {
-        placeholder: '这里是投稿的正文~',
-        modules: {
-          toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['link'],
-            ['blockquote', 'code-block'],
-            [{ 'header': 1 }, { 'header': 2 }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],
-            [{ 'indent': '-1' }, { 'indent': '+1' }],
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'align': [] }]
-          ]
-        }
-      }
+      editorConfig: Object.assign({}, quillEditorBaseConfig, {placeholder: '这里是投稿的正文~'})
     }
   },
   methods: {
@@ -180,12 +167,31 @@ export default {
         console.log(error)
         this.$message.error('发表失败~')
       }
+    },
+
+    uploadImage (data) {
+      console.log(data)
+      const instance = new s3.FineUploaderBasic({
+        request: {
+          endpoint: 'moecoin-uploads.s3.amazonaws.com',
+          accessKey: this.identity.accessKeyId,
+          secretKey: this.identity.secretAccessKey,
+          sessionToken: this.identity.sessionToken
+        },
+        signature: {
+          endpoint: '/s3/signature'
+        }
+      })
+
+      instance.addFiles([data.file])
+      console.log(instance)
     }
   },
   computed: {
     ...mapState({
       accessToken: state => state.user.accessToken,
-      uniqueName: state => state.user.uniqueName
+      uniqueName: state => state.user.uniqueName,
+      identity: state => state.user.identity
     })
   },
   mounted () {

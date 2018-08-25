@@ -6,44 +6,45 @@
     <section class="container">
       <el-form ref="form" :model="form" label-position="top" >
 
-        <el-form-item label="标题">
-          <el-input v-model="form.title"></el-input>
+        <el-form-item label="标题" prop="title" :rules="[
+          { required: true, message:$t('error.POST_TITLE_EMPTY')}
+        ]">
+          <el-input v-model="form.title" placeholder="这里是稿件的标题ヾ(´∀`o)+"></el-input>
         </el-form-item>
 
-        <template v-for="(item,key) in form.priceGroups" >
-          <el-form-item label="图片列表" :key="key">
-            <el-upload
-              action=""
-              list-type="picture-card">
-              <i class="el-icon-plus"></i>
-            </el-upload>
-          </el-form-item>
+        <el-form-item label="图片列表">
+          <el-upload
+            action=""
+            list-type="picture-card">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
 
-          <el-form-item label="说明" :key="key">
-            <el-input
-            v-model="item.textContent"
-            type="textarea"
-            :autosize="{ minRows: 4}"
-            ></el-input>
-          </el-form-item>
+        <el-form-item label="正文" prop="title" :rules="[
+          { required: true, message:$t('error.POST_CONTENT_EMPTY')}
+        ]">
+          <el-input
+          v-model="form.content"
+          type="textarea"
+          placeholder="这里是动态的正文~"
+          :autosize="{ minRows: 5, maxRows: 10}"
+          ></el-input>
+        </el-form-item>
 
-          <el-form-item label="公开范围" :key="key">
-            <el-radio v-model="item.publishLevel" label="all">全体公开</el-radio>
-            <el-radio v-model="item.publishLevel" label="subscribed">订阅可见</el-radio>
-            <el-radio v-model="item.publishLevel" label="paid">付费 10 元或以上可见</el-radio>
-          </el-form-item>
+        <el-form-item label="公开范围">
+          <el-radio v-model="form.visible" label="NORMAL">全体公开</el-radio>
+          <el-radio v-model="form.visible" label="SUBSCRIBED_ONLY">订阅可见</el-radio>
+          <el-radio v-model="form.visible" label="PAID">付费 10 元或以上可见</el-radio>
+        </el-form-item>
 
-          <hr :key="key" style="margin-bottom:30px"/>
-        </template>
-
-        <el-form-item>
+        <!-- <el-form-item>
             <el-button icon="el-icon-plus" type="warning" @click="addPriceGroup">增加付费档位</el-button>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item>
           <div class="button-row">
             <el-button>保存草稿</el-button>
-            <el-button type="primary">立即创建</el-button>
+            <el-button type="primary" @click="postContent">立即创建</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -65,25 +66,57 @@ export default {
     return {
       loading: false,
       form: {
+        type: 'ARTICLE',
+        visible: 'NORMAL',
         title: '',
-        priceGroups: [{
-          textContent: '',
-          publishLevel: 'all'
-        }]
+        content: '',
+        images: []
       }
     }
   },
   methods: {
-    addPriceGroup () {
-      this.form.priceGroups.push({
-        textContent: '',
-        publishLevel: 'all'
-      })
+    async postContent () {
+      try {
+        await this.$refs.form.validate()
+      } catch (err) {
+        return
+      }
+
+      try {
+        const response = await this.$request.post({
+          name: 'content',
+          body: {
+            ...this.form
+          },
+          config: {
+            headers: {
+              Authorization: `Bearer ${this.accessToken}`
+            }
+          }
+        })
+
+        this.$message({
+          type: 'success',
+          message: '发表成功~'
+        })
+
+        this.$router.push({
+          name: 'HomeCreatorPost',
+          params: {
+            id: this.uniqueName,
+            postid: response.body.data.content_id
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        this.$message.error('发表失败~')
+      }
     }
   },
   computed: {
     ...mapState({
-      accessToken: state => state.user.accessToken
+      accessToken: state => state.user.accessToken,
+      uniqueName: state => state.user.uniqueName
     })
   }
 }

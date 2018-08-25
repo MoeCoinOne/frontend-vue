@@ -136,5 +136,8 @@ export const error = {
   FORGET_MAIL_EMPTY: '邮箱不能为空',
   FORGET_CODE_EMPTY: '验证码不能为空',
   FORGET_CODE_INVALID: '验证码不正确~请重试~',
-  FORGET_PASSWORD_LENGTH_INVALID: '请输入8位以上密码'
+  FORGET_PASSWORD_LENGTH_INVALID: '请输入8位以上密码',
+  // 创建投稿
+  POST_TITLE_EMPTY: '稿件标题不可为空',
+  POST_CONTENT_EMPTY: '稿件正文不可为空'
 }

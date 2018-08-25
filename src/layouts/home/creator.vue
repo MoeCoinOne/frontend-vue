@@ -16,7 +16,7 @@
             <router-link v-if="isSelf" class="action-item" :to="{ name: 'HomeCreatorSettingProfile', params: $route.params }">设置</router-link>
           </div>
         </div>
-        <el-button v-if="isSelf" type="danger" icon="el-icon-edit" class="btn-publish" @click="goPublishPage">发布动态</el-button>
+        <el-button v-if="isSelf" type="danger" icon="el-icon-edit" class="btn-publish" @click="goPublishPage">新建投稿</el-button>
       </div>
     </div>
 

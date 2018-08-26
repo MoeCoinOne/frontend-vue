@@ -16,6 +16,11 @@
           <el-upload
             action=""
             :http-request="uploadImage"
+            accept="image/*"
+            :file-list="elementImageList"
+            :on-error="fileListError(0)"
+            :on-success="fileListSuccess(0)"
+            :on-remove="fileListRemove(0)"
             list-type="picture-card">
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -84,8 +89,9 @@ export default {
   data () {
     return {
       loading: false,
+      elementImageList: [],
       form: {
-        type: 'ARTICLE',
+        type: 'IMAGES',
         visible: 'NORMAL',
         title: '',
         content: '',
@@ -96,6 +102,32 @@ export default {
     }
   },
   methods: {
+    fileListSuccess (groupId) {
+      // groupId 为日后多组上传保留
+      return (response, file, fileList) => {
+        this.syncElementImageList(fileList)
+      }
+    },
+
+    fileListError (groupId) {
+      // groupId 为日后多组上传保留
+      return (response, file, fileList) => {
+        this.syncElementImageList(fileList)
+      }
+    },
+
+    fileListRemove (groupId) {
+      // groupId 为日后多组上传保留
+      return (response, fileList) => {
+        this.syncElementImageList(fileList)
+      }
+    },
+
+    syncElementImageList (fileList) {
+      console.log('sync', fileList)
+      this.elementImageList = fileList
+    },
+
     // 从服务端加载订阅类型，用于可见度候候选
     async loadVisibleCandidate () {
       this.loading = true
@@ -137,6 +169,11 @@ export default {
             minimum_paid: price
           })
         }
+        params = Object.assign({}, params, {
+          images: this.elementImageList
+            .filter(item => item.status === 'success')
+            .map(item => item.response.path)
+        })
         this.loading = true
         const response = await this.$request.post({
           name: 'content',
@@ -171,6 +208,7 @@ export default {
 
     uploadImage (data) {
       console.log(data)
+      const self = this
       const tomorrow = new Date()
       tomorrow.setDate((new Date()).getDate() + 1)
       const instance = new s3.FineUploaderBasic({
@@ -185,25 +223,36 @@ export default {
           endpoint: 'moecoin-uploads.s3.amazonaws.com'
         },
         objectProperties: {
-          acl: 'private'
+          acl: 'public-read',
+          key (id) {
+            return `post/${self.userUuid}/${this.getUuid(id)}-${this.getName(id)}`
+          }
+        },
+        callbacks: {
+          onProgress (id, name, loaded, total) {
+            data.onProgress({percent: loaded / total * 100})
+            console.log('progress', arguments, loaded / total * 100)
+            console.log(this)
+          },
+          onComplete (id, name, content, xhr) {
+            console.log(this, 'asdf', this.getBucket(id))
+            data.onSuccess(Object.assign({}, content, {
+              path: `${xhr.responseURL}post/${self.userUuid}/${this.getUuid(id)}-${this.getName(id)}`
+            }))
+            console.log('sccess', arguments)
+          }
         }
-      })
-      console.log({
-        accessKey: this.identity.accessKeyId,
-        secretKey: this.identity.secretAccessKey,
-        sessionToken: this.identity.sessionToken,
-        expiration: tomorrow
       })
 
       instance.addFiles([data.file])
-      console.log(instance)
     }
   },
   computed: {
     ...mapState({
       accessToken: state => state.user.accessToken,
       uniqueName: state => state.user.uniqueName,
-      identity: state => state.user.identity
+      identity: state => state.user.identity,
+      userUuid: state => state.user.uuid
     })
   },
   mounted () {

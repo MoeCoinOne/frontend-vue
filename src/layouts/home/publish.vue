@@ -171,16 +171,28 @@ export default {
 
     uploadImage (data) {
       console.log(data)
+      const tomorrow = new Date()
+      tomorrow.setDate((new Date()).getDate() + 1)
       const instance = new s3.FineUploaderBasic({
-        request: {
-          endpoint: 'moecoin-uploads.s3.amazonaws.com',
+        debug: true,
+        credentials: {
           accessKey: this.identity.accessKeyId,
           secretKey: this.identity.secretAccessKey,
-          sessionToken: this.identity.sessionToken
+          sessionToken: this.identity.sessionToken,
+          expiration: tomorrow
         },
-        signature: {
-          endpoint: '/s3/signature'
+        request: {
+          endpoint: 'moecoin-uploads.s3.amazonaws.com'
+        },
+        objectProperties: {
+          acl: 'private'
         }
+      })
+      console.log({
+        accessKey: this.identity.accessKeyId,
+        secretKey: this.identity.secretAccessKey,
+        sessionToken: this.identity.sessionToken,
+        expiration: tomorrow
       })
 
       instance.addFiles([data.file])

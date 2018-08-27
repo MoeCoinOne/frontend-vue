@@ -21,6 +21,7 @@
             :on-error="fileListError(0)"
             :on-success="fileListSuccess(0)"
             :on-remove="fileListRemove(0)"
+            :disabled="imageUploading"
             list-type="picture-card">
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -89,6 +90,7 @@ export default {
   data () {
     return {
       loading: false,
+      imageUploading: false,
       elementImageList: [],
       form: {
         type: 'IMAGES',
@@ -208,6 +210,7 @@ export default {
 
     uploadImage (data) {
       console.log(data)
+      this.imageUploading = true
       const self = this
       const tomorrow = new Date()
       tomorrow.setDate((new Date()).getDate() + 1)
@@ -235,11 +238,15 @@ export default {
             console.log(this)
           },
           onComplete (id, name, content, xhr) {
+            self.imageUploading = false
             console.log(this, 'asdf', this.getBucket(id))
             data.onSuccess(Object.assign({}, content, {
               path: `${xhr.responseURL}post/${self.userUuid}/${this.getUuid(id)}-${this.getName(id)}`
             }))
             console.log('sccess', arguments)
+          },
+          onError () {
+            self.imageUploading = false
           }
         }
       })

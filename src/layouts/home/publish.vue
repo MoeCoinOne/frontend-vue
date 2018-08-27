@@ -79,7 +79,7 @@ import 'quill/dist/quill.bubble.css'
 import { quillEditor as QuillEditor } from 'vue-quill-editor'
 import { quillEditorBaseConfig } from '../../common/config/rich-text'
 
-import { s3 } from 'fine-uploader/lib/core/all'
+import { uploadSingleFile } from '@/common/services/file-upload'
 
 export default {
   components: {
@@ -209,57 +209,28 @@ export default {
     },
 
     uploadImage (data) {
-      console.log(data)
+      // console.log(data)
       this.imageUploading = true
       const self = this
-      const tomorrow = new Date()
-      tomorrow.setDate((new Date()).getDate() + 1)
-      const instance = new s3.FineUploaderBasic({
-        debug: true,
-        credentials: {
-          accessKey: this.identity.accessKeyId,
-          secretKey: this.identity.secretAccessKey,
-          sessionToken: this.identity.sessionToken,
-          expiration: tomorrow
+      uploadSingleFile(
+        data.file,
+        'post', // category Name
+        function onSuccess () {
+          self.imageUploading = false
+          data.onSuccess.apply(data, arguments)
         },
-        request: {
-          endpoint: 'moecoin-uploads.s3.amazonaws.com'
+        function onError (err) {
+          self.imageUploading = false
+          data.onError(err)
         },
-        objectProperties: {
-          acl: 'public-read',
-          key (id) {
-            return `post/${self.userUuid}/${this.getUuid(id)}-${this.getName(id)}`
-          }
-        },
-        callbacks: {
-          onProgress (id, name, loaded, total) {
-            data.onProgress({percent: loaded / total * 100})
-            console.log('progress', arguments, loaded / total * 100)
-            console.log(this)
-          },
-          onComplete (id, name, content, xhr) {
-            self.imageUploading = false
-            console.log(this, 'asdf', this.getBucket(id))
-            data.onSuccess(Object.assign({}, content, {
-              path: `${xhr.responseURL}post/${self.userUuid}/${this.getUuid(id)}-${this.getName(id)}`
-            }))
-            console.log('sccess', arguments)
-          },
-          onError () {
-            self.imageUploading = false
-          }
-        }
-      })
-
-      instance.addFiles([data.file])
+        data.onProgress.bind(data)
+      )
     }
   },
   computed: {
     ...mapState({
       accessToken: state => state.user.accessToken,
-      uniqueName: state => state.user.uniqueName,
-      identity: state => state.user.identity,
-      userUuid: state => state.user.uuid
+      uniqueName: state => state.user.uniqueName
     })
   },
   mounted () {

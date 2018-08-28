@@ -54,7 +54,7 @@ function isAllow (path) {
 
 router.beforeEach(function (to, from, next) {
   console.log(store.state.user.accessToken)
-  if (store.state.user.accessToken) {
+  if (store.state.user.accessToken && store.state.user.identity.accessKeyId) {
     next()
   } else {
     // 非登录状态

@@ -8,11 +8,12 @@
             <div class="time">{{ moment(content.created_at).locale('zh-cn').format('YYYY年MM月DD日 HH:mm:ss') }}</div>
           </div>
           <div class="content">
-            <div class="content-line" v-for="(line, lIndex) in content.content.split('\n')" :key="lIndex">
-              {{ line }}
-            </div>
+            <template v-if="content.content">
+              <div class="content-line" v-for="(line, lIndex) in content.content.split('\n')" :key="lIndex" v-html="line">
+              </div>
+            </template>
           </div>
-          <image-list v-if="content.images" class="images" :images="images"></image-list>
+          <image-list v-if="content.images" class="images" :images="content.images ? content.images.map(item => ({src: item})) : []"></image-list>
         </el-card>
       </el-col>
       <el-col class="aside" :span="6">

@@ -1,6 +1,7 @@
 const Index = () => import('@/layouts/home/index.vue')
 const Explore = () => import('@/layouts/home/explore.vue')
 const Pay = () => import('@/layouts/home/pay.vue')
+const Publish = () => import('@/layouts/home/publish.vue')
 const Creator = () => import('@/layouts/home/creator.vue')
 const CreatorIndex = () => import('@/layouts/home/creator/index.vue')
 const CreatorPosts = () => import('@/layouts/home/creator/posts.vue')
@@ -25,6 +26,11 @@ export default [
     path: '/home/pay',
     name: 'HomePay',
     component: Pay
+  },
+  {
+    path: '/home/publish',
+    name: 'HomePublish',
+    component: Publish
   },
   {
     path: '/c/:id',

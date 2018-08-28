@@ -16,6 +16,7 @@
   "dependencies": {
     "animate.css": "^3.6.1",
     "element-ui": "^2.4.3",
+    "fine-uploader": "^5.16.2",
     "js-base64": "^2.4.8",
     "less": "^3.5.3",
     "less-loader": "^4.1.0",
@@ -24,6 +25,7 @@
     "vue": "^2.5.2",
     "vue-i18n": "^8.0.0",
     "vue-photo-preview": "^1.0.9",
+    "vue-quill-editor": "^3.0.6",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vue-star": "0.0.4",

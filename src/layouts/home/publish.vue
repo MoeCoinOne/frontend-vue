@@ -6,18 +6,27 @@
     <section class="container">
       <el-form ref="form" :model="form" label-position="top" >
 
-        <el-form-item label="标题" prop="title" :rules="[
-          { required: true, message:$t('error.POST_TITLE_EMPTY')}
+        <el-form-item label="投稿类型" prop="type">
+          <el-select v-model="form.type" placeholder="请选择">
+            <el-option label="图片投稿" value="IMAGES"></el-option>
+            <el-option label="文章投稿" value="ARTICLE"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item v-if="form.type === 'ARTICLE'" label="标题" prop="title" :rules="[
+          { required: form.type === 'ARTICLE', message:$t('error.POST_TITLE_EMPTY')}
         ]">
           <el-input v-model="form.title" placeholder="这里是稿件的标题ヾ(´∀`o)+"></el-input>
         </el-form-item>
 
-        <el-form-item label="图片列表">
+        <el-form-item v-else label="图片列表" prop="elementImageList" :rules="[
+          { type: 'array', required: form.type === 'IMAGES', message: '请至少上传一张图片'}
+        ]">
           <el-upload
             action=""
             :http-request="uploadImage"
             accept="image/*"
-            :file-list="elementImageList"
+            :file-list="form.elementImageList"
             :on-error="fileListError(0)"
             :on-success="fileListSuccess(0)"
             :on-remove="fileListRemove(0)"
@@ -27,7 +36,7 @@
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="正文" prop="title" :rules="[
+        <el-form-item :label="form.type === 'ARTICLE' ? '正文' : '说明'" prop="content" :rules="[
           { required: true, message:$t('error.POST_CONTENT_EMPTY')}
         ]">
           <!-- <el-input
@@ -91,13 +100,13 @@ export default {
     return {
       loading: false,
       imageUploading: false,
-      elementImageList: [],
       form: {
         type: 'IMAGES',
         visible: 'NORMAL',
         title: '',
         content: '',
-        images: []
+        images: [],
+        elementImageList: []
       },
       visibleCandidate: [],
       editorConfig: Object.assign({}, quillEditorBaseConfig, {placeholder: '这里是投稿的正文~'})
@@ -126,8 +135,7 @@ export default {
     },
 
     syncElementImageList (fileList) {
-      console.log('sync', fileList)
-      this.elementImageList = fileList
+      this.form.elementImageList = fileList
     },
 
     // 从服务端加载订阅类型，用于可见度候候选
@@ -156,6 +164,9 @@ export default {
 
     // 向服务端发送投稿请求
     async postContent () {
+      if (this.imageUploading) {
+        return
+      }
       try {
         await this.$refs.form.validate()
       } catch (err) {
@@ -172,10 +183,11 @@ export default {
           })
         }
         params = Object.assign({}, params, {
-          images: this.elementImageList
+          images: this.form.elementImageList
             .filter(item => item.status === 'success')
             .map(item => item.response.path)
         })
+        delete params.elementImageList
         this.loading = true
         const response = await this.$request.post({
           name: 'content',
@@ -188,7 +200,6 @@ export default {
             }
           }
         })
-        this.loading = false
 
         this.$message({
           type: 'success',
@@ -201,7 +212,7 @@ export default {
             id: this.uniqueName,
             postid: response.body.data.content_id
           }
-        })
+        }, () => { this.loading = false })
       } catch (error) {
         console.log(error)
         this.$message.error('发表失败~')

@@ -17,7 +17,7 @@ export function uploadSingleFile (file, category, onSuccessCallback, onErrorCall
       expiration: tomorrow
     },
     request: {
-      endpoint: `${uploadConfiguration.s3.bucketName}.s3.amazonaws.com`
+      endpoint: `https://${uploadConfiguration.s3.bucketName}.s3.amazonaws.com`
     },
     objectProperties: {
       acl: 'public-read',

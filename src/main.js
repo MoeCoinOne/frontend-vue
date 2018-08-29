@@ -32,6 +32,10 @@ new Vue({
   i18n,
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })
+
+console.log(`${process.env.APP_NAME} by ${process.env.AUTHOR} \n-----\nBuild Env: ${process.env.NODE_ENV} \nBuild Time: ${process.env.BUILD_TIME}.`)

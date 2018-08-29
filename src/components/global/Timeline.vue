@@ -12,14 +12,15 @@
       <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.user ? dynamic.user.unique_name : $route.params.id, postid: dynamic.content_id } }">{{ dynamic.title }}</router-link>
       <div class="content" v-if ="!!dynamic.content" v-html="dynamic.content"></div>
       <image-list v-if="dynamic.images" class="images" :preview-id="dIndex" :images="!!dynamic.images ? dynamic.images.map(item => ({src: item})) : []"></image-list>
-      <!-- <div class="actions">
-        <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
+      <div class="actions">
+        <!-- <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
           <i slot="icon" class="icon-star el-icon-star-on"></i>
         </vue-star>
         <div class="start-count">5</div>
         <div>&nbsp;•&nbsp;</div>
-        <div class="comment">11 条评论</div>
-      </div> -->
+        <div class="comment">11 条评论</div> -->
+        <div @click="deleteDynamicByIndex(dIndex)" v-if="dynamic.user_id === currentUserId">删除</div>
+      </div>
     </div>
     <div v-if="loadingFinished" class="tips-loading-finished">
       <div v-if="isLogin">没有更多的信息了</div>
@@ -56,6 +57,7 @@ export default {
   data () {
     return {
       loading: false,
+      deleteBusy: false,
       loadingFinished: false,
       dynamics: [],
       pagination: {
@@ -67,7 +69,8 @@ export default {
   },
   computed: {
     ...mapState({
-      accessToken: state => state.user.accessToken
+      accessToken: state => state.user.accessToken,
+      user: state => state.user
     }),
     isLogin () {
       return !this.notLogin
@@ -81,6 +84,13 @@ export default {
         query: this.$route.query,
         params: this.$route.params
       })
+    },
+    currentUserId () {
+      if (!!this.user && !!this.user.uuid) {
+        return this.user.uuid
+      } else {
+        return ''
+      }
     }
   },
   created () {
@@ -113,6 +123,7 @@ export default {
         if (response.body.data.length < this.pagination.pageSize) {
           this.loadingFinished = true
         }
+        console.log(this.dynamics)
       } catch (error) {
         console.log(error)
         this.loadingFinished = true
@@ -148,6 +159,13 @@ export default {
       } else {
         return this.moment(date).locale('zh-cn').format('YYYY-MM-DD HH:mm')
       }
+    },
+    deleteDynamicByIndex (index) {
+      if (this.deleteBusy) {
+        return
+      }
+      // console.log(this.dynamics[index])
+      this.dynamics.splice(index, 1)
     }
   },
   watch: {

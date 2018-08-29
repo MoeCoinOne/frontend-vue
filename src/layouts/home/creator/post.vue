@@ -7,12 +7,7 @@
             <h1 class="title">{{ content.title }}</h1>
             <div class="time">{{ moment(content.created_at).locale('zh-cn').format('YYYY年MM月DD日 HH:mm:ss') }}</div>
           </div>
-          <div class="content">
-            <template v-if="content.content">
-              <div class="content-line" v-for="(line, lIndex) in content.content.split('\n')" :key="lIndex" v-html="line">
-              </div>
-            </template>
-          </div>
+          <div class="content" v-if="content.content" v-html="content.content"></div>
           <image-list v-if="content.images" class="images" :images="content.images ? content.images.map(item => ({src: item})) : []"></image-list>
         </el-card>
       </el-col>

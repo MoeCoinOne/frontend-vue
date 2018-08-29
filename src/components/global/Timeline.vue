@@ -10,12 +10,7 @@
         </user-pop><span v-if="!userId">&nbsp;•&nbsp;</span><span>发布于 {{ handleDate(dynamic.created_at) }}</span>
       </div>
       <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.user ? dynamic.user.unique_name : $route.params.id, postid: dynamic.content_id } }">{{ dynamic.title }}</router-link>
-      <div class="content">
-        <template v-if ="!!dynamic.content">
-          <div class="content-line" v-for="(line, lIndex) in dynamic.content.split('\n')" :key="lIndex" v-html="line">
-          </div>
-        </template>
-      </div>
+      <div class="content" v-if ="!!dynamic.content" v-html="dynamic.content"></div>
       <image-list v-if="dynamic.images" class="images" :preview-id="dIndex" :images="!!dynamic.images ? dynamic.images.map(item => ({src: item})) : []"></image-list>
       <!-- <div class="actions">
         <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">

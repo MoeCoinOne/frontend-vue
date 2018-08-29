@@ -123,7 +123,6 @@ export default {
         if (response.body.data.length < this.pagination.pageSize) {
           this.loadingFinished = true
         }
-        console.log(this.dynamics)
       } catch (error) {
         console.log(error)
         this.loadingFinished = true

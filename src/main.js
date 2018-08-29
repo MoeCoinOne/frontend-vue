@@ -12,6 +12,8 @@ import './common/style/element/theme/index.css'
 import './common/directives'
 import './common/plugins'
 
+import './styles/common.css'
+
 Vue.config.productionTip = false
 Vue.use(VueI18n)
 Vue.use(ElementUI)

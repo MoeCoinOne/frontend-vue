@@ -19,7 +19,7 @@
         <div class="start-count">5</div>
         <div>&nbsp;•&nbsp;</div>
         <div class="comment">11 条评论</div> -->
-        <div @click="deleteDynamicByIndex(dIndex)" v-if="dynamic.user_id === currentUserId">删除</div>
+        <div @click="deleteDynamicByIndex(dIndex)" v-if="dynamic.user_id === currentUserId" class="pointer">删除</div>
       </div>
     </div>
     <div v-if="loadingFinished" class="tips-loading-finished">
@@ -160,12 +160,46 @@ export default {
         return this.moment(date).locale('zh-cn').format('YYYY-MM-DD HH:mm')
       }
     },
-    deleteDynamicByIndex (index) {
-      if (this.deleteBusy) {
+    async deleteDynamicByIndex (index) {
+      if (this.deleteBusy || !this.dynamics[index]) {
         return
       }
-      // console.log(this.dynamics[index])
-      this.dynamics.splice(index, 1)
+      this.deleteBusy = true
+
+      try {
+        await this.$confirm('确定要删除这条投稿咩? 此操作不可撤销。', '删除确认', {
+          confirmButtonText: '删除',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+      } catch (err) {
+        this.deleteBusy = false
+        return
+      }
+      try {
+        await this.$request.delete({
+          name: 'content',
+          formatUrl: url => `${url}/${this.dynamics[index].content_id}`,
+          config: {
+            headers: {
+              Authorization: `Bearer ${this.accessToken}`
+            }
+          }
+        })
+        this.$message({
+          type: 'success',
+          message: '投稿已删除'
+        })
+        this.dynamics.splice(index, 1)
+      } catch (err) {
+        this.$message({
+          type: 'error',
+          message: '删除失败：' + (err.statusText || err.message || '未知错误')
+        })
+        console.error(err)
+      }
+
+      this.deleteBusy = false
     }
   },
   watch: {

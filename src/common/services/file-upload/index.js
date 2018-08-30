@@ -8,6 +8,8 @@ export function uploadSingleFile (file, category, onSuccessCallback, onErrorCall
   const isDebug = process.env.NODE_ENV !== 'production'
   tomorrow.setDate((new Date()).getDate() + 1)
 
+  onProgressCallback && onProgressCallback({percent: 0}) // 立即展示进度，防止前端假死
+
   const fineUploadInstance = new s3.FineUploaderBasic({
     debug: isDebug,
     credentials: {

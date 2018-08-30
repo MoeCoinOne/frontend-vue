@@ -52,7 +52,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this)
     this.loadData()
   },
   beforeRouteUpdate (to, from, next) {

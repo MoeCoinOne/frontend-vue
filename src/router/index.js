@@ -53,7 +53,9 @@ function isAllow (path) {
 }
 
 router.beforeEach(function (to, from, next) {
-  if (store.state.user.accessToken && store.state.user.identity.accessKeyId) {
+  if (store.state.user.accessToken &&
+    store.state.user.identity &&
+    store.state.user.identity.accessKeyId) {
     next()
   } else {
     // 非登录状态

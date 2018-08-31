@@ -2,13 +2,18 @@ import { s3 } from 'fine-uploader/lib/core/all'
 import store from '@/store'
 import { uploadConfiguration } from './config'
 
+function getFileExtWithDot (fileName) {
+  const fileNameArr = fileName.split('.')
+  return fileName.length > 1 ? '.' + fileNameArr[fileNameArr.length - 1] : ''
+}
+
 export function uploadSingleFile (file, category, onSuccessCallback, onErrorCallback, onProgressCallback) {
   const tomorrow = new Date()
   const user = store.state.user
   const isDebug = process.env.NODE_ENV !== 'production'
   tomorrow.setDate((new Date()).getDate() + 1)
 
-  onProgressCallback && onProgressCallback({percent: 0}) // 立即展示进度，防止前端假死
+  onProgressCallback && onProgressCallback({ percent: 0 }) // 立即展示进度，防止前端假死
 
   const fineUploadInstance = new s3.FineUploaderBasic({
     debug: isDebug,
@@ -24,19 +29,20 @@ export function uploadSingleFile (file, category, onSuccessCallback, onErrorCall
     objectProperties: {
       acl: 'public-read',
       key (id) {
-        return `${category}/${user.uuid}/${this.getUuid(id)}-${this.getName(id)}`
+        const fileExt = getFileExtWithDot(this.getName(id) || '')
+        return `${category}/${user.uuid}/${this.getUuid(id)}${fileExt}`
       }
     },
     callbacks: {
       onProgress (id, name, loaded, total) {
-        onProgressCallback && onProgressCallback({percent: loaded / total * 100})
+        onProgressCallback && onProgressCallback({ percent: loaded / total * 100 })
         if (isDebug) {
           console.log('progress', arguments, loaded / total * 100)
         }
       },
       onComplete (id, name, content, xhr) {
         onSuccessCallback && onSuccessCallback(Object.assign({}, content, {
-          path: `${xhr.responseURL}${category}/${user.uuid}/${this.getUuid(id)}-${this.getName(id)}`
+          path: `${xhr.responseURL}${category}/${user.uuid}/${this.getUuid(id)}${getFileExtWithDot(this.getName(id) || '')}`
         }))
         if (isDebug) {
           console.log('success', arguments)

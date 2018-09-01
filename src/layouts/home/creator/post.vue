@@ -4,7 +4,7 @@
       <el-col :span="18" v-loading="loading">
         <el-card shadow="none" class="post">
           <div class="header">
-            <h1 class="title">{{ content.title }}</h1>
+            <h1 class="title">{{ content.title || '无标题' }}</h1>
             <div class="time">
               <span class="v-middle" v-text="moment(content.created_at).locale('zh-cn').format('YYYY年MM月DD日 HH:mm:ss')"></span>
               <span class="v-middle pointer dp-i-block delete-btn" v-if="isMyPost" @click="deletePost">删除</span></div>

@@ -9,7 +9,7 @@
         >
         </user-pop><span v-if="!userId">&nbsp;•&nbsp;</span><span>发布于 {{ handleDate(dynamic.created_at) }}</span>
       </div>
-      <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.user ? dynamic.user.unique_name : $route.params.id, postid: dynamic.content_id } }">{{ dynamic.title }}</router-link>
+      <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.user ? dynamic.user.unique_name : $route.params.id, postid: dynamic.content_id } }">{{ dynamic.title || '无标题' }}</router-link>
       <div class="content" v-if ="!!getContent(dynamic)" v-html="getContent(dynamic)"></div>
       <image-list v-if="dynamic.images" class="images" :preview-id="dIndex" :images="!!dynamic.images ? dynamic.images.map(item => ({src: item})) : []"></image-list>
       <div class="actions">

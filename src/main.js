@@ -12,6 +12,8 @@ import './common/style/element/theme/index.css'
 import './common/directives'
 import './common/plugins'
 
+import './styles/common.css'
+
 Vue.config.productionTip = false
 Vue.use(VueI18n)
 Vue.use(ElementUI)
@@ -32,6 +34,10 @@ new Vue({
   i18n,
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })
+
+console.log(`${process.env.APP_NAME} by ${process.env.AUTHOR} \n-----\nBuild Env: ${process.env.NODE_ENV} \nBuild Time: ${process.env.BUILD_TIME}.`)

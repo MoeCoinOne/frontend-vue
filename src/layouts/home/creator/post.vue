@@ -5,14 +5,11 @@
         <el-card shadow="none" class="post">
           <div class="header">
             <h1 class="title">{{ content.title }}</h1>
-            <div class="time">{{ moment(content.created_at).locale('zh-cn').format('YYYY年MM月DD日 HH:mm:ss') }}</div>
+            <div class="time">
+              <span class="v-middle" v-text="moment(content.created_at).locale('zh-cn').format('YYYY年MM月DD日 HH:mm:ss')"></span>
+              <span class="v-middle pointer dp-i-block delete-btn" v-if="isMyPost" @click="deletePost">删除</span></div>
           </div>
-          <div class="content">
-            <template v-if="content.content">
-              <div class="content-line" v-for="(line, lIndex) in content.content.split('\n')" :key="lIndex" v-html="line">
-              </div>
-            </template>
-          </div>
+          <div class="content" v-if="content.content" v-html="content.content"></div>
           <image-list v-if="content.images" class="images" :images="content.images ? content.images.map(item => ({src: item})) : []"></image-list>
         </el-card>
       </el-col>
@@ -24,6 +21,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { NavBar, FootBar, ImageList } from '@/components/global'
 import moment from 'moment'
 import Types from '@/components/home/CreatorTypes'
@@ -34,6 +32,18 @@ export default {
     ImageList,
     Types
   },
+  computed: {
+    ...mapState({
+      user: state => state.user,
+      accessToken: state => state.user.accessToken
+    }),
+    isMyPost () {
+      if (!this.user || !this.user.uuid) {
+        return false
+      }
+      return this.user.uuid === this.content.user_id
+    }
+  },
   data () {
     return {
       loading: false,
@@ -41,7 +51,9 @@ export default {
         title: '',
         content: '',
         images: null,
-        created_at: ''
+        created_at: '',
+        user_id: '',
+        content_id: ''
       }
     }
   },
@@ -62,7 +74,47 @@ export default {
       }
       this.loading = false
     },
-    moment
+    moment,
+
+    async deletePost () {
+      try {
+        await this.$confirm('确定要删除这条投稿咩? 此操作不可撤销。', '删除确认', {
+          confirmButtonText: '删除',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+      } catch (err) {
+        return
+      }
+      this.loading = true
+
+      try {
+        await this.$request.delete({
+          name: 'content',
+          formatUrl: url => `${url}/${this.content.content_id}`,
+          config: {
+            headers: {
+              Authorization: `Bearer ${this.accessToken}`
+            }
+          }
+        })
+        this.$message({
+          type: 'success',
+          message: '投稿已删除'
+        })
+        this.$router.replace({
+          name: 'HomeCreatorPosts',
+          params: this.$route.params
+        })
+      } catch (err) {
+        this.$message({
+          type: 'error',
+          message: '删除失败：' + (err.statusText || err.message || '未知错误')
+        })
+        console.error(err)
+      }
+      this.loading = false
+    }
   }
 }
 </script>
@@ -97,5 +149,11 @@ article {
 }
 .aside {
   padding-left: 20px;
+}
+
+.delete-btn{
+  margin-left: 8px;
+  font-size: 16px;
+  color: #8590a6;
 }
 </style>

@@ -10,21 +10,17 @@
         </user-pop><span v-if="!userId">&nbsp;•&nbsp;</span><span>发布于 {{ handleDate(dynamic.created_at) }}</span>
       </div>
       <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.user ? dynamic.user.unique_name : $route.params.id, postid: dynamic.content_id } }">{{ dynamic.title }}</router-link>
-      <div class="content">
-        <template v-if ="!!dynamic.content">
-          <div class="content-line" v-for="(line, lIndex) in dynamic.content.split('\n')" :key="lIndex" v-html="line">
-          </div>
-        </template>
-      </div>
+      <div class="content" v-if ="!!dynamic.content" v-html="dynamic.content"></div>
       <image-list v-if="dynamic.images" class="images" :preview-id="dIndex" :images="!!dynamic.images ? dynamic.images.map(item => ({src: item})) : []"></image-list>
-      <!-- <div class="actions">
-        <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
+      <div class="actions">
+        <!-- <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
           <i slot="icon" class="icon-star el-icon-star-on"></i>
         </vue-star>
         <div class="start-count">5</div>
         <div>&nbsp;•&nbsp;</div>
-        <div class="comment">11 条评论</div>
-      </div> -->
+        <div class="comment">11 条评论</div> -->
+        <div @click="deleteDynamicByIndex(dIndex)" v-if="dynamic.user_id === currentUserId" class="pointer">删除</div>
+      </div>
     </div>
     <div v-if="loadingFinished" class="tips-loading-finished">
       <div v-if="isLogin">没有更多的信息了</div>
@@ -61,6 +57,7 @@ export default {
   data () {
     return {
       loading: false,
+      deleteBusy: false,
       loadingFinished: false,
       dynamics: [],
       pagination: {
@@ -72,7 +69,8 @@ export default {
   },
   computed: {
     ...mapState({
-      accessToken: state => state.user.accessToken
+      accessToken: state => state.user.accessToken,
+      user: state => state.user
     }),
     isLogin () {
       return !this.notLogin
@@ -86,6 +84,13 @@ export default {
         query: this.$route.query,
         params: this.$route.params
       })
+    },
+    currentUserId () {
+      if (!!this.user && !!this.user.uuid) {
+        return this.user.uuid
+      } else {
+        return ''
+      }
     }
   },
   created () {
@@ -153,6 +158,47 @@ export default {
       } else {
         return this.moment(date).locale('zh-cn').format('YYYY-MM-DD HH:mm')
       }
+    },
+    async deleteDynamicByIndex (index) {
+      if (this.deleteBusy || !this.dynamics[index]) {
+        return
+      }
+      this.deleteBusy = true
+
+      try {
+        await this.$confirm('确定要删除这条投稿咩? 此操作不可撤销。', '删除确认', {
+          confirmButtonText: '删除',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+      } catch (err) {
+        this.deleteBusy = false
+        return
+      }
+      try {
+        await this.$request.delete({
+          name: 'content',
+          formatUrl: url => `${url}/${this.dynamics[index].content_id}`,
+          config: {
+            headers: {
+              Authorization: `Bearer ${this.accessToken}`
+            }
+          }
+        })
+        this.$message({
+          type: 'success',
+          message: '投稿已删除'
+        })
+        this.dynamics.splice(index, 1)
+      } catch (err) {
+        this.$message({
+          type: 'error',
+          message: '删除失败：' + (err.statusText || err.message || '未知错误')
+        })
+        console.error(err)
+      }
+
+      this.deleteBusy = false
     }
   },
   watch: {

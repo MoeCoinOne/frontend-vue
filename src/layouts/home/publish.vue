@@ -13,13 +13,13 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item v-if="form.type === 'ARTICLE'" label="标题" prop="title" :rules="[
-          { required: form.type === 'ARTICLE', message:$t('error.POST_TITLE_EMPTY')}
+        <el-form-item label="标题" prop="title" :rules="[
+          { required: true, message:$t('error.POST_TITLE_EMPTY')}
         ]">
           <el-input v-model="form.title" placeholder="这里是稿件的标题ヾ(´∀`o)+"></el-input>
         </el-form-item>
 
-        <el-form-item v-else label="图片列表" prop="elementImageList" :rules="[
+        <el-form-item v-if="form.type === 'IMAGES'" label="图片列表" prop="elementImageList" :rules="[
           { type: 'array', required: form.type === 'IMAGES', message: '请至少上传一张图片'}
         ]">
           <el-upload

@@ -162,7 +162,28 @@ export default {
       this.loading = false
     },
 
+    // 从 VM 中过滤出需要提交到服务端的数据
+    filterPostDataFromVM () {
+      const params = Object.assign({}, this.form)
+      if (params.visible.indexOf('PAID@') !== -1) {
+        const price = params.visible.substring(params.visible.indexOf('@') + 1)
+        params.visible = 'SUBSCRIBED_ONLY'
+        params.minimum_paid = parseInt(price)
+      }
+      if (params.type === 'IMAGES') {
+        params.images = params.elementImageList
+          .filter(item => item.status === 'success')
+          .map(item => item.response.path)
+        params.description = params.content
+
+        delete params.content
+      }
+      delete params.elementImageList
+      return params
+    },
+
     // 向服务端发送投稿请求
+    // Doc：https://app.swaggerhub.com/apis/MoeCoinOne/content/1.02#/users/post_content
     async postContent () {
       if (this.imageUploading) {
         return
@@ -174,25 +195,11 @@ export default {
       }
 
       try {
-        let params = this.form
-        if (params.visible.indexOf('PAID@') !== -1) {
-          const price = params.visible.substring(params.visible.indexOf('@') + 1)
-          params = Object.assign({}, params, {
-            visible: 'SUBSCRIBED_ONLY',
-            minimum_paid: price
-          })
-        }
-        params = Object.assign({}, params, {
-          images: this.form.elementImageList
-            .filter(item => item.status === 'success')
-            .map(item => item.response.path)
-        })
-        delete params.elementImageList
         this.loading = true
         const response = await this.$request.post({
           name: 'content',
           body: {
-            ...params
+            ...this.filterPostDataFromVM()
           },
           config: {
             headers: {

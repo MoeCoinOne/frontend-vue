@@ -91,10 +91,10 @@ export default {
         }],
         password: [
           { required: true, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' },
-          { min: 8, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' },
+          { min: 6, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' },
           {
             validator: (rule, value, callback) => {
-              if (value.toUpperCase() == value) {
+              if (value.toUpperCase() === value) {
                 callback(new Error(this.$t('error.REGISTER_PASSWORD_LOWERCASE_INVALID')))
               }
               callback()

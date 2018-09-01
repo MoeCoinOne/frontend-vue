@@ -58,7 +58,7 @@ export default {
         ],
         password: [
           { required: true, message: this.$t('error.FORGET_PASSWORD_LENGTH_INVALID'), trigger: 'blur' },
-          { min: 8, message: this.$t('error.FORGET_PASSWORD_LENGTH_INVALID'), trigger: 'blur' }
+          { min: 6, message: this.$t('error.FORGET_PASSWORD_LENGTH_INVALID'), trigger: 'blur' }
         ]
       }
     }

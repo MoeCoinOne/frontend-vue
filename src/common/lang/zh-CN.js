@@ -41,7 +41,7 @@ export const user = {
     title: '注册',
     nicknamePlaceholder: '昵称',
     mailPlaceholder: '电子邮箱',
-    passwordPlaceholder: '密码（8个字符以上，至少包含字母和数字）',
+    passwordPlaceholder: '密码（6个字符以上，至少包含字母和数字）',
     repeatPasswordPlaceholder: '确认你的密码',
     regionSelectPlaceholder: '选择地区',
     mobilePlaceholder: '填写手机号',
@@ -125,7 +125,7 @@ export const error = {
   REGISTER_NICKNAME_EMPTY: '昵称不能为空',
   REGISTER_MAIL_INVALID: '邮箱格式无效',
   REGISTER_MAIL_EXIST: '邮箱已经被占用',
-  REGISTER_PASSWORD_LENGTH_INVALID: '请输入8位以上密码',
+  REGISTER_PASSWORD_LENGTH_INVALID: '请输入6位以上密码',
   REGISTER_PASSWORD_LOWERCASE_INVALID: '密码中必须包含小写字母',
   REGISTER_PASSWORD_NUMERIC_INVALID: '密码中必须包含数字',
   REGISTER_REPEAT_PASSWORD_INVALID: '两次输入的密码不一致',
@@ -136,7 +136,7 @@ export const error = {
   FORGET_MAIL_EMPTY: '邮箱不能为空',
   FORGET_CODE_EMPTY: '验证码不能为空',
   FORGET_CODE_INVALID: '验证码不正确~请重试~',
-  FORGET_PASSWORD_LENGTH_INVALID: '请输入8位以上密码',
+  FORGET_PASSWORD_LENGTH_INVALID: '请输入6位以上密码',
   // 创建投稿
   POST_TITLE_EMPTY: '稿件标题不可为空',
   POST_CONTENT_EMPTY: '稿件正文不可为空'

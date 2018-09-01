@@ -10,7 +10,7 @@
         </user-pop><span v-if="!userId">&nbsp;•&nbsp;</span><span>发布于 {{ handleDate(dynamic.created_at) }}</span>
       </div>
       <router-link class="title" :to="{ name: 'HomeCreatorPost', params: { id: dynamic.user ? dynamic.user.unique_name : $route.params.id, postid: dynamic.content_id } }">{{ dynamic.title }}</router-link>
-      <div class="content" v-if ="!!dynamic.content" v-html="dynamic.content"></div>
+      <div class="content" v-if ="!!getContent(dynamic)" v-html="getContent(dynamic)"></div>
       <image-list v-if="dynamic.images" class="images" :preview-id="dIndex" :images="!!dynamic.images ? dynamic.images.map(item => ({src: item})) : []"></image-list>
       <div class="actions">
         <!-- <vue-star class="vue-star" animate="animated rubberBand" color="#F05654">
@@ -99,6 +99,10 @@ export default {
     window.addEventListener('scroll', this.onScroll)
   },
   methods: {
+    getContent (dynamic) {
+      return dynamic.type === 'IMAGES' ? dynamic.description : dynamic.content
+    },
+
     async loadData () {
       this.loading = true
       try {

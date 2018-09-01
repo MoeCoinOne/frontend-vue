@@ -9,7 +9,7 @@
               <span class="v-middle" v-text="moment(content.created_at).locale('zh-cn').format('YYYY年MM月DD日 HH:mm:ss')"></span>
               <span class="v-middle pointer dp-i-block delete-btn" v-if="isMyPost" @click="deletePost">删除</span></div>
           </div>
-          <div class="content" v-if="content.content" v-html="content.content"></div>
+          <div class="content" v-if="displayContent" v-html="displayContent"></div>
           <image-list v-if="content.images" class="images" :images="content.images ? content.images.map(item => ({src: item})) : []"></image-list>
         </el-card>
       </el-col>
@@ -42,6 +42,9 @@ export default {
         return false
       }
       return this.user.uuid === this.content.user_id
+    },
+    displayContent () {
+      return this.content.type === 'IMAGES' ? this.content.description : this.content.content
     }
   },
   data () {
@@ -53,7 +56,8 @@ export default {
         images: null,
         created_at: '',
         user_id: '',
-        content_id: ''
+        content_id: '',
+        description: ''
       }
     }
   },

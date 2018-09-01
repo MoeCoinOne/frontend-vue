@@ -91,7 +91,25 @@ export default {
         }],
         password: [
           { required: true, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' },
-          { min: 8, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' }
+          { min: 8, message: this.$t('error.REGISTER_PASSWORD_LENGTH_INVALID'), trigger: 'blur' },
+          {
+            validator: (rule, value, callback) => {
+              if (value.toUpperCase() == value) {
+                callback(new Error(this.$t('error.REGISTER_PASSWORD_LOWERCASE_INVALID')))
+              }
+              callback()
+            },
+            trigger: 'blur'
+          },
+          {
+            validator: (rule, value, callback) => {
+              if (/\d/.test(value) === false) {
+                callback(new Error(this.$t('error.REGISTER_PASSWORD_NUMERIC_INVALID')))
+              }
+              callback()
+            },
+            trigger: 'blur'
+          }
         ],
         repeatPassword: [{
           validator: (rule, value, callback) => {

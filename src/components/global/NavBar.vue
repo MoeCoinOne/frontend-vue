@@ -17,7 +17,7 @@
         <li v-if="isLogin" style="width: 50px"><router-link class="iconfont i-home" :to="{ name: 'HomeCreatorIndex', params: { id: uniqueName } }" exact></router-link></li>
         <li v-if="isLogin" style="width: 100px">
           <el-dropdown class="moe-nav-dropdown" trigger="click">
-            <span v-if="nickname" class="el-dropdown-link moe-nav-user">
+            <span v-if="nickname || isLogin" class="el-dropdown-link moe-nav-user"><!-- quickfix by @raphaelsoul -->
               <!-- {{ nickname }}<i class="el-icon-arrow-down el-icon--right"></i> -->
               <img class="avatar" :src="`https://develop-test.encore.moe/api/v1/users/avatar/${userinfo.avatar_id}?s=200&d=mp`" />
             </span>

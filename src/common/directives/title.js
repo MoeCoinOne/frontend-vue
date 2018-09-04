@@ -6,7 +6,8 @@ function handleTitle (value) {
   } else if (typeof value === 'object') {
     // 站点标题选项
     let pageTitle = ''
-    if ('showSiteName' in value && value.showSiteName === false) {
+    // if ('showSiteName' in value && value.showSiteName === false) {
+    if (!value.showSiteName) { // quick fix by @raphaelsoul due to chrome bug
       pageTitle = value.title
     } else {
       pageTitle = `${value.title} - ${siteName}`

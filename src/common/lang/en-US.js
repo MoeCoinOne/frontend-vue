@@ -23,3 +23,12 @@ export const user = {
     updateTime: 'Update Time'
   }
 }
+
+export const payment = {
+  'status': {
+    'pending': 'pending',
+    'cancel': 'cancel',
+    'complete': 'complete',
+    'undefined': 'unknown'
+  }
+}

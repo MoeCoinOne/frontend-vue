@@ -60,7 +60,7 @@
           label="状态">
           <template slot-scope="scope">
             <span :style="{ color: scope.row.status === 20 ? 'green' : 'red' }">
-              {{ scope.row.status === 20 ? '成功' : '未支付' }}
+              {{ $t(`payment.status.${scope.row.status_level}`) }}
             </span>
           </template>
         </el-table-column>

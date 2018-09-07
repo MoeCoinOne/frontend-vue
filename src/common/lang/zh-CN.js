@@ -141,3 +141,12 @@ export const error = {
   POST_TITLE_EMPTY: '稿件标题不可为空',
   POST_CONTENT_EMPTY: '稿件正文不可为空'
 }
+
+export const payment = {
+  status: {
+    'pending': '处理中',
+    'cancel': '取消',
+    'complete': '已完成',
+    'undefined': '未知'
+  }
+}
